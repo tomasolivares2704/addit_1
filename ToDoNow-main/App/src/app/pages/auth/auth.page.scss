@@ -1,33 +1,13 @@
-.sign-up {
-    padding: 50px;
-}
-
-ion-button {
-    width: 170px;
-}
-
-@media (min-width: 768px) {
-    form{
-        width: 500px;
-        padding: 50px 10px;
-    }
-}
-
 ion-card{
     border-radius: 10%;
-    background-color: #36B5FF;
+    background: #3AB2FB;
+    color: #ffffff;
 }
 
 ion-button{
-    --background: ##0888D6;
-    --background-hover: #9ce0be;
-    --background-activated: #88f4be;
-    --background-focused: #88f4be;
-
-    color: #0888D6;
+    width: 170px;
+    --background: #0888D6;
+    color: #ffffff;
 }
 
-ion-icon{
-    color: #0888D6;
-}
 
