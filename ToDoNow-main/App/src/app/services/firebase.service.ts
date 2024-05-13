@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from '../models/user.models';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -56,4 +57,13 @@ export class FirebaseService {
   deleteDocument(path: string){
     return this.db.doc(path).delete();
   }
+
+  // Funcion para obtener coleccion de Food
+
+  getAllFoods(): Observable<any[]> {
+    return this.db.collection('food').valueChanges();
+  }
+
+
+
 }
