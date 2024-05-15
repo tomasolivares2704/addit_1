@@ -58,12 +58,20 @@ export class FirebaseService {
     return this.db.doc(path).delete();
   }
 
-  // Funcion para obtener coleccion de Food
+  // Funcion o Metodo para obtener coleccion de Food
 
   getAllFoods(): Observable<any[]> {
     return this.db.collection('food').valueChanges();
   }
 
+  // Funcion o Metodo para crear un documento en la colección "user" 
 
+  createUserDocument(user: User) {
+    return this.db.collection('user').doc(user.uid).set({
+      name: user.name,
+      email: user.email
+      // Aquí puedes agregar más campos si lo necesitas
+    });
+  }
 
 }
