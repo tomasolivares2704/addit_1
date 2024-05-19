@@ -1,0 +1,28 @@
+ <!--
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Aquí puedes agregar el título de tu página si lo deseas -
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="checkStockLevels()">
+        <ion-icon name="notifications"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-spinner *ngIf="loading"></ion-spinner>
+  <ng-container *ngIf="!loading">
+    <div *ngFor="let food of myfoods">
+      <p>{{ food.name }} - Stock: {{ food.stock }} - Stock Ideal: {{ food.stock_ideal }}</p>
+    </div>
+  </ng-container>
+</ion-content>
+
+-->
+
+<ion-button (click)="checkStockLevels()">
+  <ion-icon name="notifications"></ion-icon>
+</ion-button>

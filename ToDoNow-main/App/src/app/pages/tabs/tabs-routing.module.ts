@@ -15,13 +15,22 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
-      }
+      },
+      {
+        path: 'inventory',
+        loadChildren: () => import('./inventory/inventory.module').then( m => m.InventoryPageModule)
+      },
+      {
+        path: 'inventario',
+        loadChildren: () => import('./inventario/inventario.module').then( m => m.InventarioPageModule)
+      },
     ],
   },
   {
-    path: 'inventario',
-    loadChildren: () => import('./inventario/inventario.module').then( m => m.InventarioPageModule)
+    path: 'inventory',
+    loadChildren: () => import('./inventory/inventory.module').then( m => m.InventoryPageModule)
   },
+  
 ];
 
 @NgModule({

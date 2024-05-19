@@ -3,6 +3,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
 
+
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.page.html',

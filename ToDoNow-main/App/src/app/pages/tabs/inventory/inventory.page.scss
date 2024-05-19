@@ -1,0 +1,24 @@
+.low-stock {
+    background-color: yellow;
+  }
+  
+  .no-stock {
+    background-color: red;
+  }
+  
+  .high-stock {
+    background-color: green;
+  }
+  
+
+  .food-thumbnail {
+    border-radius: 50%; /* Hace que la imagen tenga bordes redondeados */
+    border-width: 4px; /* Ancho del borde */
+    border-style: solid; /* Estilo del borde */
+  }
+  
+  .food-thumbnail img {
+    border-radius: 100%; /* Hace que la imagen tenga bordes redondeados */
+    background-color: rgba(255, 255, 255, 1); /* Fondo transparente con un 50% de opacidad */
+  }
+  

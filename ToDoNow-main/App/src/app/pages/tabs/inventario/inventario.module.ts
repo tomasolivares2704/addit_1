@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { InventarioPageRoutingModule } from './inventario-routing.module';
 
 import { InventarioPage } from './inventario.page';
+import { SharedModule } from 'src/app/shared/shared.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    InventarioPageRoutingModule
+    InventarioPageRoutingModule,
+    SharedModule,
   ],
   declarations: [InventarioPage]
 })

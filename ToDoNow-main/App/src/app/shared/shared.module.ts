@@ -7,6 +7,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { CustomInputComponent } from './components/custom-input/custom-input.component';
 import { LogoComponent } from './components/logo/logo.component';
 import { AddUpdateTaskComponent } from './components/add-update-task/add-update-task.component';
+import { BarraComponent } from './components/barra/barra.component';
+import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
+
+
 
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
@@ -16,14 +20,19 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
-    AddUpdateTaskComponent
+    AddUpdateTaskComponent,
+    BarraComponent,
+    NotificacionesComponent,
+    
   ],
   exports: [
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
     NgCircleProgressModule,
-    AddUpdateTaskComponent
+    AddUpdateTaskComponent,
+    BarraComponent,
+    NotificacionesComponent,
   ],
   imports: [
     CommonModule,
@@ -38,7 +47,9 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
       outerStrokeColor: "#78C000",
       innerStrokeColor: "#C7E596",
       animationDuration: 300,
-    })
+    }),
+    
+    
   ]
 })
 export class SharedModule { }
