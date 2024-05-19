@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'receta-detalle',
     loadChildren: () => import('./receta-detalle/receta-detalle.module').then( m => m.RecetaDetallePageModule)
+  },  {
+    path: 'lista-compras',
+    loadChildren: () => import('./lista-compras/lista-compras.module').then( m => m.ListaComprasPageModule)
   },
+
 
   
 ];
