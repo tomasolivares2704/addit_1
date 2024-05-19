@@ -4,3 +4,13 @@ export interface shoppinglist {
     frequency: string,
     items: Item[]
 }
+
+
+export interface Item {
+    name: string,
+    brand: string,
+    quantity: number,
+    description: string,
+    calories: number;
+    
+}
