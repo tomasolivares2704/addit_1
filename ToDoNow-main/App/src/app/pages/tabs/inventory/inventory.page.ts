@@ -82,21 +82,67 @@ export class InventoryPage implements OnInit {
 
   applyStockColors() {
     if (!this.myfoods || this.myfoods.length === 0) return;
-  
+    
     for (const food of this.myfoods) {
       const diferencia = food.stock - food.stock_ideal;
-      if (diferencia < 0) {
-        food.bgColor = 'yellow';
-      } else if (diferencia === 0) {
-        food.bgColor = 'red';
+      if (diferencia >= 0) {
+        food.bgColor = 'green'; // Stock igual al stock ideal o mayor
+      } else if (diferencia !== 0 && food.stock_ideal > diferencia  ) {
+        food.bgColor = 'yellow'; // Diferencia negativa pero no igual a cero
       } else {
-        food.bgColor = 'green';
+        food.bgColor = 'red'; // Stock igual a cero
       }
     }
   }
-
-  filterFoods() {
-    this.filteredFoods = this.myfoods.filter(food => 
-      food.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+  
+  
+  
+  
+  
+  
+  showStockEditor(food: myfood) {
+    // Cambiar el estado de showStockEditor para mostrar los botones
+    food.showStockEditor = true;
   }
+
+  incrementStock(food: myfood) {
+    // Incrementar la cantidad de stock mostrada en la interfaz
+    food.stockToShow++;
+  }
+
+  decrementStock(food: myfood) {
+    // Decrementar la cantidad de stock mostrada en la interfaz
+    if (food.stockToShow > 0) {
+      food.stockToShow--;
+    }
+  }
+
+  confirmStockChange(food: myfood) {
+    // Actualizar la cantidad de stock en Firestore y en la base de datos
+    food.stock = food.stockToShow;
+    this.updateStock(food);
+  }
+
+  updateStock(food: myfood) {
+    // Actualizar la cantidad de stock en Firestore u en la base de datos
+    let user: User = this.utilsSvc.getElementInLocalStorage('user');
+    let path = `user/${user.uid}/myfoods/${food.id}`;
+    this.loading = true; // Mostrar estado de carga
+    this.firebaseSvc.updateDocument(path, { stock: food.stock })
+      .then(() => {
+        console.log('Cantidad de stock actualizada exitosamente');
+        this.loading = false; // Ocultar estado de carga después de actualizar
+      })
+      .catch(error => {
+        console.error('Error al actualizar cantidad de stock:', error);
+        this.loading = false; // Ocultar estado de carga en caso de error
+      });
+  }
+
+  cancelStockEdit(food: myfood) {
+    food.stockToShow = food.stock; // Revertir cualquier cambio realizado
+    food.showStockEditor = false; // Ocultar el editor de stock
+  }
+  
+
 }

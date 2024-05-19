@@ -26,8 +26,8 @@
   </ion-grid>
 
   <ion-grid>
-    <ion-row>
-      <ion-col size="6" *ngFor="let food of filteredFoods">
+    <ion-row *ngFor="let food of filteredFoods">
+      <ion-col size="12">
         <ion-card>
           <ion-item>
             <ion-thumbnail slot="start" [ngStyle]="{'border-color': food.bgColor}">
@@ -37,10 +37,20 @@
               <h2>{{food.name}}</h2>
               <p>Stock: {{food.stock}}</p>
             </ion-label>
-            <ion-button slot="end" fill="clear">
-              <ion-icon name="create-outline"></ion-icon>
-            </ion-button>
+            <ion-button *ngIf="food.showStockEditor" (click)="confirmStockChange(food)">Confirmar</ion-button>
+            <ion-button (click)="showStockEditor(food)">Editar Stock</ion-button>
           </ion-item>
+          <ion-row *ngIf="food.showStockEditor">
+            <ion-row *ngIf="food.showStockEditor">
+              <ion-col>
+                <ion-button (click)="cancelStockEdit(food)">Cancelar</ion-button>
+                <ion-button (click)="incrementStock(food)">+</ion-button>
+                <ion-input type="number" [(ngModel)]="food.stockToShow"></ion-input>
+                <ion-button (click)="decrementStock(food)">-</ion-button>
+              </ion-col>
+            </ion-row>
+            
+          </ion-row>
         </ion-card>
       </ion-col>
     </ion-row>
