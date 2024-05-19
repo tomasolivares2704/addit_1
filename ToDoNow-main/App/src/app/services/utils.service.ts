@@ -3,6 +3,8 @@ import { AlertController, AlertOptions, LoadingController, LoadingOptions, Modal
 import { Router } from '@angular/router';
 import { Task } from 'src/app/models/task.models';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -82,4 +84,5 @@ export class UtilsService {
 
     return parseInt(percentage.toString());
   }
+
 }

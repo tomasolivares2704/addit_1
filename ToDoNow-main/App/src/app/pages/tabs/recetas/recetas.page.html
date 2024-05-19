@@ -1,0 +1,67 @@
+<app-header title="Recetas"></app-header>
+<ion-content>
+  <ion-spinner *ngIf="loading"></ion-spinner>
+
+  <form [formGroup]="newRecetaForm" (ngSubmit)="addNewReceta()">
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Imagen URL</ion-label>
+      <ion-input formControlName="imagen" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Calorías</ion-label>
+      <ion-input formControlName="calories" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Proteínas</ion-label>
+      <ion-input formControlName="protein" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Grasas</ion-label>
+      <ion-input formControlName="fats" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Carbohidratos</ion-label>
+      <ion-input formControlName="carbohydrates" type="number"></ion-input>
+    </ion-item>
+    
+    <div formArrayName="ingredients">
+      <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+        <ion-item>
+          <ion-label position="stacked">Ingrediente {{ i + 1 }} - Nombre</ion-label>
+          <ion-input formControlName="name" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Stock</ion-label>
+          <ion-input formControlName="stock" type="number"></ion-input>
+        </ion-item>
+        <ion-button expand="block" color="danger" (click)="removeIngredient(i)">Eliminar Ingrediente</ion-button>
+      </div>
+    </div>
+    <ion-button expand="block" (click)="addIngredient()">Añadir Ingrediente</ion-button>
+
+    <ion-button expand="block" type="submit">Agregar Receta</ion-button>
+  </form>
+
+  <ion-list>
+    <ion-item *ngFor="let receta of recetas">
+      <ion-thumbnail slot="start">
+        <img [src]="receta.imagen" alt="Imagen de la receta">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ receta.name }}</h2>
+        <p>Calorías: {{ receta.calories }}</p>
+        <p>Proteínas: {{ receta.protein }}</p>
+        <p>Grasas: {{ receta.fats }}</p>
+        <p>Carbohidratos: {{ receta.carbohydrates }}</p>
+        <p>Ingredientes:</p>
+        <ul>
+          <li *ngFor="let ing of receta.ingredients">{{ ing.name }} - Stock: {{ ing.stock }}</li>
+        </ul>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

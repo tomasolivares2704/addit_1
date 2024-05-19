@@ -5,6 +5,7 @@ import { User } from '../models/user.models';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
 import { Observable } from 'rxjs';
+import { Receta } from '../models/receta.models';
 
 @Injectable({
   providedIn: 'root'
@@ -73,5 +74,19 @@ export class FirebaseService {
       // Aquí puedes agregar más campos si lo necesitas
     });
   }
+
+  getReceta(id: string): Observable<Receta> {
+    return this.db.collection('recetas').doc<Receta>(id).valueChanges();
+  }
+
+  addReceta(receta: Receta): Promise<void> {
+    const id = this.db.createId();
+    return this.db.collection('recetas').doc(id).set({ ...receta, id });
+  }
+
+  getRecetas(): Observable<any[]> {
+    return this.db.collection('recetas').valueChanges({ idField: 'id' });
+  }
+  
 
 }

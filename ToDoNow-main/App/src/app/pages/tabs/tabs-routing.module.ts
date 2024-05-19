@@ -24,12 +24,26 @@ const routes: Routes = [
         path: 'inventario',
         loadChildren: () => import('./inventario/inventario.module').then( m => m.InventarioPageModule)
       },
+      {
+        path: 'recetas',
+        loadChildren: () => import('./recetas/recetas.module').then( m => m.RecetasPageModule)
+      },
+    
     ],
   },
   {
     path: 'inventory',
     loadChildren: () => import('./inventory/inventory.module').then( m => m.InventoryPageModule)
   },
+  {
+    path: 'recetas',
+    loadChildren: () => import('./recetas/recetas.module').then( m => m.RecetasPageModule)
+  },
+  {
+    path: 'receta-detalle',
+    loadChildren: () => import('./receta-detalle/receta-detalle.module').then( m => m.RecetaDetallePageModule)
+  },
+
   
 ];
 
