@@ -21,4 +21,66 @@
     border-radius: 100%; /* Hace que la imagen tenga bordes redondeados */
     background-color: rgba(255, 255, 255, 1); /* Fondo transparente con un 50% de opacidad */
   }
+
+  .scanner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: #44B0F1;
+    border-radius: 10px;
+  }
   
+  .scanner ion-icon {
+    margin-right: 10px;
+  }
+  
+  .toggle-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .toggle-col {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggle-col ion-label {
+    margin-left: 10px;
+  }
+  
+  .filter-col {
+    display: flex;
+    align-items: center;
+  }
+  
+  .filter-col ion-searchbar {
+    flex: 1;
+  }
+  
+  .filter-col ion-button {
+    margin-left: 10px;
+  }
+  
+  ion-thumbnail {
+    border: 2px solid;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  ion-card {
+    margin: 10px 0;
+  }
+  
+  ion-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+    ion-grid {
+      background-color: #A8DEFF;
+    }

@@ -4,3 +4,19 @@
     justify-content: center;
     height: 100%;
   }
+
+
+ion-icon {
+  color: #44B0F1;
+  font-size: 24px;
+}
+
+ion-button {
+  color: #44B0F1;
+  font-size: 24px;
+} 
+
+ion-content{
+  --background: #44B0F1;
+  --color: var(--ion-color-light)
+}

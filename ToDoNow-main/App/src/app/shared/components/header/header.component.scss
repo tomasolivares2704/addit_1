@@ -1,0 +1,18 @@
+.title-left {
+    margin-left: 16px; /* Ajusta el margen según sea necesario */
+  }
+  
+  ion-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  ion-title {
+    flex: 1;
+  }
+  
+  app-notificaciones {
+    margin-right: 10px; /* Ajusta el margen según sea necesario */
+  }
+  
