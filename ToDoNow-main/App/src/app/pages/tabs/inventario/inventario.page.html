@@ -1,8 +1,76 @@
-<app-header title="Inventario"></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Inventario</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <ion-spinner *ngIf="loading"></ion-spinner>
 
+  <!-- Formulario de creación de nuevo alimento -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Crear Nuevo Alimento</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="newFoodForm" (ngSubmit)="addNewFood()">
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input formControlName="name" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Calorías</ion-label>
+          <ion-input formControlName="calories" type="number" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Imagen URL</ion-label>
+          <ion-input formControlName="imagen" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Grasas</ion-label>
+          <ion-input formControlName="fat" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Grasas saturadas</ion-label>
+          <ion-input formControlName="fat_sat" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Grasas trans</ion-label>
+          <ion-input formControlName="fat_trans" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">sodio</ion-label>
+          <ion-input formControlName="sodio" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">carbohidratos</ion-label>
+          <ion-input formControlName="carbs" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Proteina</ion-label>
+          <ion-input formControlName="protein" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Colesterol</ion-label>
+          <ion-input formControlName="colesterol" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Fibra</ion-label>
+          <ion-input formControlName="fibra" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Unidad Medida</ion-label>
+          <ion-input formControlName="medida" type="text" required></ion-input>
+        </ion-item>
+
+        <ion-button type="submit" expand="block" [disabled]="!newFoodForm.valid">Agregar Alimento</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de alimentos existentes -->
   <ion-list *ngIf="foods.length > 0">
     <ion-item *ngFor="let food of foods">
       <ion-thumbnail slot="start">
@@ -14,8 +82,6 @@
       </ion-label>
     </ion-item>
   </ion-list>
-
-
 
   <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
 </ion-content>

@@ -71,36 +71,38 @@ export class SignUpPage implements OnInit {
     }
   } */
 
-  submit() {
+ submit() {
     if (this.form.valid) {
-      this.utilsSvc.presentLoading({message: 'Registrando...'});
+      this.utilsSvc.presentLoading({ message: 'Registrando...' });
       this.firebaseSvc.signUp(this.form.value as User).then(async res => {
         console.log(res);
         await this.firebaseSvc.updateUser({ displayName: this.form.value.name})
         let user: User = {
           uid: res.user.uid,
           name: res.user.displayName,
-          email: res.user.email
-        }
-  
-        // Crear documento en la colección "user" de Firestore
+          email: res.user.email,
+          isAdmin: false // Por defecto, los usuarios no son administradores
+        };
+
+        // Agregar usuario a la colección de usuarios en Firestore
         await this.firebaseSvc.createUserDocument(user);
-  
+
         this.utilsSvc.setElementInLocalStorage('user', user);
         this.utilsSvc.routerLink('/tabs');
         this.utilsSvc.dismissLoading();
-  
+
         this.utilsSvc.presentToast({
-          message: 'Te damos la bienvenida ${user.name}',
+          message: `Te damos la bienvenida ${user.name}`,
           duration: 1500,
           color: 'primary',
-          icon: 'person-outline'
+          icon: 'person-outline',
+          mode: 'ios'
         });
         this.form.reset();
       }, error => {
         this.utilsSvc.dismissLoading();
         this.utilsSvc.presentToast({
-          message: error,
+          message: error.message,
           duration: 5000,
           color: 'warning',
           icon: 'alert-circle-outline'
@@ -108,6 +110,7 @@ export class SignUpPage implements OnInit {
       });
     }
   }
+  
   
 
   limpiar(){

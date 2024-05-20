@@ -90,23 +90,40 @@ export class FirebaseService {
     return this.db.collection('recetas').valueChanges({ idField: 'id' });
   }
 
-  // Nueva función para añadir alimento a food y myfoods
-  addFoodToCollections(food: Foods, userId: string): Promise<void> {
-    const foodId = this.db.createId();
-    const foodData = { ...food, id: foodId };
-    const userFoodData: myfood = {
-      id: foodId,
-      name: food.name,
-      imagen: food.imagen,
-      stock: 0,
-      stock_ideal: 0
-    };
-    return this.db.collection('food').doc(foodId).set(foodData)
-      .then(() => {
-        const userFoodPath = `user/${userId}/myfoods/${foodId}`;
-        return this.db.doc(userFoodPath).set(userFoodData);
-      });
+  async addFoodToCollections(food: Foods): Promise<void> {
+    try {
+      const currentUser = await this.auth.currentUser;
+      if (!currentUser) {
+        throw new Error('No se pudo obtener el usuario actual.');
+      }
+  
+      const isAdmin = await this.checkIfUserIsAdmin(currentUser.uid);
+  
+      if (!isAdmin) {
+        throw new Error('El usuario no tiene permisos de administrador.');
+      }
+  
+      const foodId = this.db.createId();
+      const foodData = { ...food, id: foodId };
+  
+      // Agregar el alimento a la colección 'food'
+      await this.db.collection('food').doc(foodId).set(foodData);
+    } catch (error) {
+      throw error;
+    }
   }
+  
+  async checkIfUserIsAdmin(userId: string): Promise<boolean> {
+    try {
+      const userDoc = await this.db.collection('user').doc(userId).get().toPromise();
+      const userData = userDoc.data() as User;
+      return userData?.isAdmin || false;
+    } catch (error) {
+      console.error('Error al verificar si el usuario es administrador:', error);
+      return false;
+    }
+  }
+  
   
 
 }

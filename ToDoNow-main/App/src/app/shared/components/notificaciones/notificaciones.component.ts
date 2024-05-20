@@ -39,8 +39,14 @@ export class NotificacionesComponent  implements OnInit {
   }
 
   getUser() {
-    return this.user = this.utilsSvc.getElementInLocalStorage('user');
+    const user = this.utilsSvc.getElementInLocalStorage('user');
+    if (user) {
+      this.user = user;
+    } else {
+      console.error('No se encontró el usuario en el almacenamiento local');
+    }
   }
+  
 
   getMyFoods() {
     let user: User = this.utilsSvc.getElementInLocalStorage('user');

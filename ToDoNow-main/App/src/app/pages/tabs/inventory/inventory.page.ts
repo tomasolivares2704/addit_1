@@ -57,26 +57,7 @@ export class InventoryPage implements OnInit {
     });
   }
 
-  addNewFood() {
-    if (this.newFoodForm.valid) {
-      const newFoodData: Foods = {
-        ...this.newFoodForm.value,
-        id: ''
-      };
-      let user: User = this.utilsSvc.getElementInLocalStorage('user');
-      this.loading = true;
   
-      this.firebaseSvc.addFoodToCollections(newFoodData, user.uid).then(() => {
-        this.newFoodForm.reset();
-        this.loading = false;
-      }).catch(error => {
-        this.loading = false;
-        console.error('Error al agregar alimento:', error);
-      });
-    } else {
-      console.error('Formulario no válido');
-    }
-  }
 
   toggleMode(event: any) {
     this.addMode = event.detail.checked;

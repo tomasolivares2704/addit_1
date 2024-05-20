@@ -8,7 +8,7 @@ import { InventarioPageRoutingModule } from './inventario-routing.module';
 
 import { InventarioPage } from './inventario.page';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -17,6 +17,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     InventarioPageRoutingModule,
     SharedModule,
+    ReactiveFormsModule
   ],
   declarations: [InventarioPage]
 })

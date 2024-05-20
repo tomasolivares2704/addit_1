@@ -77,17 +77,4 @@
   </ion-grid>
   
 
-  <form [formGroup]="newFoodForm" (ngSubmit)="addNewFood()">
-    <ion-item>
-      <ion-label position="stacked">Nombre</ion-label>
-      <ion-input formControlName="name" type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Imagen URL</ion-label>
-      <ion-input formControlName="imagen" type="text"></ion-input>
-    </ion-item>
-    <ion-button expand="block" type="submit">Agregar Alimento</ion-button>
-  </form>
-
-
 </ion-content>
