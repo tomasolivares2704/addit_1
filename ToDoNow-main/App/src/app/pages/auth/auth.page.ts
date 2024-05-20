@@ -36,7 +36,7 @@ export class AuthPage implements OnInit {
         }
 
         this.utilsSvc.setElementInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/tabs/home');
+        this.utilsSvc.routerLink('/tabs/inventario');
         this.utilsSvc.dismissLoading();
 
         this.utilsSvc.presentToast({
