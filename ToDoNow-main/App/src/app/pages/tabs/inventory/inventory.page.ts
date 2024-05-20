@@ -4,6 +4,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
+import { Foods } from 'src/app/models/food.models';
 
 @Component({
   selector: 'app-inventory',
@@ -19,6 +20,7 @@ export class InventoryPage implements OnInit {
   newFoodForm: FormGroup;
   addMode: boolean = true;
   searchTerm: string = '';
+  
 
   constructor(
     private firebaseSvc: FirebaseService,
@@ -27,9 +29,7 @@ export class InventoryPage implements OnInit {
   ) { 
     this.newFoodForm = this.formBuilder.group({
       name: ['', Validators.required],
-      imagen: ['', Validators.required],
-      stock: ['', Validators.required],
-      stock_ideal: ['', Validators.required]
+      imagen: ['', Validators.required]
     });
   }
 
@@ -59,12 +59,14 @@ export class InventoryPage implements OnInit {
 
   addNewFood() {
     if (this.newFoodForm.valid) {
-      const newFoodData = this.newFoodForm.value;
+      const newFoodData: Foods = {
+        ...this.newFoodForm.value,
+        id: ''
+      };
       let user: User = this.utilsSvc.getElementInLocalStorage('user');
-      let path = `user/${user.uid}`;
       this.loading = true;
   
-      this.firebaseSvc.addToSubcollection(path, 'myfoods', newFoodData).then(() => {
+      this.firebaseSvc.addFoodToCollections(newFoodData, user.uid).then(() => {
         this.newFoodForm.reset();
         this.loading = false;
       }).catch(error => {
@@ -95,54 +97,59 @@ export class InventoryPage implements OnInit {
     }
   }
   
-  
-  
-  
-  
-  
   showStockEditor(food: myfood) {
-    // Cambiar el estado de showStockEditor para mostrar los botones
     food.showStockEditor = true;
   }
 
   incrementStock(food: myfood) {
-    // Incrementar la cantidad de stock mostrada en la interfaz
-    food.stockToShow++;
+    food.stock++;
+    food.stockToShow = food.stock;
   }
 
   decrementStock(food: myfood) {
-    // Decrementar la cantidad de stock mostrada en la interfaz
-    if (food.stockToShow > 0) {
-      food.stockToShow--;
+    if (food.stock > 0) {
+      food.stock--;
+      food.stockToShow = food.stock;
     }
   }
 
   confirmStockChange(food: myfood) {
-    // Actualizar la cantidad de stock en Firestore y en la base de datos
     food.stock = food.stockToShow;
     this.updateStock(food);
   }
 
   updateStock(food: myfood) {
-    // Actualizar la cantidad de stock en Firestore u en la base de datos
     let user: User = this.utilsSvc.getElementInLocalStorage('user');
     let path = `user/${user.uid}/myfoods/${food.id}`;
-    this.loading = true; // Mostrar estado de carga
+    this.loading = true;
     this.firebaseSvc.updateDocument(path, { stock: food.stock })
       .then(() => {
         console.log('Cantidad de stock actualizada exitosamente');
-        this.loading = false; // Ocultar estado de carga después de actualizar
+        this.loading = false;
       })
       .catch(error => {
         console.error('Error al actualizar cantidad de stock:', error);
-        this.loading = false; // Ocultar estado de carga en caso de error
+        this.loading = false;
       });
   }
 
   cancelStockEdit(food: myfood) {
-    food.stockToShow = food.stock; // Revertir cualquier cambio realizado
-    food.showStockEditor = false; // Ocultar el editor de stock
+    food.stockToShow = food.stock;
+    food.showStockEditor = false;
   }
-  
+
+   // Nueva función para filtrar alimentos
+   filterFoods(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
+    this.filteredFoods = this.myfoods.filter(food => {
+      return food.name.toLowerCase().includes(searchTerm);
+    });
+  }
+
+  // Nueva función para abrir el modal de filtros (puedes agregar más funcionalidad aquí)
+  openFilterModal() {
+    console.log('Abriendo modal de filtros');
+    // Aquí puedes agregar la lógica para abrir un modal de filtros si es necesario
+  }
 
 }

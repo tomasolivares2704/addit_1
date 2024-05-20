@@ -6,6 +6,8 @@ import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
 import { Observable } from 'rxjs';
 import { Receta } from '../models/receta.models';
+import { Foods } from '../models/food.models';
+import { myfood } from '../models/myfood.models';
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +88,24 @@ export class FirebaseService {
 
   getRecetas(): Observable<any[]> {
     return this.db.collection('recetas').valueChanges({ idField: 'id' });
+  }
+
+  // Nueva función para añadir alimento a food y myfoods
+  addFoodToCollections(food: Foods, userId: string): Promise<void> {
+    const foodId = this.db.createId();
+    const foodData = { ...food, id: foodId };
+    const userFoodData: myfood = {
+      id: foodId,
+      name: food.name,
+      imagen: food.imagen,
+      stock: 0,
+      stock_ideal: 0
+    };
+    return this.db.collection('food').doc(foodId).set(foodData)
+      .then(() => {
+        const userFoodPath = `user/${userId}/myfoods/${foodId}`;
+        return this.db.doc(userFoodPath).set(userFoodData);
+      });
   }
   
 

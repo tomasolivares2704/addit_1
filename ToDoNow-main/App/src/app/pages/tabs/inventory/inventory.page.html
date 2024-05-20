@@ -11,24 +11,31 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-row class="toggle-buttons">
-      <ion-col size="2" class="toggle-col">
-        <ion-toggle [(ngModel)]="addMode" (ionChange)="toggleMode($event)"></ion-toggle>
-        <ion-label>{{ addMode ? 'Añadir' : 'Descontar' }}</ion-label>
-      </ion-col>
-      <ion-col size="8" class="filter-col">
-        <ion-searchbar [(ngModel)]="searchTerm"></ion-searchbar>
-        <ion-button>
-          <ion-icon name="funnel-outline"></ion-icon> Filtrar
-        </ion-button>
+
+   <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-toggle (ionChange)="toggleMode($event)" checked color="success"></ion-toggle>
+          <ion-label>Añadir</ion-label>
+        </ion-item>
       </ion-col>
     </ion-row>
-  </ion-grid>
-
-  <ion-grid>
-    <ion-row *ngFor="let food of filteredFoods">
+    
+    <ion-row>
       <ion-col size="12">
-        <ion-card>
+        <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterFoods($event)"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" (click)="openFilterModal()">Filtrar</ion-button>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row *ngFor="let food of filteredFoods">
+      <ion-col size="6">
+        <ion-card >
           <ion-item>
             <ion-thumbnail slot="start" [ngStyle]="{'border-color': food.bgColor}">
               <img [src]="food.imagen" alt="Imagen del alimento">
@@ -40,20 +47,47 @@
             <ion-button *ngIf="food.showStockEditor" (click)="confirmStockChange(food)">Confirmar</ion-button>
             <ion-button (click)="showStockEditor(food)">Editar Stock</ion-button>
           </ion-item>
+
           <ion-row *ngIf="food.showStockEditor">
-            <ion-row *ngIf="food.showStockEditor">
-              <ion-col>
-                <ion-button (click)="cancelStockEdit(food)">Cancelar</ion-button>
-                <ion-button (click)="incrementStock(food)">+</ion-button>
-                <ion-input type="number" [(ngModel)]="food.stockToShow"></ion-input>
-                <ion-button (click)="decrementStock(food)">-</ion-button>
+            <ion-col size="12">
+              <ion-col size="12">
+                <ion-button expand="block" color="danger" (click)="cancelStockEdit(food)">Cancelar</ion-button>
               </ion-col>
-            </ion-row>
-            
+              <ion-col size="4">
+                <ion-button expand="block" color="success" (click)="incrementStock(food)">+</ion-button>
+              </ion-col>
+              <ion-input type="number" [(ngModel)]="food.stockToShow"></ion-input>
+              <p>Stock actual: {{food.stock}}</p>
+              <ion-col size="4">
+                <ion-button expand="block" color="warning" (click)="decrementStock(food)">-</ion-button>
+              </ion-col>
+              <ion-col size="12">
+                <ion-button expand="block" color="primary" (click)="confirmStockChange(food)">Confirmar</ion-button>
+              </ion-col>
+            </ion-col>
           </ion-row>
+
+
+
         </ion-card>
       </ion-col>
     </ion-row>
+
+
   </ion-grid>
+  
+
+  <form [formGroup]="newFoodForm" (ngSubmit)="addNewFood()">
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Imagen URL</ion-label>
+      <ion-input formControlName="imagen" type="text"></ion-input>
+    </ion-item>
+    <ion-button expand="block" type="submit">Agregar Alimento</ion-button>
+  </form>
+
 
 </ion-content>
