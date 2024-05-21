@@ -151,9 +151,15 @@ export class RecetasPage implements OnInit {
     this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
     console.log('myfoods después de descontar ingredientes:', this.myfoods);
   
-    this.loading = false;
+    // Mostrar el mensaje de éxito y luego desaparecer automáticamente después de 1 segundo
     this.utilsSvc.presentToast({ message: 'Ingredientes descontados correctamente.' });
+    setTimeout(() => {
+      this.utilsSvc.dismissToast();
+    }, 2500);
+  
+    this.loading = false;
   }
+  
   
   
 

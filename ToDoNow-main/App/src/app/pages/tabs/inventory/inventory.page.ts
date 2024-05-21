@@ -72,25 +72,7 @@ export class InventoryPage implements OnInit {
   }
   
 
-  // getMyFoods() {
-   // let user: User = this.utilsSvc.getElementInLocalStorage('user');
-    //let path = `user/${user.uid}`;
-    //this.loading = true;
-  
-//    this.firebaseSvc.getSubcollection(path, 'myfoods').subscribe({
-  //    next: (myfoods: myfood[]) => {
-    //    this.myfoods = myfoods.map(food => ({
-      //    ...food,
-        //  stock: food.stock !== undefined ? food.stock : (food.stock !== undefined ? food.stock : 1),
-          //stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : (food.stock_ideal !== undefined ? food.stock_ideal : 1)
-    //    }));
-     //   this.filteredFoods = this.myfoods;
-      //  this.loading = false;
-       // this.applyStockColors();
-    //  }
-   // });
-  //} //
-  
+
   
 
   observeFoodChangesAndUpdateMyFoods() {

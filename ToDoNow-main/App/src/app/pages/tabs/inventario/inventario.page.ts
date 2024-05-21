@@ -4,6 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar FormGroup, FormBuilder y Validators
+import { ModalController } from '@ionic/angular'; // Importar ModalController
 
 @Component({
   selector: 'app-inventario',
@@ -16,11 +17,13 @@ export class InventarioPage implements OnInit {
   foods: Foods[] = [];
   loading: boolean = false;
   newFoodForm: FormGroup; // Definir la variable para el formulario
+  selectedFood: Foods;
 
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
-    private formBuilder: FormBuilder // Inyectar FormBuilder en el constructor
+    private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
+    private modalController: ModalController ,
   ) { 
 
     
@@ -87,4 +90,7 @@ export class InventarioPage implements OnInit {
       console.error('Formulario no válido');
     }
   }
+
+  
+
 }

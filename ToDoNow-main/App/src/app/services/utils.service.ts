@@ -71,6 +71,10 @@ export class UtilsService {
     }
   }
 
+  async dismissToast() {
+    await this.toastController.dismiss();
+  }
+
 
   // Dismiss
   dismssModal(data?: any) {
