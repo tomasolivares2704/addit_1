@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { RecetasPageRoutingModule } from './recetas-routing.module';
 import { RecetasPage } from './recetas.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { InventoryPageModule } from '../inventory/inventory.module';
+import { InventarioPageRoutingModule } from '../inventario/inventario-routing.module';
 
 @NgModule({
   imports: [
@@ -13,7 +15,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ReactiveFormsModule,
     IonicModule,
     RecetasPageRoutingModule,
-    SharedModule
+    SharedModule,
+    InventoryPageModule,
+    InventarioPageRoutingModule,
   ],
   declarations: [RecetasPage]
 })

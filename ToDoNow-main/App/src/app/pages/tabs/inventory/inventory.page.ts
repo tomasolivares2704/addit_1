@@ -44,6 +44,7 @@ export class InventoryPage implements OnInit {
     this.user = this.utilsSvc.getElementInLocalStorage('user');
   }
 
+
   getMyFoods() {
     let user: User = this.utilsSvc.getElementInLocalStorage('user');
     let path = `user/${user.uid}`;
@@ -53,15 +54,42 @@ export class InventoryPage implements OnInit {
       next: (myfoods: myfood[]) => {
         this.myfoods = myfoods.map(food => ({
           ...food,
-          stock: food.stock !== undefined ? food.stock : (food.stock !== undefined ? food.stock : 1),
-          stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : (food.stock_ideal !== undefined ? food.stock_ideal : 1)
+          stock: food.stock !== undefined ? food.stock : 1,
+          stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : 1
         }));
         this.filteredFoods = this.myfoods;
         this.loading = false;
         this.applyStockColors();
+  
+        // Guardar myfoods en el localStorage
+        this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
+      },
+      error: (error) => {
+        console.error('Error al obtener alimentos:', error);
+        this.loading = false;
       }
     });
   }
+  
+
+  // getMyFoods() {
+   // let user: User = this.utilsSvc.getElementInLocalStorage('user');
+    //let path = `user/${user.uid}`;
+    //this.loading = true;
+  
+//    this.firebaseSvc.getSubcollection(path, 'myfoods').subscribe({
+  //    next: (myfoods: myfood[]) => {
+    //    this.myfoods = myfoods.map(food => ({
+      //    ...food,
+        //  stock: food.stock !== undefined ? food.stock : (food.stock !== undefined ? food.stock : 1),
+          //stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : (food.stock_ideal !== undefined ? food.stock_ideal : 1)
+    //    }));
+     //   this.filteredFoods = this.myfoods;
+      //  this.loading = false;
+       // this.applyStockColors();
+    //  }
+   // });
+  //} //
   
   
 
