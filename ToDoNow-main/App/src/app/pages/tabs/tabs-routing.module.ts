@@ -28,6 +28,10 @@ const routes: Routes = [
         path: 'recetas',
         loadChildren: () => import('./recetas/recetas.module').then( m => m.RecetasPageModule)
       },
+      {
+        path: 'lista-compras',
+        loadChildren: () => import('./lista-compras/lista-compras.module').then( m => m.ListaComprasPageModule)
+      },
     
     ],
   },
@@ -43,8 +47,11 @@ const routes: Routes = [
     path: 'receta-detalle',
     loadChildren: () => import('./receta-detalle/receta-detalle.module').then( m => m.RecetaDetallePageModule)
   },
+  {
+    path: 'lista-compras',
+    loadChildren: () => import('./lista-compras/lista-compras.module').then( m => m.ListaComprasPageModule)
+  },
 
-  
 ];
 
 @NgModule({
