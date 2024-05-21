@@ -3,7 +3,7 @@ import { User } from 'firebase/auth';
 import { Task } from 'src/app/models/task.models';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { AddUpdateTaskComponent } from 'src/app/shared/components/add-update-task/add-update-task.component';
+/*import { AddUpdateTaskComponent } from 'src/app/shared/components/add-update-task/add-update-task.component';*/
 
 @Component({
   selector: 'app-home',
@@ -37,7 +37,7 @@ export class HomePage implements OnInit {
     return this.utilsSvc.getPercentage(task);
   }
 
-  async addOrUpdateTask(task?: Task){
+ /* async addOrUpdateTask(task?: Task){
     let res = await this.utilsSvc.presentModal({
       component: AddUpdateTaskComponent,
       componentProps: { task },
@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
     if(res && res.success) {
       this.getTasks();
     }
-  }
+  }*/
 
   getTasks(){
     let user: User = this.utilsSvc.getElementInLocalStorage('user')

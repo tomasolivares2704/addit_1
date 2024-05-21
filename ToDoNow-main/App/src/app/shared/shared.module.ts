@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { CustomInputComponent } from './components/custom-input/custom-input.component';
 import { LogoComponent } from './components/logo/logo.component';
-import { AddUpdateTaskComponent } from './components/add-update-task/add-update-task.component';
+/*import { AddUpdateTaskComponent } from './components/add-update-task/add-update-task.component';*/
 import { BarraComponent } from './components/barra/barra.component';
 import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
 
@@ -20,7 +20,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
-    AddUpdateTaskComponent,
+    /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
     
@@ -30,7 +30,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     CustomInputComponent,
     LogoComponent,
     NgCircleProgressModule,
-    AddUpdateTaskComponent,
+    /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
   ],
