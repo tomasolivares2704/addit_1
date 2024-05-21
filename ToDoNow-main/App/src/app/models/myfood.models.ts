@@ -4,8 +4,9 @@ export interface myfood {
   imagen: string; 
   stock: number;
   stock_ideal: number; 
-  activo: boolean;  // Nuevo atributo
+  activo: boolean;
   bgColor?: string;
   showStockEditor?: boolean;
-  stockToShow?: number; 
+  stockToShow?: number;
+  showIdealStockEditor?: boolean; // Nueva propiedad
 }

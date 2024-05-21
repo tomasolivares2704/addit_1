@@ -20,6 +20,7 @@ export class InventoryPage implements OnInit {
   newFoodForm: FormGroup;
   addMode: boolean = true;
   searchTerm: string = '';
+  food: myfood; // Declaración de la propiedad food
   
 
   constructor(
@@ -36,6 +37,7 @@ export class InventoryPage implements OnInit {
   ngOnInit() {
     this.getUser();
     this.getMyFoods();
+    this.observeFoodChangesAndUpdateMyFoods();
   }
 
   getUser() {
@@ -49,12 +51,23 @@ export class InventoryPage implements OnInit {
   
     this.firebaseSvc.getSubcollection(path, 'myfoods').subscribe({
       next: (myfoods: myfood[]) => {
-        this.myfoods = myfoods;
-        this.filteredFoods = myfoods;
+        this.myfoods = myfoods.map(food => ({
+          ...food,
+          stock: food.stock !== undefined ? food.stock : (food.stock !== undefined ? food.stock : 1),
+          stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : (food.stock_ideal !== undefined ? food.stock_ideal : 1)
+        }));
+        this.filteredFoods = this.myfoods;
         this.loading = false;
         this.applyStockColors();
       }
     });
+  }
+  
+  
+
+  observeFoodChangesAndUpdateMyFoods() {
+    let user: User = this.utilsSvc.getElementInLocalStorage('user');
+    this.firebaseSvc.observeFoodChangesAndUpdateMyFoods(user);
   }
 
   
@@ -103,7 +116,17 @@ export class InventoryPage implements OnInit {
     let user: User = this.utilsSvc.getElementInLocalStorage('user');
     let path = `user/${user.uid}/myfoods/${food.id}`;
     this.loading = true;
-    this.firebaseSvc.updateDocument(path, { stock: food.stock })
+  
+    // Crear un objeto solo con las propiedades que no son undefined
+    const updateObject: Partial<myfood> = {};
+  
+    if (food.stock !== undefined) {
+      updateObject.stock = food.stock;
+    }
+  
+    // Aquí puedes agregar más propiedades que deseas actualizar
+  
+    this.firebaseSvc.updateDocument(path, updateObject)
       .then(() => {
         console.log('Cantidad de stock actualizada exitosamente');
         this.loading = false;
@@ -113,6 +136,7 @@ export class InventoryPage implements OnInit {
         this.loading = false;
       });
   }
+  
 
   cancelStockEdit(food: myfood) {
     food.stockToShow = food.stock;
@@ -132,5 +156,65 @@ export class InventoryPage implements OnInit {
     console.log('Abriendo modal de filtros');
     // Aquí puedes agregar la lógica para abrir un modal de filtros si es necesario
   }
+
+  updateIdealStock(food: myfood) {
+    let user: User = this.utilsSvc.getElementInLocalStorage('user');
+    let path = `user/${user.uid}/myfoods/${food.id}`;
+    this.loading = true;
+  
+    // Crear un objeto solo con las propiedades que no son undefined
+    const updateObject: Partial<myfood> = {};
+  
+    if (food.stock_ideal !== undefined) {
+      updateObject.stock_ideal = food.stock_ideal;
+    }
+  
+    // Puedes agregar más propiedades que deseas actualizar aquí
+  
+    this.firebaseSvc.updateDocument(path, updateObject)
+      .then(() => {
+        console.log('Stock ideal actualizado exitosamente');
+        this.loading = false;
+      })
+      .catch(error => {
+        console.error('Error al actualizar stock ideal:', error);
+        this.loading = false;
+      });
+  }
+
+  showIdealStockEditor(food: myfood) {
+    food.showStockEditor = true;
+  }
+  
+  submitIdealStock(food: myfood) {
+    let user: User = this.utilsSvc.getElementInLocalStorage('user');
+    let path = `user/${user.uid}/myfoods/${food.id}`;
+    this.loading = true;
+    this.firebaseSvc.updateDocument(path, { stock_ideal: food.stock_ideal })
+      .then(() => {
+        console.log('Stock ideal actualizado exitosamente');
+        this.loading = false;
+        food.showStockEditor = false; // Oculta el editor de stock ideal después de actualizar
+      })
+      .catch(error => {
+        console.error('Error al actualizar stock ideal:', error);
+        this.loading = false;
+      });
+  }
+
+  cancelIdealStockEdit(food: myfood) {
+    food.showIdealStockEditor = false;
+  }
+  
+  
+  
+
+
+
+  
+
+
+
+
 
 }

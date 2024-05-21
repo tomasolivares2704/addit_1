@@ -123,6 +123,41 @@ export class FirebaseService {
       return false;
     }
   }
+
+    
+
+  migrateFoodsToMyFoods(user: User) {
+    const foodsCollection = this.db.collection('food');
+    const myfoodsCollection = this.db.collection(`user/${user.uid}/myfoods`);
+
+    foodsCollection.valueChanges().subscribe((foods: myfood[]) => {
+      foods.forEach(food => {
+        myfoodsCollection.doc(food.id).set(food);
+      });
+    });
+  }
+
+  observeFoodChangesAndUpdateMyFoods(user: User) {
+    const foodsCollection = this.db.collection('food');
+    const myfoodsCollection = this.db.collection(`user/${user.uid}/myfoods`);
+
+    // Observar cambios en la colección food
+    foodsCollection.snapshotChanges().subscribe(changes => {
+      changes.forEach(change => {
+        const food = change.payload.doc.data() as myfood;
+        const foodId = change.payload.doc.id;
+        
+        // Actualizar myfoods con el mismo ID que el alimento modificado
+        myfoodsCollection.doc(foodId).set(food);
+      });
+    });
+  }
+
+
+
+
+
+
   
   
 
