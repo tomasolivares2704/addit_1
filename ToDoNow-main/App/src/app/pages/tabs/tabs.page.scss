@@ -1,22 +1,28 @@
-.example-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-
 ion-icon {
   color: #44B0F1;
-  font-size: 24px;
+  font-size: 30px;
 }
 
-ion-button {
-  color: #44B0F1;
-  font-size: 24px;
+ion-tab-button {
+  --background: white;
+  --color: #44B0F1;
+  font-size: 12px;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px; 
+  margin: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 } 
 
-ion-content{
+ion-tab-bar {
+  height: 80px;
   --background: #44B0F1;
-  --color: var(--ion-color-light)
+  --color: white;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box; 
 }
