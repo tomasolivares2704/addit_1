@@ -29,28 +29,17 @@ const routes: Routes = [
         loadChildren: () => import('./recetas/recetas.module').then( m => m.RecetasPageModule)
       },
       {
-        path: 'lista-compras',
-        loadChildren: () => import('./lista-compras/lista-compras.module').then( m => m.ListaComprasPageModule)
+        path: 'listacompras',
+        loadChildren: () => import('./listacompras/listacompras.module').then( m => m.ListacomprasPageModule)
+      },
+      {
+        path: 'detallelista/:id',
+        loadChildren: () => import('./detallelista/detallelista.module').then( m => m.DetallelistaPageModule)
       },
     
     ],
   },
-  {
-    path: 'inventory',
-    loadChildren: () => import('./inventory/inventory.module').then( m => m.InventoryPageModule)
-  },
-  {
-    path: 'recetas',
-    loadChildren: () => import('./recetas/recetas.module').then( m => m.RecetasPageModule)
-  },
-  {
-    path: 'receta-detalle',
-    loadChildren: () => import('./receta-detalle/receta-detalle.module').then( m => m.RecetaDetallePageModule)
-  },
-  {
-    path: 'lista-compras',
-    loadChildren: () => import('./lista-compras/lista-compras.module').then( m => m.ListaComprasPageModule)
-  },
+
 
 ];
 

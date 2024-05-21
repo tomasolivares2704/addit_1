@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { Receta } from '../models/receta.models';
 import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
+import { List, Product } from '../models/list.models';
 
 @Injectable({
   providedIn: 'root'
@@ -153,12 +154,44 @@ export class FirebaseService {
     });
   }
 
+  // Gestión de listas de compras
+  createList(list: List) {
+    return this.db.collection('list').add(list);
+  }
 
+  getLists(): Observable<List[]> {
+    return this.db.collection<List>('lists').valueChanges({ idField: 'id' });
+  }
 
+  getList(listId: string): Observable<List> {
+    return this.db.collection('lists').doc<List>(listId).valueChanges();
+  }
 
+  addProductToList(listId: string, product: Product) {
+    return this.db.collection(`lists/${listId}/products`).add(product);
+  }
 
+  getProductsForList(listId: string): Observable<Product[]> {
+    return this.db.collection<Product>(`lists/${listId}/products`).valueChanges({ idField: 'id' });
+  }
 
-  
-  
+  // Notificación
+  async showNotification(list: List) {
+    const toast = await this.utilsSvc.presentShoppingListNotification(`Reminder for your shopping list: ${list.title}`);
+  }
 
+  async checkAndNotifyLists() {
+    const listsSnapshot = await this.db.collection<List>('lists').get().toPromise();
+    const now = new Date();
+    listsSnapshot.forEach(doc => {
+      const list = doc.data() as List;
+      const nextNotificationDate = new Date(list.createdAt);
+      nextNotificationDate.setDate(nextNotificationDate.getDate() + parseInt(list.purchaseFrequency, 10));
+      if (nextNotificationDate <= now) {
+        this.showNotification(list);
+        nextNotificationDate.setDate(nextNotificationDate.getDate() + parseInt(list.purchaseFrequency, 10));
+        this.db.collection('lists').doc(doc.id).update({ nextNotification: nextNotificationDate });
+      }
+    });
+  }
 }

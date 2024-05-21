@@ -10,10 +10,10 @@ import { LogoComponent } from './components/logo/logo.component';
 import { BarraComponent } from './components/barra/barra.component';
 import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
 
-
-
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { CreateListModalComponent } from './components/create-list-modal/create-list-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
-    
+    CreateListModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -33,6 +33,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
+    CreateListModalComponent
   ],
   imports: [
     CommonModule,

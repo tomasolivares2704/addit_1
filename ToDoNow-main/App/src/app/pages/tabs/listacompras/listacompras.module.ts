@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ListaComprasPageRoutingModule } from './lista-compras-routing.module';
+import { ListacomprasPageRoutingModule } from './listacompras-routing.module';
 
-import { ListaComprasPage } from './lista-compras.page';
+import { ListacomprasPage } from './listacompras.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaComprasPageRoutingModule,
+    ListacomprasPageRoutingModule,
     SharedModule
   ],
-  declarations: [ListaComprasPage]
+  declarations: [ListacomprasPage]
 })
-export class ListaComprasPageModule {}
+export class ListacomprasPageModule {}

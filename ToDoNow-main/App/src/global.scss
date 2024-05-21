@@ -98,3 +98,16 @@ ion-item{
     padding-bottom: 5px;
     font-weight: 900;
 }
+
+.custom-modal {
+    --width: 90%;
+    --max-width: 400px;
+    --height: 60%;
+    --max-height: 500px;
+    --border-radius: 10px;
+    --margin: 0 auto;
+    --position: fixed;
+    --top: 50%;
+    --left: 50%;
+    --transform: translate(-50%, -50%);
+  }
