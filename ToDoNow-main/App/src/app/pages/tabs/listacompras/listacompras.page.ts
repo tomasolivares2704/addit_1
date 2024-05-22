@@ -56,7 +56,7 @@ export class ListacomprasPage implements OnInit {
   }
 
   openList(listId: string) {
-    this.router.navigate(['/detallelista', listId]);
+    this.router.navigate(['/detalle-lista', listId]);
   }
 
   async openCreateListModal() {

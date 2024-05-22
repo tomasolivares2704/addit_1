@@ -167,12 +167,14 @@ export class FirebaseService {
     return this.db.collection('lists').doc<List>(listId).valueChanges();
   }
 
-  addProductToList(listId: string, product: Product) {
-    return this.db.collection(`lists/${listId}/products`).add(product);
+  getProductsForList(userId: string, listId: string) {
+    const path = `user/${userId}/list/${listId}/products`;
+    return this.getSubcollection(path, '');
   }
-
-  getProductsForList(listId: string): Observable<Product[]> {
-    return this.db.collection<Product>(`lists/${listId}/products`).valueChanges({ idField: 'id' });
+  
+  addProductToList(userId: string, listId: string, product: Product) {
+    const path = `user/${userId}/list/${listId}/products`;
+    return this.addToSubcollection(path, '', product);
   }
 
   // Notificación
@@ -200,7 +202,9 @@ export class FirebaseService {
   }
   
 
-
-
+  //Listas de Compras
+  getListById(id: string): Observable<Foods> {
+    return this.db.collection('list').doc<Foods>(id).valueChanges();
+  }
 
 }

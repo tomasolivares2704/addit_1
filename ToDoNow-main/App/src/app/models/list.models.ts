@@ -9,8 +9,8 @@ export interface List {
     products: Product[];  
   }
   
-  export interface Product {
-    id?: string;  
+export interface Product {
+    id: string;  
     listId: string;  
     food: Foods;
     quantity: number;
