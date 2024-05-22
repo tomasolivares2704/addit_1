@@ -194,4 +194,13 @@ export class FirebaseService {
       }
     });
   }
+
+  getFoodById(id: string): Observable<Foods> {
+    return this.db.collection('food').doc<Foods>(id).valueChanges();
+  }
+  
+
+
+
+
 }

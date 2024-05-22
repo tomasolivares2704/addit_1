@@ -1,0 +1,75 @@
+<app-header title="Tabla Nutricional"></app-header>
+
+<ion-content>
+  <div *ngIf="food; else loading">
+    <ion-card class="custom-card">
+      <ion-card-header class="custom-header">
+        <ion-card-title>Cantidad por 100 gramos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <table class="custom-table">
+                <tr>
+                  <td><strong>Nutriente:</strong></td>
+                  <td>Cantidad por 100g</td>
+                </tr>
+                <tr>
+                  <td><strong>Nombre:</strong></td>
+                  <td>{{ food.name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Calorías:</strong></td>
+                  <td>{{ food.calories }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Grasas:</strong></td>
+                  <td>{{ food.fat }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Grasas Saturadas:</strong></td>
+                  <td>{{ food.fat_sat }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Grasas Trans:</strong></td>
+                  <td>{{ food.fat_trans }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Sodio:</strong></td>
+                  <td>{{ food.sodio }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Carbohidratos:</strong></td>
+                  <td>{{ food.carbs }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Proteínas:</strong></td>
+                  <td>{{ food.protein }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Colesterol:</strong></td>
+                  <td>{{ food.colesterol }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Fibra:</strong></td>
+                  <td>{{ food.fibra }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Medida:</strong></td>
+                  <td>{{ food.medida }}</td>
+                </tr>
+                <!-- Agregar más filas según sea necesario -->
+              </table>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #loading>
+    <ion-spinner></ion-spinner>
+    <p>Cargando...</p>
+  </ng-template>
+</ion-content>

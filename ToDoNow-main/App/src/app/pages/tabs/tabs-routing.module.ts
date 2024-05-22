@@ -36,9 +36,15 @@ const routes: Routes = [
         path: 'detallelista/:id',
         loadChildren: () => import('./detallelista/detallelista.module').then( m => m.DetallelistaPageModule)
       },
+      {
+        path: 'tabnutri/:id',
+        loadChildren: () => import('./tabnutri/tabnutri.module').then( m => m.TabnutriPageModule)
+      },
     
     ],
   },
+  
+
 
 
 ];
