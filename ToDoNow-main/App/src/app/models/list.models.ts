@@ -1,9 +1,9 @@
 import { Foods } from "./food.models";
 
 export interface List {
-    id?: string;  
+    id: string;  
     title: string;
-    image: string;
+    image?: string;
     purchaseFrequency: string;
     createdAt: Date; 
     products: Product[];  
