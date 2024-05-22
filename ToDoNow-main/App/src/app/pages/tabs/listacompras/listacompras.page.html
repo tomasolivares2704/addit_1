@@ -26,7 +26,7 @@
           <ion-list>
             <ion-item *ngFor="let list of lists" [class.delete-mode]="deleteMode" (click)="deleteMode ? confirmDeleteList(list) : openList(list.id)">
               <ion-thumbnail slot="start">
-                <img [src]="list.image || 'assets/default-image.png'" alt="Imagen de la lista">
+                <img src="../../../../assets/icon/favicon.png" alt="Imagen de la lista">
               </ion-thumbnail>
               <ion-label>
                 <h2>{{ list.title }}</h2>
