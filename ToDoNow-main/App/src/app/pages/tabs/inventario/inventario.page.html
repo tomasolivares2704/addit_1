@@ -92,6 +92,7 @@
         <h2>{{ food.name }}</h2>
         <p>Calorías: {{ food.calories }}</p>
       </ion-label>
+      <ion-button (click)="viewFoodDetails(food.id)">Ver Detalles</ion-button>
       
     </ion-item>
   </ion-list>

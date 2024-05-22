@@ -5,6 +5,8 @@ import { Foods } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar FormGroup, FormBuilder y Validators
 import { ModalController } from '@ionic/angular'; // Importar ModalController
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-inventario',
@@ -24,6 +26,7 @@ export class InventarioPage implements OnInit {
     private utilsSvc: UtilsService,
     private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
     private modalController: ModalController ,
+    private router: Router // Inyectar Router en el constructor
   ) { 
 
     
@@ -89,6 +92,11 @@ export class InventarioPage implements OnInit {
     } else {
       console.error('Formulario no válido');
     }
+  }
+
+  // Método para redirigir a la vista de detalles del alimento
+  viewFoodDetails(foodId: string) {
+    this.router.navigate(['/tabs/tabnutri', foodId]);
   }
 
   
