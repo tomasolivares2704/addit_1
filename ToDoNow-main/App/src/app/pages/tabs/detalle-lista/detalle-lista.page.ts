@@ -28,24 +28,24 @@ export class DetalleListaPage implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
+  getUser() {
+    return this.user = this.utilsService.getElementInLocalStorage('user');
+  }
   ngOnInit() {
+    this.getUser(); 
+
     const listId = this.route.snapshot.paramMap.get('id');
     if (listId) {
       this.getProductsByListId(listId);
     } else {
       console.error('No food ID found in route');
     }
-    this.getUser();
   }
 
-  getUser() {
-    return this.user = this.utilsService.getElementInLocalStorage('user');
-  }
-
-  getProductsByListId(listId: string) {
+  getProductsByListId(productId: string) {
     const user: User = this.utilsService.getElementInLocalStorage('user');
-
-    const path = `user/${user.uid}/list/${listId}/products`;
+    const listId = this.route.snapshot.paramMap.get('id');
+    const path = `user/${user.uid}/list/${listId}/product/${productId}`;
 
     this.firebaseService.getSubcollection(path, 'product').subscribe((res: Product[]) => {
       console.log(res);
@@ -54,8 +54,9 @@ export class DetalleListaPage implements OnInit {
     });
   }
 
+/*
   addProductToList() {
 
   }
-  
+  */
 }

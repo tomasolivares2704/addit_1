@@ -203,8 +203,8 @@ export class FirebaseService {
   
 
   //Listas de Compras
-  getListById(id: string): Observable<Foods> {
-    return this.db.collection('list').doc<Foods>(id).valueChanges();
+  getListById(id: string): Observable<List> {
+    return this.db.collection('list').doc<List>(id).valueChanges();
   }
 
 }
