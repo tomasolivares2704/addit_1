@@ -1,5 +1,37 @@
-.background-celeste {
-    --ion-background-color: #add8e6; /* Color celeste */
-  }
+.receta-card {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-  
+.receta-image {
+  position: relative;
+  height: 200px; /* Ajusta la altura según tus necesidades */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.receta-nutrition {
+  background-color: rgba(255, 255, 255, 0.7); /* Ajusta el valor de opacidad según tu preferencia */
+  padding: 10px;
+}
+
+.receta-nutrition p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.receta-ingredients {
+  padding: 10px;
+}
+
+.receta-ingredients p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.receta-ingredient ion-label {
+  font-size: 14px;
+}

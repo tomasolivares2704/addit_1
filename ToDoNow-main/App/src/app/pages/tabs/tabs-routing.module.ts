@@ -40,8 +40,18 @@ const routes: Routes = [
         path: 'detalle-lista/:id',
         loadChildren: () => import('./detalle-lista/detalle-lista.module').then( m => m.DetalleListaPageModule)
       },
+      {
+        path: 'formfood',
+        loadChildren: () => import('./formfood/formfood.module').then( m => m.FormfoodPageModule)
+      },
+      {
+        path: 'formreceta',
+        loadChildren: () => import('./formreceta/formreceta.module').then( m => m.FormrecetaPageModule)
+      },
     ],
   },
+  
+
 
 ];
 

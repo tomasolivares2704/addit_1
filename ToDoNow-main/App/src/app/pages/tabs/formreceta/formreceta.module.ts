@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-import { RecetasPageRoutingModule } from './recetas-routing.module';
+import { ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
 
-import { RecetasPage } from './recetas.page';
+import { FormrecetaPageRoutingModule } from './formreceta-routing.module';
+import { FormrecetaPage } from './formreceta.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { InventoryPageModule } from '../inventory/inventory.module';
 import { InventarioPageRoutingModule } from '../inventario/inventario-routing.module';
@@ -13,14 +12,13 @@ import { InventarioPageRoutingModule } from '../inventario/inventario-routing.mo
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     IonicModule,
-    RecetasPageRoutingModule,
+    FormrecetaPageRoutingModule,
+    ReactiveFormsModule, // Agrega ReactiveFormsModule aquí
     SharedModule,
     InventoryPageModule,
-    InventarioPageRoutingModule,
+    InventarioPageRoutingModule
   ],
-  declarations: [RecetasPage]
+  declarations: [FormrecetaPage]
 })
-export class RecetasPageModule {}
+export class FormrecetaPageModule {}
