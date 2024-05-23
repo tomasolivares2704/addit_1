@@ -72,7 +72,7 @@ export class NotificacionesComponent  implements OnInit {
       if (diferencia < 0) {
         await this.presentAlert(`El alimento ${food.name} No tiene suficiente stock, tiene un faltante de: ${faltante} `);
       } 
-      if (diferencia === 0) {
+      if (food.stock  === 0) {
         await this.presentAlert(`No posees stock de ${food.name} `);
       }
     }

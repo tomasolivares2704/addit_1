@@ -90,16 +90,21 @@ export class InventoryPage implements OnInit {
     if (!this.myfoods || this.myfoods.length === 0) return;
     
     for (const food of this.myfoods) {
-      const diferencia = food.stock - food.stock_ideal;
-      if (diferencia >= 0) {
-        food.bgColor = 'green'; // Stock igual al stock ideal o mayor
-      } else if (diferencia !== 0 && food.stock_ideal > diferencia  ) {
-        food.bgColor = 'yellow'; // Diferencia negativa pero no igual a cero
-      } else {
-        food.bgColor = 'red'; // Stock igual a cero
-      }
+        const porcentajeStock = (food.stock / food.stock_ideal) * 100; // Calcula el porcentaje de stock actual respecto al stock ideal
+        
+        if (porcentajeStock >= 100) {
+            food.bgColor = 'green'; // Stock igual o mayor al 100% del stock ideal
+        } else if (porcentajeStock >= 50) {
+            food.bgColor = 'yellow'; // Stock entre el 50% y el 99% del stock ideal
+        } else if (porcentajeStock >= 20) {
+            food.bgColor = 'orange'; // Stock entre el 20% y el 49% del stock ideal
+        } else {
+            food.bgColor = 'red'; // Stock menor al 20% del stock ideal
+        }
     }
-  }
+}
+  
+  
   
   showStockEditor(food: myfood) {
     food.showStockEditor = true;
