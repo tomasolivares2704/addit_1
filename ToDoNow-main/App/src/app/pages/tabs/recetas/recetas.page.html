@@ -3,140 +3,39 @@
 <ion-content>
   <ion-spinner *ngIf="loading"></ion-spinner>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Crear Nueva Receta</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <form [formGroup]="newRecetaForm" (ngSubmit)="addNewReceta()">
-        <ion-item>
-          <ion-label position="stacked">Nombre</ion-label>
-          <ion-input formControlName="name" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked">Imagen URL</ion-label>
-          <ion-input formControlName="imagen" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked">Calorías</ion-label>
-          <ion-input formControlName="calories" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked">Proteínas</ion-label>
-          <ion-input formControlName="protein" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked">Grasas</ion-label>
-          <ion-input formControlName="fats" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked">Carbohidratos</ion-label>
-          <ion-input formControlName="carbohydrates" type="number"></ion-input>
-        </ion-item>
-  
-        <div formArrayName="ingredients">
-          <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
-            <ion-item>
-              <ion-label position="stacked">Ingrediente {{ i + 1 }} - Nombre</ion-label>
-              <ion-input formControlName="name" type="text"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="stacked">Stock</ion-label>
-              <ion-input formControlName="stock" type="number"></ion-input>
-            </ion-item>
-            <ion-button expand="block" color="warning" (click)="removeIngredient(i)">
-              Eliminar Ingrediente
-            </ion-button>
-          </div>
-        </div>
-        <ion-button expand="block"  color="success"  (click)="addIngredient()">
-          Añadir Ingrediente
-        </ion-button>
-  
-        <ion-button expand="block" type="submit">Agregar Receta</ion-button>
-      </form>
-    </ion-card-content>
-  </ion-card>
-  
-  <!-- 
+
   <ion-list>
-      <ion-card *ngFor="let receta of recetas">
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <img [src]="receta.imagen" alt="Imagen de la receta">
-          </ion-thumbnail>
-          <ion-label>
-            <h2>{{ receta.name }}</h2>
-            <p>Calorías: {{ receta.calories }}</p>
-            <p>Proteínas: {{ receta.protein }}</p>
-            <p>Grasas: {{ receta.fats }}</p>
-            <p>Carbohidratos: {{ receta.carbohydrates }}</p>
-            <p>Ingredientes:</p>
-            <ul>
-              <ng-container *ngFor="let ing of receta.ingredients">
-                <li>
-                  {{ ing.name }} - Stock (Receta): {{ ing.stock }}
-                  <ng-container *ngIf="myfoods && myfoods.length > 0">
-                    <span *ngIf="ingredientInMyFoods(ing.name)">
-                      - Stock (MyFood): {{ getMyFoodStock(ing.name) }}
-                    </span>
-                  </ng-container>
-                </li>
-              </ng-container>
-            </ul>
-            <ion-button 
-              [color]="canDiscountIngredients(receta) ? 'success' : 'danger'" 
-              [disabled]="!canDiscountIngredients(receta)"
-              (click)="discountIngredients(receta)">
-              Descontar Ingredientes
-            </ion-button>
-          </ion-label>
-        </ion-item>
-      </ion-card>
-    </ion-list> 
-
-    -->
-
-    
-      <ion-list>
-        <ion-card *ngFor="let receta of recetas">
-          <ion-row>
-            <ion-col size="6">
-              <ion-thumbnail slot="start">
-                <img [src]="receta.imagen" alt="Imagen de la receta">
-              </ion-thumbnail>
-            </ion-col>
-            <ion-col size="6">
-              <ion-card-content>
-                <h2>{{ receta.name }}</h2>
-                <p>Calorías: {{ receta.calories }}</p>
-                <p>Proteínas: {{ receta.protein }}</p>
-                <p>Grasas: {{ receta.fats }}</p>
-                <p>Carbohidratos: {{ receta.carbohydrates }}</p>
-                <p>Ingredientes:</p>
-                <ion-list>
-                  <ion-item *ngFor="let ing of receta.ingredients">
-                    <ion-label>{{ ing.name }} - Stock (Receta): {{ ing.stock }}</ion-label>
-                    <ion-label *ngIf="myfoods && myfoods.length > 0 && ingredientInMyFoods(ing.name)">
-                      Stock (MyFood): {{ getMyFoodStock(ing.name) }}
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-                <ion-button 
-                  [color]="canDiscountIngredients(receta) ? 'success' : 'danger'" 
-                  [disabled]="!canDiscountIngredients(receta)"
-                  (click)="discountIngredients(receta)">
-                  Descontar Ingredientes
-                </ion-button>
-              </ion-card-content>
-            </ion-col>
-          </ion-row>
-        </ion-card>
-      </ion-list>
-   
-    
-
+    <ion-card class="receta-card" *ngFor="let receta of recetas">
+      <div class="receta-image" [style.backgroundImage]="'url(' + receta.imagen + ')'">
+        <div class="receta-nutrition">
+          <p>Calorías: {{ receta.calories }}</p>
+          <p>Proteínas: {{ receta.protein }}</p>
+          <p>Grasas: {{ receta.fats }}</p>
+          <p>Carbohidratos: {{ receta.carbohydrates }}</p>
+          <ion-button 
+            class="discount-button"
+            [color]="canDiscountIngredients(receta) ? 'success' : 'danger'" 
+            [disabled]="!canDiscountIngredients(receta)"
+            (click)="discountIngredients(receta)">
+            Descontar Ingredientes
+          </ion-button>
+        </div>
+      </div>
+      <div class="receta-ingredients">
+        <p>Ingredientes:</p>
+        <ion-list>
+          <ion-item *ngFor="let ing of receta.ingredients" class="receta-ingredient">
+            <ion-label>*{{ ing.name }}= {{ ing.stock }}</ion-label>
+            <ion-label *ngIf="myfoods && myfoods.length > 0 && ingredientInMyFoods(ing.name)">
+              *Stock={{ getMyFoodStock(ing.name) }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-card>
+  </ion-list>
   
   
 
 </ion-content>
+

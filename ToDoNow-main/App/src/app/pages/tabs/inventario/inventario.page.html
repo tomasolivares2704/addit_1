@@ -1,102 +1,24 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Inventario</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-header title="Alimentos"></app-header>
 <ion-content>
   <ion-spinner *ngIf="loading"></ion-spinner>
 
-  <!-- Formulario de creación de nuevo alimento -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Crear Nuevo Alimento</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <form [formGroup]="newFoodForm" (ngSubmit)="addNewFood()">
-        <ion-item>
-          <ion-label position="floating">Nombre</ion-label>
-          <ion-input formControlName="name" type="text" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Calorías</ion-label>
-          <ion-input formControlName="calories" type="number" required></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="floating">Imagen URL</ion-label>
-          <ion-input formControlName="imagen" type="text" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Grasas</ion-label>
-          <ion-input formControlName="fat" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Grasas saturadas</ion-label>
-          <ion-input formControlName="fat_sat" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Grasas trans</ion-label>
-          <ion-input formControlName="fat_trans" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">sodio</ion-label>
-          <ion-input formControlName="sodio" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">carbohidratos</ion-label>
-          <ion-input formControlName="carbs" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Proteina</ion-label>
-          <ion-input formControlName="protein" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Colesterol</ion-label>
-          <ion-input formControlName="colesterol" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Fibra</ion-label>
-          <ion-input formControlName="fibra" type="number" required></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Unidad Medida</ion-label>
-          <ion-input formControlName="medida" type="text" required></ion-input>
-        </ion-item>
-
-        <ion-button type="submit" expand="block" [disabled]="!newFoodForm.valid">Agregar Alimento</ion-button>
-      </form>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Lista de alimentos existentes 
-  <ion-list *ngIf="foods.length > 0">
-    <ion-item *ngFor="let food of foods">
-      <ion-thumbnail slot="start">
-        <img [src]="food.imagen" alt="Imagen de {{ food.name }}">
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ food.name }}</h2>
-        <p>Calorías: {{ food.calories }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list> -->
-
-  <ion-list *ngIf="foods.length > 0">
-    <ion-item *ngFor="let food of foods">
-      <ion-thumbnail slot="start">
-        <img [src]="food.imagen" alt="Imagen de {{ food.name }}">
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ food.name }}</h2>
-        <p>Calorías: {{ food.calories }}</p>
-      </ion-label>
-      <ion-button (click)="viewFoodDetails(food.id)">Ver Detalles</ion-button>
-      
-    </ion-item>
-  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4" *ngFor="let food of foods; let i = index">
+        <ion-card class="food-card" (click)="viewFoodDetails(food.id)">
+          <ion-img class="food-image" [src]="food.imagen" style="height: 100px; width: 100px;"></ion-img>
+          <ion-card-header>
+            <ion-card-title>{{ food.name }}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
+  
   
 
-  <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
+ 
+
+
 </ion-content>
