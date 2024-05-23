@@ -207,4 +207,14 @@ export class FirebaseService {
     return this.db.collection('list').doc<List>(id).valueChanges();
   }
 
+  generateId(): string {
+    // Genera un ID único utilizando la función de generación de ID de Firebase
+    return this.db.createId();
+  }
+
+  addDocument<T>(path: string, data: T): Promise<void> {
+    // Añade un nuevo documento a la colección especificada en el path con los datos proporcionados
+    return this.db.doc<T>(path).set(data);
+  }
+
 }

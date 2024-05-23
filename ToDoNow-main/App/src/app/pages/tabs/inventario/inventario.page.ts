@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
+import { List, Product } from 'src/app/models/list.models';
 import { User } from 'src/app/models/user.models';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar FormGroup, FormBuilder y Validators
-import { ModalController } from '@ionic/angular'; // Importar ModalController
-import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,14 +18,14 @@ export class InventarioPage implements OnInit {
   user = {} as User;
   foods: Foods[] = [];
   loading: boolean = false;
-  newFoodForm: FormGroup; // Definir la variable para el formulario
+  newFoodForm: FormGroup;
   selectedFood: Foods;
 
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
     private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
-    private modalController: ModalController ,
+    private route: ActivatedRoute,
     private router: Router // Inyectar Router en el constructor
   ) { 
 
@@ -97,6 +97,24 @@ export class InventarioPage implements OnInit {
   // Método para redirigir a la vista de detalles del alimento
   viewFoodDetails(foodId: string) {
     this.router.navigate(['/tabs/tabnutri', foodId]);
+  }
+
+  //Agregar producto a lista de compras
+  addToShoppingList(food: Foods) {
+    const listId = this.route.snapshot.paramMap.get('id');
+    const newProduct: Product = {
+      id: this.firebaseSvc.generateId(),
+      listId: listId,
+      food: food,
+      quantity: 1
+    };
+    const path = `user/${this.user.uid}/list/${listId}/products`;
+
+    this.firebaseSvc.addDocument(path, newProduct).then(() => {
+      this.router.navigate(['/detalle-lista', listId]);
+    }).catch(error => {
+      console.error('Error al agregar el producto a la lista de compras:', error);
+    });
   }
 
   

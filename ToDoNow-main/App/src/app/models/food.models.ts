@@ -12,6 +12,7 @@ export interface Foods {
     colesterol: number;
     fibra: number;
     medida: string;
+    price: number;
 
   }
   

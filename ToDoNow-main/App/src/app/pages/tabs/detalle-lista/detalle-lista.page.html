@@ -1,9 +1,46 @@
 <ion-content>
-  <H1 color="primary" style="color: black;">Hola</H1>
-  <ion-list>
-    <ion-item *ngFor="let product of products">
-      <!-- Mostrar detalles del producto aquí -->
-      Hola
-    </ion-item>
-  </ion-list>
+  <app-header title="Lista de Compras"></app-header>
+  <app-logo></app-logo>
+  <div class="contenido">
+    <div class="titulo">
+      <h1 class="d-flex-center">Lista</h1>
+    </div>
+    
+    <div style="margin: auto; width: 90%;">
+      <ion-buttons>
+        <!-- Ajusta estos botones para que realicen las acciones necesarias -->
+        <ion-button class="add" (click)="addProductToList()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+        <ion-button class="delete" (click)="toggleDeleteMode()">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+
+    <!-- Chequeo si no hay productos -->
+    <ion-card *ngIf="products.length === 0" class="no-products d-flex-center">
+      <p>Aún no hay productos en esta lista.</p>
+    </ion-card>
+
+    <!-- Iterar sobre la lista de productos y mostrar sus detalles -->
+    <ion-card *ngFor="let product of products">
+      <ion-row>
+        <ion-col size="3">
+          <img [src]="product.food.imagen" alt="Imagen del producto">
+          <p>{{ product.food.price | currency }}</p>
+        </ion-col>
+        <ion-col size="3">
+          {{ product.food.name }}
+        </ion-col>
+        <ion-col size="3">
+          {{ product.quantity }}
+        </ion-col>
+        <ion-col size="3">
+          {{ product.food.price * product.quantity | currency }}
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+  </div>
 </ion-content>

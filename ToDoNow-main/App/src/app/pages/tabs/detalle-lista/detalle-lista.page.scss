@@ -1,0 +1,26 @@
+.add{
+    --background: rgb(43, 197, 82) !important;
+    --color: white !important;
+    margin-top: 3%;
+    margin-right: auto;
+    width: 100px;
+    --border-radius: 20px 20px 20px 20px !important;
+}
+
+.delete{
+    --background: rgb(190, 54, 54) !important;
+    --color: white !important;
+    margin-top: 3%;
+    margin-left: auto;
+    width: 100px;
+    --border-radius: 20px 20px 20px 20px !important;
+}
+
+ion-item.delete-mode {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid red;
+  }
+
+.no-products{
+    background-color: aliceblue;
+}
