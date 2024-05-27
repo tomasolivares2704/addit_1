@@ -19,25 +19,27 @@
     </div>
 
     <!-- Chequeo si no hay productos -->
-    <ion-card *ngIf="products.length === 0" class="no-products d-flex-center">
+    <ion-card *ngIf="foods.length === 0" class="no-products d-flex-center">
       <p>Aún no hay productos en esta lista.</p>
     </ion-card>
 
     <!-- Iterar sobre la lista de productos y mostrar sus detalles -->
-    <ion-card *ngFor="let product of products">
+    <ion-card *ngFor="let food of foods">
       <ion-row>
         <ion-col size="3">
-          <img [src]="product.food.imagen" alt="Imagen del producto">
-          <p>{{ product.food.price | currency }}</p>
+          <img [src]="food.imagen" alt="Imagen del producto">
+          <p>{{ food.price | currency }}</p>
         </ion-col>
         <ion-col size="3">
-          {{ product.food.name }}
+          {{ food.name }}
         </ion-col>
+        <!-- Si quieres mostrar la cantidad de productos, asegúrate de tenerla disponible en la estructura de datos -->
         <ion-col size="3">
-          {{ product.quantity }}
-        </ion-col>
+          <!--{{ product.quantity }}-->
+        </ion-col> 
         <ion-col size="3">
-          {{ product.food.price * product.quantity | currency }}
+          <!-- Si quieres mostrar el total por producto, puedes calcularlo aquí -->
+          <!--{{ product.food.price * product.quantity | currency }} -->
         </ion-col>
       </ion-row>
     </ion-card>

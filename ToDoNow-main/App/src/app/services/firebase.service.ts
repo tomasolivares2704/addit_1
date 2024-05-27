@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 import { Receta } from '../models/receta.models';
 import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
-import { List, Product } from '../models/list.models';
+import { List } from '../models/list.models';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class FirebaseService {
   constructor(
     private auth: AngularFireAuth,
     private db: AngularFirestore,
-    private utilsSvc: UtilsService
+    private utilsSvc: UtilsService,
   ) { }
 
   // Autenticación
@@ -167,16 +168,6 @@ export class FirebaseService {
     return this.db.collection('lists').doc<List>(listId).valueChanges();
   }
 
-  getProductsForList(userId: string, listId: string) {
-    const path = `user/${userId}/list/${listId}/products`;
-    return this.getSubcollection(path, '');
-  }
-  
-  addProductToList(userId: string, listId: string, product: Product) {
-    const path = `user/${userId}/list/${listId}/products`;
-    return this.addToSubcollection(path, '', product);
-  }
-
   // Notificación
   async showNotification(list: List) {
     const toast = await this.utilsSvc.presentShoppingListNotification(`Reminder for your shopping list: ${list.title}`);
@@ -215,6 +206,25 @@ export class FirebaseService {
   addDocument<T>(path: string, data: T): Promise<void> {
     // Añade un nuevo documento a la colección especificada en el path con los datos proporcionados
     return this.db.doc<T>(path).set(data);
+  }
+
+  // Fetch all available products
+  getAllProducts() {
+    return this.db.collection('food').valueChanges();
+  }
+
+  addProductsToList(listId: string, foods: Foods[]): Promise<void> {
+    const listRef = this.db.collection('list').doc(listId);
+    return listRef.get().toPromise().then(doc => {
+      if (doc.exists) {
+        const data = doc.data() as List;
+        const currentFoods = data.food || [];
+        const updatedFoods = [...currentFoods, ...foods];
+        return listRef.update({ food: updatedFoods });
+      } else {
+        return Promise.reject('Document does not exist');
+      }
+    });
   }
 
 }

@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Seleccionar Productos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addSelectedProducts()">Añadir</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item size="4" *ngFor="let food of foods; let i = index">
+      <ion-label>{{ food.name }}</ion-label>
+      <ion-checkbox slot="end" (ionChange)="toggleProductSelection(food.id)"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

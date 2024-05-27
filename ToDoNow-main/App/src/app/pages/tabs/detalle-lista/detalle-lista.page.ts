@@ -8,7 +8,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 
 //Modelos
 import { User } from 'src/app/models/user.models';
-import { List, Product } from 'src/app/models/list.models';
+import { List } from 'src/app/models/list.models';
+import { Foods } from 'src/app/models/food.models';
 
 @Component({
   selector: 'app-detalle-lista',
@@ -19,7 +20,7 @@ export class DetalleListaPage implements OnInit {
 
   user = {} as User;
   selectedList: List;
-  products: Product[] = [];
+  foods: Foods[] = [];
   deleteMode: boolean = false;
 
   constructor(
@@ -50,33 +51,29 @@ export class DetalleListaPage implements OnInit {
     }
   }
 
-  getProductsByListId(productId: string) {
-    const user: User = this.utilsService.getElementInLocalStorage('user');
-    
-    const listId = this.route.snapshot.paramMap.get('id');
-    const path = `user/${user.uid}/list/${listId}/products/${productId}`;
-
-    this.firebaseService.getSubcollection(path, 'product').subscribe((res: Product[]) => {
-      this.products = res;
-      console.log(this.products);
+  getProductsByListId(listId: string) {
+    this.firebaseService.getListById(listId).subscribe((list: List) => {
+      this.selectedList = list;
+      this.foods = list.food; // Asignamos los alimentos de la lista a la variable foods
     });
   }
 
   async deleteList(productId: string) {
     const listId = this.route.snapshot.paramMap.get('id');
-    const path = `user/${this.user.uid}/list/${listId}/product/${productId}`;
-    
+    const path = `user/${this.user.uid}/list/${listId}`;
+  
     try {
-      await this.firebaseService.deleteDocument(path);
-      this.getProductsByListId(listId); // Refresh the list after deletion
-      this.toggleDeleteMode(); // Exit delete mode after deletion
+      await this.firebaseService.deleteDocument(path + `/foods/${productId}`);
+      this.getProductsByListId(listId); // Actualizamos la lista después de eliminar el producto
+      this.toggleDeleteMode(); // Salimos del modo de eliminación después de eliminar el producto
     } catch (error) {
       console.error('Error al eliminar el producto:', error);
     }
   }
 
   addProductToList() {
-    this.router.navigate(['tabs/inventario', this.route.snapshot.paramMap.get('id')]);
+    const listId = this.route.snapshot.paramMap.get('id');
+    this.router.navigate([`/tabs/detalle-lista/${listId}/select-products`]);
   }
 
   toggleDeleteMode() {

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
-import { List, Product } from 'src/app/models/list.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -98,25 +97,6 @@ export class InventarioPage implements OnInit {
   viewFoodDetails(foodId: string) {
     this.router.navigate(['/tabs/tabnutri', foodId]);
   }
-
-  //Agregar producto a lista de compras
-  addToShoppingList(food: Foods) {
-    const listId = this.route.snapshot.paramMap.get('id');
-    const newProduct: Product = {
-      id: this.firebaseSvc.generateId(),
-      listId: listId,
-      food: food,
-      quantity: 1
-    };
-    const path = `user/${this.user.uid}/list/${listId}/products`;
-
-    this.firebaseSvc.addDocument(path, newProduct).then(() => {
-      this.router.navigate(['/detalle-lista', listId]);
-    }).catch(error => {
-      console.error('Error al agregar el producto a la lista de compras:', error);
-    });
-  }
-
   
 
 }
