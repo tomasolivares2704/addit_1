@@ -1,8 +1,13 @@
 <app-header title="Mi Inventario"></app-header>
 
 <ion-content>
+  <app-logo></app-logo>
+  <div class="contenido">
+    <div class="titulo">
+      <h1 class="d-flex-center">Mi Inventario</h1>
+    </div>
   <ion-grid>
-    <ion-row style="background-color: 44B0F1;">
+    <ion-row>
       <ion-col size="12">
         <div class="scanner">
           <ion-icon name="scan-outline" size="large"></ion-icon>
@@ -28,64 +33,54 @@
   
     <ion-row>
       <ion-col size="12">
-        <ion-button expand="block" (click)="openFilterModal()">Filtrar</ion-button>
+        <ion-button class="filtrar" expand="block" (click)="openFilterModal()">Filtrar</ion-button>
       </ion-col>
     </ion-row>
-  
-
-
   </ion-grid>
 
   <ion-grid>
     <ion-row>
       <ng-container *ngFor="let food of filteredFoods">
-        <ion-col size="4">
-          <ion-card>
-            <ion-item>
-              <ion-thumbnail slot="start" [ngStyle]="{'border-color': food.bgColor}">
-                <img [src]="food.imagen" alt="Imagen del alimento">
-              </ion-thumbnail>
-              <ion-label>
-                <h2>{{food.name}}</h2>
-                <p>Stock: {{food.stock}}</p>
-                <p>Ideal: {{food.stock_ideal}}</p>
-              </ion-label>
-              <ion-button *ngIf="!food.showStockEditor" (click)="showStockEditor(food)">Editar Stock</ion-button>
-            </ion-item>
-  
-            <ion-row *ngIf="food.showStockEditor">
-              <ion-col size="12">
-                <ion-row>
-                  <ion-col size="4">
-                    <ion-button expand="block" color="success" (click)="incrementStock(food)">+</ion-button>
-                  </ion-col>
-                  <ion-col size="4">
-                    <ion-input type="number" [(ngModel)]="food.stockToShow" name="stockToShow"></ion-input>
-                    <p>Stock actual: {{food.stock}}</p>
-                  </ion-col>
-                  <ion-col size="4">
-                    <ion-button expand="block" color="warning" (click)="decrementStock(food)">-</ion-button>
-                  </ion-col>
-                  <ion-col size="6">
-                    <ion-button expand="block" color="primary" (click)="confirmStockChange(food)">Confirmar</ion-button>
-                  </ion-col>
-                  <ion-col size="6">
-                    <ion-button expand="block" color="danger" (click)="cancelStockEdit(food)">Cancelar</ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
+        <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
+          <ion-card class="food-card">
+            <div class="image-container">
+              <ion-img [src]="food.imagen" alt="Imagen del alimento" class="food-image"></ion-img>
+              <ion-button fill="clear" class="edit-button" *ngIf="!food.showStockEditor" (click)="showStockEditor(food)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+              <div class="stock-label">
+                <h5>{{ food.stock }}</h5>
+              </div>
+            </div>
+            <ion-card-content class="food-card-content">
+              <p style="font-size: 10px; color: #44B0F1; font-weight: bold;">{{ food.name }}</p>
+            </ion-card-content>
           </ion-card>
         </ion-col>
+        <ion-card>
+          <ion-card-content *ngIf="food.showStockEditor">
+              <ion-row>
+                <ion-col size="4">
+                  <ion-button expand="block" color="success" (click)="incrementStock(food)">+</ion-button>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-input type="number" [(ngModel)]="food.stockToShow" name="stockToShow"></ion-input>
+                  <p>Stock actual: {{ food.stock }}</p>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-button expand="block" color="warning" (click)="decrementStock(food)">-</ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" color="primary" (click)="confirmStockChange(food)">Confirmar</ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" color="danger" (click)="cancelStockEdit(food)">Cancelar</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-card-content>
+        </ion-card>
       </ng-container>
     </ion-row>
   </ion-grid>
-
-
-  
-  
-  
-  
-
-  
+  </div>
 </ion-content>

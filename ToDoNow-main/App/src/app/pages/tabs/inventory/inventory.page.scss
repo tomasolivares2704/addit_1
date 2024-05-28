@@ -1,88 +1,71 @@
+.scanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
 
+.scanner ion-icon {
+  margin-right: 10px;
+}
 
-.low-stock {
-    background-color: yellow;
-  }
-  
-  .no-stock {
-    background-color: red;
-  }
-  
-  .high-stock {
-    background-color: green;
-  }
-  
+.filtrar{
+  background: rgb(255, 255, 255);
+}
 
-  .food-thumbnail {
-    border-radius: 50%; /* Hace que la imagen tenga bordes redondeados */
-    border-width: 4px; /* Ancho del borde */
-    border-style: solid; /* Estilo del borde */
-  }
-  
-  .food-thumbnail img {
-    border-radius: 100%; /* Hace que la imagen tenga bordes redondeados */
-    background-color: rgba(255, 255, 255, 1); /* Fondo transparente con un 50% de opacidad */
-  }
+.food-card {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; 
+}
 
-  .scanner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    padding: 10px;
-    background-color: #44B0F1;
-    border-radius: 10px;
-  }
-  
-  .scanner ion-icon {
-    margin-right: 10px;
-  }
-  
-  .toggle-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .toggle-col {
-    display: flex;
-    align-items: center;
-  }
-  
-  .toggle-col ion-label {
-    margin-left: 10px;
-  }
-  
-  .filter-col {
-    display: flex;
-    align-items: center;
-  }
-  
-  .filter-col ion-searchbar {
-    flex: 1;
-  }
-  
-  .filter-col ion-button {
-    margin-left: 10px;
-  }
-  
-  ion-thumbnail {
-    border: 2px solid;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  ion-card {
-    margin: 10px 0;
-  }
-  
-  ion-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
+.food-card .image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
-    ion-grid {
-      background-color: #A8DEFF;
-    }
+.food-image {
+  width: 80%;
+  height: 80%; 
+  margin: auto;
+}
+
+.edit-button {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  height: 25px;
+  width: 25px;
+  --background: rgba(255, 255, 255, 0); /* Botón semi-transparente */
+  font-size: 1px;
+}
+
+.stock-label {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  background: rgba(43, 37, 37, 0); /* Etiqueta semi-transparente */
+  padding: 0px 2px;
+  border-radius: 10px;
+}
+
+.food-card-content {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+ion-icon {
+  color: #3880ff;
+  --ionicon-stroke-width: 70px;
+}
