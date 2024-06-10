@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ receta?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="receta">
+  <ion-card>
+    <img [src]="receta.imagen" alt="{{ receta.name }}">
+    <ion-card-header>
+      <ion-card-title>{{ receta.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Calorías: {{ receta.calories }}</p>
+      <p>Proteínas: {{ receta.protein }}</p>
+      <p>Grasas: {{ receta.fats }}</p>
+      <p>Carbohidratos: {{ receta.carbohydrates }}</p>
+      <ion-list>
+        <ion-item *ngFor="let ingredient of receta.ingredients">
+          <ion-label>
+            {{ ingredient.name }}: {{ ingredient.stock }}
+          </ion-label>
+          <ion-button (click)="descontarStock(ingredient)">Descontar</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

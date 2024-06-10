@@ -1,0 +1,41 @@
+<app-header title="Recetas"></app-header>
+
+<ion-content>
+  <ion-spinner *ngIf="loading"></ion-spinner>
+
+
+  <ion-list>
+    <ion-card class="receta-card" *ngFor="let receta of recetas">
+      <div class="receta-image" [style.backgroundImage]="'url(' + receta.imagen + ')'">
+        <div class="receta-nutrition">
+          <p>Calorías: {{ receta.calories }}</p>
+          <p>Proteínas: {{ receta.protein }}</p>
+          <p>Grasas: {{ receta.fats }}</p>
+          <p>Carbohidratos: {{ receta.carbohydrates }}</p>
+          <ion-button 
+            class="discount-button"
+            [color]="canDiscountIngredients(receta) ? 'success' : 'danger'" 
+            [disabled]="!canDiscountIngredients(receta)"
+            (click)="discountIngredients(receta)">
+            Descontar Ingredientes
+          </ion-button>
+        </div>
+      </div>
+      <div class="receta-ingredients">
+        <p>Ingredientes:</p>
+        <ion-list>
+          <ion-item *ngFor="let ing of receta.ingredients" class="receta-ingredient">
+            <ion-label>*{{ ing.name }}= {{ ing.stock }}</ion-label>
+            <ion-label *ngIf="myfoods && myfoods.length > 0 && ingredientInMyFoods(ing.name)">
+              *Stock={{ getMyFoodStock(ing.name) }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-card>
+  </ion-list>
+  
+  
+
+</ion-content>
+

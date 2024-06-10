@@ -3,6 +3,8 @@ import { AlertController, AlertOptions, LoadingController, LoadingOptions, Modal
 import { Router } from '@angular/router';
 import { Task } from 'src/app/models/task.models';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -69,6 +71,10 @@ export class UtilsService {
     }
   }
 
+  async dismissToast() {
+    await this.toastController.dismiss();
+  }
+
 
   // Dismiss
   dismssModal(data?: any) {
@@ -82,4 +88,15 @@ export class UtilsService {
 
     return parseInt(percentage.toString());
   }
+
+  // Notificación específica para listas de compras
+  async presentShoppingListNotification(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
 }

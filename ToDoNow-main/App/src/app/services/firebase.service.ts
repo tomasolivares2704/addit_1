@@ -5,8 +5,6 @@ import { User } from '../models/user.models';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
 import { Observable } from 'rxjs';
-<<<<<<< Updated upstream
-=======
 import { Receta } from '../models/receta.models';
 import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
@@ -14,7 +12,6 @@ import { List } from '../models/list.models';
 import { NewList } from '../models/newlist.models';
 import {FoodList} from '../models/detnewlist.models';
 import { AlimentoListaCompra } from '../models/newlist.models';
->>>>>>> Stashed changes
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +21,7 @@ export class FirebaseService {
   constructor(
     private auth: AngularFireAuth,
     private db: AngularFirestore,
-    private utilsSvc: UtilsService
+    private utilsSvc: UtilsService,
   ) { }
 
   // Autenticación
@@ -84,8 +81,6 @@ export class FirebaseService {
     });
   }
 
-<<<<<<< Updated upstream
-=======
   getReceta(id: string): Observable<Receta> {
     return this.db.collection('recetas').doc<Receta>(id).valueChanges();
   }
@@ -262,5 +257,4 @@ export class FirebaseService {
   
 
   
->>>>>>> Stashed changes
 }

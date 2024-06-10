@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear Lista</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="listForm" (ngSubmit)="createNewList()">
+
+    <ion-item>
+      <ion-label position="floating" for="title">Título:</ion-label>
+      <ion-input type="text" formControlName="title" id="title"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" for="purchaseFrequency">Frecuencia de Compra:</ion-label>
+      <ion-input type="text" formControlName="purchaseFrequency" id="purchaseFrequency"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" for="image">Imagen:</ion-label>
+      <ion-input type="text" formControlName="image" id="image"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" shape="round" type="submit" [disabled]="listForm.invalid">Crear</ion-button>
+
+  </form>
+</ion-content>

@@ -15,15 +15,6 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
-<<<<<<< Updated upstream
-      }
-    ],
-  },
-  {
-    path: 'inventario',
-    loadChildren: () => import('./inventario/inventario.module').then( m => m.InventarioPageModule)
-  },
-=======
       },
       {
         path: 'inventory',
@@ -76,7 +67,6 @@ const routes: Routes = [
   
 
 
->>>>>>> Stashed changes
 ];
 
 @NgModule({

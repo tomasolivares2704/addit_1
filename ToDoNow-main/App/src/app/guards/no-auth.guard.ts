@@ -23,7 +23,7 @@ export class NoAuthGuard implements CanActivate {
           return true;
         } else {
           // Existe usuario autenticado
-          this.utilsSvc.routerLink('/tabs/home');
+          this.utilsSvc.routerLink('/tabs/inventory');
           return false;
         }
       }));
