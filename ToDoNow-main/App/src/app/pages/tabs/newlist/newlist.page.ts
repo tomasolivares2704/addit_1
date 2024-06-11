@@ -5,7 +5,6 @@ import { NewList } from 'src/app/models/newlist.models';
 import { NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user.models';
 
-
 @Component({
   selector: 'app-newlist',
   templateUrl: './newlist.page.html',
@@ -16,45 +15,39 @@ export class NewlistPage implements OnInit {
   nombreLista: string;
   user = {} as User;
   listasDeUsuario: NewList[] = [];
-
-  
+  newlist: NewList = { id: '', nombre: '', total: 0, alimentos: [] }; // Inicializar newlist
 
   constructor(
     private firebaseService: FirebaseService,
-     private navCtrl: NavController,
-     private utilsSvc: UtilsService,
-
-    ) { }
+    private navCtrl: NavController,
+    private utilsSvc: UtilsService,
+  ) { }
 
   ngOnInit() {
     this.getUser();
     this.obtenerListasDeUsuario();
+    this.actualizarPrecioTotal();
   }
 
-
   getUser() {
-    // Obtener los datos del usuario del almacenamiento local
     this.user = this.utilsSvc.getElementInLocalStorage('user');
-    
-    // Verificar si el usuario tiene el rol de administrador
     if (this.user && this.user.isAdmin) {
-      // Si el usuario es administrador, establecer isAdmin en true en el almacenamiento local
       this.utilsSvc.setElementInLocalStorage('isAdmin', true);
     }
   }
 
   crearNuevaLista() {
-    if (this.nombreLista && this.user.uid) { // Verificar que haya un nombre de lista y un UID de usuario
+    if (this.nombreLista && this.user.uid) {
       const nuevaLista: NewList = {
-        id: '', // Este será generado automáticamente por Firebase
+        id: '', 
         nombre: this.nombreLista,
-        alimentos: [] // Puedes inicializar la lista de alimentos aquí si es necesario
+        alimentos: [], 
+        total: 0,
       };
 
-      this.firebaseService.crearNewList(this.user.uid, nuevaLista) // Utilizar el UID del usuario
+      this.firebaseService.crearNewList(this.user.uid, nuevaLista)
         .then(() => {
           console.log('Nueva lista creada exitosamente.');
-          // Redireccionar a la página de listas u otra página según sea necesario
           this.navCtrl.navigateRoot('/ruta_de_la_pagina_de_listas');
         })
         .catch(error => {
@@ -71,6 +64,14 @@ export class NewlistPage implements OnInit {
         .subscribe(listas => {
           this.listasDeUsuario = listas;
           console.log('Listas del usuario:', listas);
+  
+          // Imprimir el nombre de la lista y el precio de cada alimento en la consola
+          listas.forEach(lista => {
+            console.log('Nombre de la lista:', lista.nombre);
+            lista.alimentos.forEach(alimento => {
+              console.log('Nombre del alimento:', alimento.nombre, 'Precio:', alimento.precio);
+            });
+          });
         }, error => {
           console.error('Error al obtener listas del usuario:', error);
         });
@@ -78,13 +79,19 @@ export class NewlistPage implements OnInit {
       console.error('UID del usuario no disponible.');
     }
   }
+  
 
   verDetallesLista(id: string) {
-    this.navCtrl.navigateForward(['/tabs/detnewlist', id]); // Redirigir a la vista detnewlist con el ID de la lista como parámetro
+    this.navCtrl.navigateForward(['/tabs/detnewlist', id]);
   }
 
-
-
-
-
+  // Función para actualizar el precio total basado en los precios de los alimentos en la lista
+  actualizarPrecioTotal() {
+    this.newlist.total = 0; // Reiniciar el total de la lista
+    
+    // Sumar el precio de cada alimento en la lista
+    this.newlist.alimentos.forEach(alimento => {
+      this.newlist.total += alimento.precio;
+    });
+  }
 }

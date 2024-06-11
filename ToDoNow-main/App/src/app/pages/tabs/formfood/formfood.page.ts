@@ -41,6 +41,7 @@ export class FormfoodPage implements OnInit {
       colesterol: ['', Validators.required],
       fibra: ['', Validators.required],
       medida: ['', Validators.required],
+      price: ['',Validators.required],
     });
   }
   

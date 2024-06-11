@@ -1,22 +1,37 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>{{ newlist.nombre }}</ion-title>
+    <ion-title>
+      Detalle de la lista
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ newlist.nombre }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      {{ newlist.nombre }}
+    </ion-card-header>
+    <ion-card-content>
+      Total: {{ calcularTotal() | currency:'USD':'symbol':'1.2-2' }}
+    </ion-card-content>
+  </ion-card>
 
-  <ion-list>
-    <ion-item *ngFor="let alimento of newlist.alimentos">
-      <ion-label>{{ alimento.nombre }}</ion-label>
-      <ion-input type="number" [(ngModel)]="alimento.cantidad"></ion-input>
-      <ion-button (click)="agregarAlimento(alimento)">Agregar</ion-button>
+  <ion-list *ngIf="loading; else foodsList">
+    <ion-item>
+      <ion-label>Loading...</ion-label>
     </ion-item>
   </ion-list>
-</ion-content>
 
+  <ng-template #foodsList>
+    <ion-list>
+      <ion-item *ngFor="let alimento of newlist.alimentos">
+        <ion-label>{{ alimento.nombre }}</ion-label>
+        <ion-input [(ngModel)]="alimento.cantidad" type="number"></ion-input>
+        <ion-input [(ngModel)]="alimento.precio" type="number"></ion-input>
+        <ion-label>{{ (alimento.cantidad * alimento.precio) | currency:'USD':'symbol':'1.2-2' }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+
+  <ion-button expand="full" (click)="guardarCambios()">Guardar cambios</ion-button>
+</ion-content>

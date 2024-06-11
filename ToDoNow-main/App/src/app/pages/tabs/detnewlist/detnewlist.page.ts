@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ActivatedRoute } from '@angular/router';
-import { AlimentoListaCompra, NewList } from 'src/app/models/newlist.models';
+import { NewList, AlimentoListaCompra } from 'src/app/models/newlist.models';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
 
@@ -11,7 +11,7 @@ import { Foods } from 'src/app/models/food.models';
   styleUrls: ['./detnewlist.page.scss'],
 })
 export class DetnewlistPage implements OnInit {
-  newlist: NewList = { id: '', nombre: '', alimentos: [] }; // Inicialización de newlist
+  newlist: NewList = { id: '', nombre: '', total: 0, alimentos: [] };
   userUid: string;
   foods: Foods[] = [];
   loading: boolean = false;
@@ -40,7 +40,7 @@ export class DetnewlistPage implements OnInit {
   loadNewListDetails() {
     const listId = this.route.snapshot.paramMap.get('id');
     if (listId) {
-      this.newlist.id = listId; // Asignar el ID de la lista obtenido de la URL
+      this.newlist.id = listId;
       this.firebaseSvc.obtenerDetallesLista(this.userUid, listId).subscribe(
         (list) => {
           this.newlist = list;
@@ -61,8 +61,7 @@ export class DetnewlistPage implements OnInit {
         this.foods = foods;
         this.loading = false;
         console.log('Alimentos recibidos:', foods);
-        // Inicializar newlist utilizando los alimentos recibidos
-        this.initNewListFromFoods(this.newlist.id);
+        this.initNewListFromFoods();
       },
       (error) => {
         console.error('Error al obtener alimentos:', error);
@@ -71,30 +70,57 @@ export class DetnewlistPage implements OnInit {
     );
   }
 
-  initNewListFromFoods(listId: string) {
-    // Limpiar la lista de alimentos de newlist
+  initNewListFromFoods() {
     this.newlist.alimentos = [];
-    // Iterar sobre los alimentos y agregarlos a la lista de alimentos de newlist
     this.foods.forEach(food => {
       const alimento: AlimentoListaCompra = {
         id: food.id,
-        listaId: listId, // Asignar el ID de la lista
         nombre: food.name,
-        cantidad: 0, // Inicializar cantidad en 0
-        subtotal: 0, // Inicializar subtotal en 0
+        cantidad: 0,
+        precio: food.price, // Agregar el precio del alimento al inicializar
+        subtotal: 0,
       };
       this.newlist.alimentos.push(alimento);
     });
   }
 
-  agregarAlimento(alimento: AlimentoListaCompra) {
-    // Agregar el alimento a la lista de alimentos de la nueva lista de compra
-    this.firebaseSvc.agregarAlimentoALista(this.userUid, this.newlist.id, alimento)
-      .then(() => {
-        console.log('Alimento agregado exitosamente a la lista.');
-      })
-      .catch(error => {
-        console.error('Error al agregar el alimento a la lista:', error);
-      });
+  calcularSubtotal() {
+    this.newlist.total = 0;
+    this.newlist.alimentos.forEach(alimento => {
+      alimento.subtotal = alimento.cantidad * alimento.precio;
+      this.newlist.total += alimento.subtotal;
+    });
   }
+
+  guardarCambios() {
+    console.log('Guardando cambios...');
+    // Calcular los subtotales antes de guardar los cambios
+    this.calcularSubtotal();
+    // Iterar sobre la lista de alimentos
+    this.newlist.alimentos.forEach(alimento => {
+      // Aquí puedes agregar la lógica para guardar cada alimento modificado
+      // Por ejemplo, si tienes un servicio de Firebase, podrías actualizar cada documento de la subcolección correspondiente
+      this.firebaseSvc.actualizarAlimento(this.userUid, this.newlist.id, alimento)
+        .then(() => {
+          console.log('Alimento actualizado exitosamente:', alimento);
+        })
+        .catch(error => {
+          console.error('Error al actualizar el alimento:', error);
+        });
+    });
+  }
+
+  calcularTotal(): number {
+    let total = 0;
+    this.newlist.alimentos.forEach(alimento => {
+      console.log('Cantidad:', alimento.cantidad, 'Precio:', alimento.precio);
+      total += alimento.cantidad * alimento.precio;
+    });
+    console.log('Total calculado:', total);
+    return total;
+  }
+  
+  
+  
+
 }

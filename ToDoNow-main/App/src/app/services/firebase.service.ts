@@ -250,10 +250,51 @@ export class FirebaseService {
     return this.db.collection('user').doc(uid).collection('newlist').doc<NewList>(idLista).valueChanges();
   }
 
-  async agregarAlimentoALista(userUid: string, listaId: string, alimento: AlimentoListaCompra): Promise<void> {
-    await this.db.collection(`user/${userUid}/newlist/${listaId}/alimentos`).add(alimento);
-    return;
+  // firebase.service.ts
+async agregarAlimentoALista(userUid: string, listId: string, alimento: AlimentoListaCompra): Promise<void> {
+  try {
+    // Utiliza la referencia a la colección de alimentos de la nueva lista
+    const alimentosCollectionRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`);
+    // Añade un nuevo documento a la colección de alimentos
+    const alimentoRef = await alimentosCollectionRef.add(alimento);
+    // Obtiene el ID generado automáticamente y lo asigna al alimento
+    alimento.id = alimentoRef.id;
+  } catch (error) {
+    throw error;
   }
+}
+
+async actualizarAlimentoDeLista(userUid: string, listId: string, alimento: AlimentoListaCompra): Promise<void> {
+  try {
+    // Utiliza la referencia a la colección de alimentos de la nueva lista
+    const alimentosCollectionRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`);
+    // Añade un nuevo documento a la colección de alimentos
+    const alimentoRef = await alimentosCollectionRef.add(alimento);
+    // Obtiene el ID generado automáticamente y lo asigna al alimento
+    alimento.id = alimentoRef.id;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
+  if (listId && alimento.id) { // Verificar que el ID de la lista y el ID del alimento no estén vacíos
+    try {
+      await this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`).doc(alimento.id).update(alimento);
+      console.log('Alimento actualizado exitosamente en la lista.');
+    } catch (error) {
+      console.error('Error al actualizar el alimento en la lista:', error);
+    }
+  } else {
+    console.error('El ID de la lista o el ID del alimento es inválido.');
+  }
+}
+
+
+
+
+  
   
 
   
