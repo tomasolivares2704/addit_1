@@ -274,27 +274,38 @@ export class FirebaseService {
 
 
 
-  // firebase.service.ts
   async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
     if (!listId || !alimento.id) {
-      console.error('El ID de la lista o el ID del alimento es inválido.');
-      console.error('List ID:', listId);
-      console.error('Alimento ID:', alimento.id);
+      console.error('FIRESERVICE. El ID de la lista o el ID del alimento es inválido.');
+      console.error('FIRESERVICE. List ID:', listId);
+      console.error('FIRESERVICE. Alimento ID:', alimento.id);
       return;
     }
   
-    console.log('List ID:', listId);
-    console.log('Alimento ID:', alimento.id);
+    console.log('FIRESERVICE. List ID:', listId);
+    console.log('FIRESERVICE. Alimento ID:', alimento.id);
   
     try {
       const alimentosRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`).doc(alimento.id);
-      console.log('Alimentos Ref:', alimentosRef);
-      await alimentosRef.update(alimento);
-      console.log('Alimento actualizado exitosamente en la lista.');
+      console.log('FIRESERVICE. Alimentos Ref:', alimentosRef);
+  
+      // Obtener el documento
+      const doc = await alimentosRef.get().toPromise();
+  
+      // Verificar si el documento existe
+      if (doc.exists) {
+        // El documento existe, ahora puedes actualizarlo
+        await alimentosRef.update(alimento);
+        console.log('FIRESERVICE.Alimento actualizado exitosamente en la lista.');
+      } else {
+        console.error('FIRESERVICE.El documento no existe en la base de datos.');
+      }
     } catch (error) {
-      console.error('Error al actualizar el alimento en la lista:', error);
+      console.error('FIRESERVICE.Error al actualizar el alimento en la lista:', error);
     }
   }
+  
+  
   
 
 
