@@ -5,6 +5,9 @@ import { NewList } from 'src/app/models/newlist.models';
 import { NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user.models';
 
+import { Foods } from 'src/app/models/food.models';
+import { AlimentoListaCompra } from 'src/app/models/newlist.models';
+
 @Component({
   selector: 'app-newlist',
   templateUrl: './newlist.page.html',
@@ -38,29 +41,49 @@ export class NewlistPage implements OnInit {
 
   crearNuevaLista() {
     if (this.nombreLista && this.user.uid) {
-      const nuevaLista: NewList = {
-        id: '', 
-        nombre: this.nombreLista,
-        alimentos: [], 
-        total: 0,
-      };
+      // Obtener todos los alimentos
+      this.firebaseService.getAllFoods().subscribe(
+        (foods: Foods[]) => {
+          // Crear una nueva lista con los alimentos obtenidos
+          const nuevaLista: NewList = {
+            id: '', 
+            nombre: this.nombreLista,
+            alimentos: [], 
+            total: 0,
+          };
   
-      this.firebaseService.crearNewList(this.user.uid, nuevaLista)
-        .then((newListId) => {
-          nuevaLista.id = newListId; // Actualizar el ID con el ID asignado por Firestore
-          
-          // Actualizar el array de alimentos si es necesario
-          nuevaLista.alimentos = []; // Aquí puedes agregar lógica para obtener los alimentos si es necesario
-          
-          console.log('Nueva lista creada exitosamente:', nuevaLista);
-        })
-        .catch(error => {
-          console.error('Error al crear nueva lista:', error);
-        });
+          foods.forEach((food, index) => {
+            // Usar un ID único generado automáticamente por Firebase si food.id no está definido
+            const alimento: AlimentoListaCompra = {
+              id: food.id || `food_${index}`, // Usar un ID predeterminado si food.id no está disponible
+              nombre: food.name,
+              cantidad: 0,
+              precio: food.price,
+              subtotal: 0,
+            };
+            nuevaLista.alimentos.push(alimento);
+          });
+  
+          // Crear la nueva lista en Firebase
+          this.firebaseService.crearNewList(this.user.uid, nuevaLista)
+            .then((newListId) => {
+              nuevaLista.id = newListId; // Actualizar el ID con el ID asignado por Firestore
+              console.log('Nueva lista creada exitosamente:', nuevaLista);
+            })
+            .catch(error => {
+              console.error('Error al crear nueva lista:', error);
+            });
+        },
+        (error) => {
+          console.error('Error al obtener alimentos:', error);
+        }
+      );
     } else {
       console.error('El nombre de la lista es obligatorio.');
     }
   }
+  
+  
   
   
 

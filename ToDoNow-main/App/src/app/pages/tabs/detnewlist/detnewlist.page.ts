@@ -24,8 +24,6 @@ export class DetnewlistPage implements OnInit {
 
   ngOnInit() {
     this.getUser();
-    this.getAllFoods();
-    this.loadNewListDetails();
   }
 
   getUser() {
@@ -46,6 +44,8 @@ export class DetnewlistPage implements OnInit {
       this.firebaseSvc.obtenerDetallesLista(this.userUid, listId).subscribe(
         (list) => {
           this.newlist = list;
+          // Obtener detalles de los alimentos
+          this.loadAlimentosDetails(listId);
         },
         (error) => {
           console.error('Error al obtener los detalles de la lista:', error);
@@ -55,38 +55,59 @@ export class DetnewlistPage implements OnInit {
       console.error('No se encontró el ID de la lista en la ruta');
     }
   }
-  
-  
 
-  getAllFoods() {
-    this.loading = true;
-    this.firebaseSvc.getAllFoods().subscribe(
-      (foods: Foods[]) => {
-        this.foods = foods;
-        this.loading = false;
-        //console.log('Alimentos recibidos:', foods);
-        this.initNewListFromFoods();
+  loadAlimentosDetails(listId: string) {
+    this.firebaseSvc.obtenerDetallesAlimentos(this.userUid, listId).subscribe(
+      (alimentos) => {
+        // Asignar los detalles de los alimentos a la lista
+        this.newlist.alimentos = alimentos;
       },
       (error) => {
-        console.error('Error al obtener alimentos:', error);
-        this.loading = false;
+        console.error('Error al obtener los detalles de los alimentos:', error);
       }
     );
   }
 
-  initNewListFromFoods() {
-    this.newlist.alimentos = [];
-    this.foods.forEach((food, index) => {
-      // Usar un ID único generado automáticamente por Firebase si food.id no está definido
-      const alimento: AlimentoListaCompra = {
-        id: food.id || `food_${index}`, // Usar un ID predeterminado si food.id no está disponible
-        nombre: food.name,
-        cantidad: 0,
-        precio: food.price,
-        subtotal: 0,
-      };
-      this.newlist.alimentos.push(alimento);
+  guardarCambios() {
+    console.log('Guardando cambios...');
+  
+    // Obtener el ID de la lista
+    const listId = this.route.snapshot.paramMap.get('id');
+    console.log('List ID XD:', listId);
+  
+    // Verificar si el ID de la lista está presente y válido
+    if (!listId) {
+      console.error('ID de lista no encontrado.');
+      return;
+    }
+  
+    // Calcular los subtotales antes de guardar los cambios
+    this.calcularSubtotal();
+  
+    // Filtrar los alimentos con IDs válidos
+    const alimentosValidos = this.newlist.alimentos.filter(alimento => alimento.id);
+  
+    // Crear un array de promesas para todas las actualizaciones de alimentos
+    const promises = alimentosValidos.map(alimento => {
+      // Actualizar el alimento en Firestore
+      return this.firebaseSvc.actualizarAlimento(this.userUid, listId, alimento)
+        .then(() => {
+          console.log('Alimento actualizado exitosamente:', alimento);
+        })
+        .catch(error => {
+          console.error('Error al actualizar el alimento:', error);
+          return Promise.reject(error);
+        });
     });
+  
+    // Esperar a que todas las actualizaciones se completen
+    Promise.all(promises)
+      .then(() => {
+        console.log('Todos los alimentos actualizados exitosamente XSSS.');
+      })
+      .catch(error => {
+        console.error('Error al actualizar uno o más alimentos:', error);
+      });
   }
   
 
@@ -98,66 +119,11 @@ export class DetnewlistPage implements OnInit {
     });
   }
 
-  async guardarCambios() {
-    console.log('Guardando cambios...');
-
-    // Obtener el ID de la lista
-    const listId = this.route.snapshot.paramMap.get('id');
-    console.log('List ID XD:', listId);
-
-    // Verificar si el ID de la lista está presente y válido
-    if (!listId) {
-        console.error('ID de lista no encontrado.');
-        return;
-    }
-
-    // Calcular los subtotales antes de guardar los cambios
-    this.calcularSubtotal();
-  
-    // Crear un array de promesas para todas las actualizaciones de alimentos
-    const promises = this.newlist.alimentos.map(alimento => {
-        // Validar el ID del alimento
-        if (!alimento.id) {
-            console.error('El ID del alimento es inválido.');
-            console.error('Alimento:', alimento);
-            return Promise.reject('ID de alimento inválido');
-        }
-      
-        // Actualizar el alimento en Firestore
-        return this.firebaseSvc.actualizarAlimento(this.userUid, listId, alimento)
-            .then(() => {
-                console.log('Alimento actualizado exitosamente:', alimento);
-            })
-            .catch(error => {
-                console.error('Error al actualizar el alimento:', error);
-                return Promise.reject(error);
-            });
-    });
-  
-    // Esperar a que todas las actualizaciones se completen
-    try {
-        await Promise.all(promises);
-        console.log('Todos los alimentos actualizados exitosamente.');
-    } catch (error) {
-        console.error('Error al actualizar uno o más alimentos:', error);
-    }
-}
-
-
-  
-  
-
   calcularTotal(): number {
     let total = 0;
     this.newlist.alimentos.forEach(alimento => {
-      //console.log('Cantidad:', alimento.cantidad, 'Precio:', alimento.precio);
       total += alimento.cantidad * alimento.precio;
     });
-    //console.log('Total calculado:', total);
     return total;
   }
-  
-  
-  
-
 }

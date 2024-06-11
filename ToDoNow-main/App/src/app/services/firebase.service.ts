@@ -12,6 +12,8 @@ import { List } from '../models/list.models';
 import { NewList } from '../models/newlist.models';
 import {FoodList} from '../models/detnewlist.models';
 import { AlimentoListaCompra } from '../models/newlist.models';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -230,9 +232,9 @@ export class FirebaseService {
   }
 
 
-  async crearNewList(uid: string, newListData: NewList): Promise<string> {
+  async crearNewList(userUid: string, newListData: NewList): Promise<string> {
     try {
-      const newListRef = await this.db.collection('user').doc(uid).collection('newlist').add({
+      const newListRef = await this.db.collection('user').doc(userUid).collection('newlist').add({
         nombre: newListData.nombre,
         total: newListData.total
       });
@@ -262,6 +264,7 @@ export class FirebaseService {
   
   
   
+  
 
   // Método para obtener todas las newlist de un usuario
   obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
@@ -271,6 +274,25 @@ export class FirebaseService {
   obtenerDetallesLista(uid: string, idLista: string): Observable<NewList> {
     return this.db.collection('user').doc(uid).collection('newlist').doc<NewList>(idLista).valueChanges();
   }
+
+  obtenerDetallesAlimentos(userUid: string, listId: string): Observable<AlimentoListaCompra[]> {
+    return this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`)
+      .valueChanges()
+      .pipe(
+        map((data: any[]) => {
+          // Mapear los datos recibidos al tipo AlimentoListaCompra
+          return data.map(item => ({
+            id: item.id,
+            nombre: item.nombre,
+            cantidad: item.cantidad,
+            precio: item.precio,
+            subtotal: item.subtotal
+          }));
+        })
+      );
+  }
+
+
 
 
 
