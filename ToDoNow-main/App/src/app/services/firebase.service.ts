@@ -274,6 +274,7 @@ export class FirebaseService {
 
 
 
+  // firebase.service.ts
   async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
     if (!listId || !alimento.id) {
       console.error('El ID de la lista o el ID del alimento es inválido.');
@@ -294,6 +295,9 @@ export class FirebaseService {
       console.error('Error al actualizar el alimento en la lista:', error);
     }
   }
+  
+
+
   
   
   

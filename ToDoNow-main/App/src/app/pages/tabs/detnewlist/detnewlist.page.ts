@@ -98,23 +98,54 @@ export class DetnewlistPage implements OnInit {
     });
   }
 
-  guardarCambios() {
+  async guardarCambios() {
     console.log('Guardando cambios...');
+
+    // Obtener el ID de la lista
+    const listId = this.route.snapshot.paramMap.get('id');
+    console.log('List ID XD:', listId);
+
+    // Verificar si el ID de la lista está presente y válido
+    if (!listId) {
+        console.error('ID de lista no encontrado.');
+        return;
+    }
+
     // Calcular los subtotales antes de guardar los cambios
     this.calcularSubtotal();
-    // Iterar sobre la lista de alimentos
-    this.newlist.alimentos.forEach(alimento => {
-      // Aquí puedes agregar la lógica para guardar cada alimento modificado
-      // Por ejemplo, si tienes un servicio de Firebase, podrías actualizar cada documento de la subcolección correspondiente
-      this.firebaseSvc.actualizarAlimento(this.userUid, this.newlist.id, alimento)
-        .then(() => {
-          console.log('Alimento actualizado exitosamente:', alimento);
-        })
-        .catch(error => {
-          console.error('Error al actualizar el alimento:', error);
-        });
+  
+    // Crear un array de promesas para todas las actualizaciones de alimentos
+    const promises = this.newlist.alimentos.map(alimento => {
+        // Validar el ID del alimento
+        if (!alimento.id) {
+            console.error('El ID del alimento es inválido.');
+            console.error('Alimento:', alimento);
+            return Promise.reject('ID de alimento inválido');
+        }
+      
+        // Actualizar el alimento en Firestore
+        return this.firebaseSvc.actualizarAlimento(this.userUid, listId, alimento)
+            .then(() => {
+                console.log('Alimento actualizado exitosamente:', alimento);
+            })
+            .catch(error => {
+                console.error('Error al actualizar el alimento:', error);
+                return Promise.reject(error);
+            });
     });
-  }
+  
+    // Esperar a que todas las actualizaciones se completen
+    try {
+        await Promise.all(promises);
+        console.log('Todos los alimentos actualizados exitosamente.');
+    } catch (error) {
+        console.error('Error al actualizar uno o más alimentos:', error);
+    }
+}
+
+
+  
+  
 
   calcularTotal(): number {
     let total = 0;
