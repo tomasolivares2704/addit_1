@@ -250,32 +250,6 @@ export class FirebaseService {
     return this.db.collection('user').doc(uid).collection('newlist').doc<NewList>(idLista).valueChanges();
   }
 
-  // firebase.service.ts
-async agregarAlimentoALista(userUid: string, listId: string, alimento: AlimentoListaCompra): Promise<void> {
-  try {
-    // Utiliza la referencia a la colección de alimentos de la nueva lista
-    const alimentosCollectionRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`);
-    // Añade un nuevo documento a la colección de alimentos
-    const alimentoRef = await alimentosCollectionRef.add(alimento);
-    // Obtiene el ID generado automáticamente y lo asigna al alimento
-    alimento.id = alimentoRef.id;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async actualizarAlimentoDeLista(userUid: string, listId: string, alimento: AlimentoListaCompra): Promise<void> {
-  try {
-    // Utiliza la referencia a la colección de alimentos de la nueva lista
-    const alimentosCollectionRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`);
-    // Añade un nuevo documento a la colección de alimentos
-    const alimentoRef = await alimentosCollectionRef.add(alimento);
-    // Obtiene el ID generado automáticamente y lo asigna al alimento
-    alimento.id = alimentoRef.id;
-  } catch (error) {
-    throw error;
-  }
-}
 
 
 async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {

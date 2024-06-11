@@ -48,7 +48,6 @@ export class NewlistPage implements OnInit {
       this.firebaseService.crearNewList(this.user.uid, nuevaLista)
         .then(() => {
           console.log('Nueva lista creada exitosamente.');
-          this.navCtrl.navigateRoot('/ruta_de_la_pagina_de_listas');
         })
         .catch(error => {
           console.error('Error al crear nueva lista:', error);

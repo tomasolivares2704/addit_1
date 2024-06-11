@@ -60,7 +60,7 @@ export class DetnewlistPage implements OnInit {
       (foods: Foods[]) => {
         this.foods = foods;
         this.loading = false;
-        console.log('Alimentos recibidos:', foods);
+        //console.log('Alimentos recibidos:', foods);
         this.initNewListFromFoods();
       },
       (error) => {
@@ -102,7 +102,7 @@ export class DetnewlistPage implements OnInit {
       // Por ejemplo, si tienes un servicio de Firebase, podrías actualizar cada documento de la subcolección correspondiente
       this.firebaseSvc.actualizarAlimento(this.userUid, this.newlist.id, alimento)
         .then(() => {
-          console.log('Alimento actualizado exitosamente:', alimento);
+          //console.log('Alimento actualizado exitosamente:', alimento);
         })
         .catch(error => {
           console.error('Error al actualizar el alimento:', error);
@@ -113,10 +113,10 @@ export class DetnewlistPage implements OnInit {
   calcularTotal(): number {
     let total = 0;
     this.newlist.alimentos.forEach(alimento => {
-      console.log('Cantidad:', alimento.cantidad, 'Precio:', alimento.precio);
+      //console.log('Cantidad:', alimento.cantidad, 'Precio:', alimento.precio);
       total += alimento.cantidad * alimento.precio;
     });
-    console.log('Total calculado:', total);
+    //console.log('Total calculado:', total);
     return total;
   }
   
