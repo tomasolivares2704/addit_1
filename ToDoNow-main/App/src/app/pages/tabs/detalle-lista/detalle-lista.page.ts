@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 
 // Servicios
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -27,7 +26,6 @@ export class DetalleListaPage implements OnInit {
   constructor(
     private utilsService: UtilsService,
     private firebaseService: FirebaseService,
-    private alertController: AlertController,
     private route: ActivatedRoute,
     private router: Router,
   ) {}

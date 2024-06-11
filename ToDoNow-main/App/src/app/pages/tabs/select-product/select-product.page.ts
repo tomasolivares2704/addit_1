@@ -46,7 +46,9 @@ export class SelectProductPage implements OnInit {
   addSelectedProducts() {
     const userId = this.utilsService.getElementInLocalStorage('user'); 
     const listId = this.route.snapshot.paramMap.get('id'); 
-    const selectedFoods = this.foods.filter(food => this.selectedProducts.has(food.id));
+    //const selectedFoods = this.foods.filter(food => this.selectedProducts.has(food.id));
+    const selectedFoods = this.utilsService.getElementInLocalStorage('myfoods');
+    
 
     this.firebaseService.addProductsToList(userId, listId, selectedFoods)
       .then(() => {
