@@ -19,8 +19,11 @@
     <ion-row>
       <ion-col size="12">
         <ion-item>
-          <ion-toggle (ionChange)="toggleMode($event)" checked color="success"></ion-toggle>
-          <ion-label>Añadir</ion-label>
+          <ion-label slot="start">Descontar</ion-label>
+          
+            <ion-toggle (ionChange)="toggleMode($event)" checked color="success" ></ion-toggle>
+          
+          <ion-label slot="end">Añadir</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>

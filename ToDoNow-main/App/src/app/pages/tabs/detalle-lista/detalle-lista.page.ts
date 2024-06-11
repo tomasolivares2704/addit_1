@@ -8,7 +8,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 
 //Modelos
 import { User } from 'src/app/models/user.models';
-import { List } from 'src/app/models/list.models';
+import { List, Product } from 'src/app/models/list.models';
 import { Foods } from 'src/app/models/food.models';
 
 @Component({
@@ -21,6 +21,7 @@ export class DetalleListaPage implements OnInit {
   user = {} as User;
   selectedList: List;
   foods: Foods[] = [];
+  product: Product[] = [];
   deleteMode: boolean = false;
 
   constructor(
@@ -54,7 +55,7 @@ export class DetalleListaPage implements OnInit {
   getProductsByListId(listId: string) {
     this.firebaseService.getListById(listId).subscribe((list: List) => {
       this.selectedList = list;
-      this.foods = list.food; // Asignamos los alimentos de la lista a la variable foods
+      this.product = list.product; // Asignamos los alimentos de la lista a la variable foods
     });
   }
 

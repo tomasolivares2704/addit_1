@@ -9,6 +9,7 @@ import { Receta } from '../models/receta.models';
 import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
 import { List } from '../models/list.models';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class FirebaseService {
     private auth: AngularFireAuth,
     private db: AngularFirestore,
     private utilsSvc: UtilsService,
+    private route: ActivatedRoute
   ) { }
 
   // Autenticación
@@ -191,12 +193,6 @@ export class FirebaseService {
   getFoodById(id: string): Observable<Foods> {
     return this.db.collection('food').doc<Foods>(id).valueChanges();
   }
-  
-
-  //Listas de Compras
-  getListById(id: string): Observable<List> {
-    return this.db.collection('list').doc<List>(id).valueChanges();
-  }
 
   generateId(): string {
     // Genera un ID único utilizando la función de generación de ID de Firebase
@@ -213,18 +209,27 @@ export class FirebaseService {
     return this.db.collection('food').valueChanges();
   }
 
-  addProductsToList(listId: string, foods: Foods[]): Promise<void> {
-    const listRef = this.db.collection('list').doc(listId);
-    return listRef.get().toPromise().then(doc => {
-      if (doc.exists) {
-        const data = doc.data() as List;
-        const currentFoods = data.food || [];
-        const updatedFoods = [...currentFoods, ...foods];
-        return listRef.update({ food: updatedFoods });
-      } else {
-        return Promise.reject('Document does not exist');
-      }
-    });
+  getSpecificList() {
+
   }
+
+  getListById(id: string): Observable<List> {
+    return this.db.collection('list').doc<List>(id).valueChanges();
+  }
+
+addProductsToList(userId: string, listId: string, foods: Foods[]): Promise<void> {
+  const listRef = this.db.collection(`user/${userId}/list`).doc(listId);
+  
+  return listRef.get().toPromise().then(doc => {
+    if (doc.exists) {
+      const data = doc.data() as List;
+      const currentFoods = data.product || [];
+      const updatedFoods = [...currentFoods, ...foods];
+      return listRef.update({ product: updatedFoods });
+    } else {
+      return Promise.reject('Document does not exist');
+    }
+  });
+}
 
 }

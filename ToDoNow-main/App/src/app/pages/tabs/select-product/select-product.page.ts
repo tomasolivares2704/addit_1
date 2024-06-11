@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
 
 @Component({
@@ -18,10 +19,12 @@ export class SelectProductPage implements OnInit {
     private firebaseService: FirebaseService,
     private route: ActivatedRoute,
     private router: Router,
+    private utilsService: UtilsService,
   ) {}
 
   ngOnInit() {
-    this.getAllFoods()
+    this.getAllFoods();
+    this.getListId();
   }
 
   toggleProductSelection(foodId: string) {
@@ -31,16 +34,27 @@ export class SelectProductPage implements OnInit {
       this.selectedProducts.add(foodId);
     }
   }
+  getListId() {
+    const listId = this.route.snapshot.paramMap.get('id');
+    if (!listId) {
+      console.error('List ID is missing or invalid');
+      return;
+    }
+    console.log('ID obtenido:', listId);
+  }
 
   addSelectedProducts() {
-    const listId = this.route.snapshot.paramMap.get('id');
+    const userId = this.utilsService.getElementInLocalStorage('user'); 
+    const listId = this.route.snapshot.paramMap.get('id'); 
     const selectedFoods = this.foods.filter(food => this.selectedProducts.has(food.id));
 
-    this.firebaseService.addProductsToList(listId, selectedFoods).then(() => {
-      this.router.navigate([`/tabs/detalle-lista/${listId}`]);
-    }).catch(error => {
-      console.error('Error adding products to list:', error);
-    });
+    this.firebaseService.addProductsToList(userId, listId, selectedFoods)
+      .then(() => {
+        console.log('Foods added successfully');
+      })
+      .catch(error => {
+        console.error('Error adding foods:', error);
+      });
   }
 
   getAllFoods() {

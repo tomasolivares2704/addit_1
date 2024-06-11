@@ -1,3 +1,11 @@
+/**
+ * Servicio de utilidades que proporciona funciones para mostrar cargas, alertas, modales, notificaciones, y gestionar el almacenamiento local y la navegación.
+ */
+
+/**
+ * Importa las clases y opciones necesarias para la gestión de alertas, cargas, modales y toasts en una aplicación Ionic.
+ * También importa el enrutador de Angular y el modelo de datos de una tarea.
+ */
 import { Injectable } from '@angular/core';
 import { AlertController, AlertOptions, LoadingController, LoadingOptions, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -19,16 +27,23 @@ export class UtilsService {
   ) { }
 
 
-  // Loading
+/**
+ * Función asincrónica para presentar una carga con las opciones especificadas.
+ * 
+ * @param opts Opciones de la carga a presentar.
+ */
+async presentLoading(opts?: LoadingOptions) {
+  const loading = await this.loadingController.create(opts);
+  await loading.present();
+}
 
-  async presentLoading(opts?: LoadingOptions) {
-    const loading = await this.loadingController.create(opts);
-    await loading.present();
-  }
+/**
+* Función asincrónica para descartar la carga actual.
+*/
+async dismissLoading() {
+  return await this.loadingController.dismiss();
+}
 
-  async dismissLoading() {
-    return await this.loadingController.dismiss();
-  }
 
   // LocalStorage
   setElementInLocalStorage(key: string, value: any) {
