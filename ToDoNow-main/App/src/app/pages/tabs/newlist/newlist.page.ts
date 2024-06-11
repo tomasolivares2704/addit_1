@@ -44,10 +44,15 @@ export class NewlistPage implements OnInit {
         alimentos: [], 
         total: 0,
       };
-
+  
       this.firebaseService.crearNewList(this.user.uid, nuevaLista)
-        .then(() => {
-          console.log('Nueva lista creada exitosamente.');
+        .then((newListId) => {
+          nuevaLista.id = newListId; // Actualizar el ID con el ID asignado por Firestore
+          
+          // Actualizar el array de alimentos si es necesario
+          nuevaLista.alimentos = []; // Aquí puedes agregar lógica para obtener los alimentos si es necesario
+          
+          console.log('Nueva lista creada exitosamente:', nuevaLista);
         })
         .catch(error => {
           console.error('Error al crear nueva lista:', error);
@@ -56,6 +61,8 @@ export class NewlistPage implements OnInit {
       console.error('El nombre de la lista es obligatorio.');
     }
   }
+  
+  
 
   obtenerListasDeUsuario() {
     if (this.user && this.user.uid) {

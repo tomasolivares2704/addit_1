@@ -230,16 +230,38 @@ export class FirebaseService {
   }
 
 
-  crearNewList(uid: string, newListData: NewList): Promise<void> {
-    return this.db.collection('user').doc(uid).collection('newlist').add(newListData)
-      .then(() => {
-        console.log('Nueva lista creada exitosamente.');
-      })
-      .catch(error => {
-        console.error('Error al crear nueva lista:', error);
-        throw error; // Asegúrate de propagar el error para manejarlo en el lugar donde se llama a esta función si es necesario.
+  async crearNewList(uid: string, newListData: NewList): Promise<string> {
+    try {
+      const newListRef = await this.db.collection('user').doc(uid).collection('newlist').add({
+        nombre: newListData.nombre,
+        total: newListData.total
       });
+  
+      const newListId = newListRef.id; // Obtener el ID del documento creado
+      
+      const alimentos = newListData.alimentos.map(alimento => ({
+        nombre: alimento.nombre,
+        cantidad: alimento.cantidad,
+        precio: alimento.precio,
+        subtotal: alimento.subtotal
+      }));
+  
+      await Promise.all(alimentos.map(async alimento => {
+        await newListRef.collection('alimentos').add(alimento);
+      }));
+  
+      console.log('Nueva lista creada exitosamente.');
+      
+      return newListId; // Devolver el ID del documento creado
+    } catch (error) {
+      console.error('Error al crear nueva lista:', error);
+      throw error;
+    }
   }
+  
+  
+  
+  
 
   // Método para obtener todas las newlist de un usuario
   obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
