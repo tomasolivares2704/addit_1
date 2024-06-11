@@ -68,16 +68,25 @@ export class NewlistPage implements OnInit {
     if (this.user && this.user.uid) {
       this.firebaseService.obtenerNewListDeUsuario(this.user.uid)
         .subscribe(listas => {
-          this.listasDeUsuario = listas;
-          console.log('Listas del usuario:', listas);
-  
-          // Imprimir el nombre de la lista y el precio de cada alimento en la consola
-          listas.forEach(lista => {
-            console.log('Nombre de la lista:', lista.nombre);
-            lista.alimentos.forEach(alimento => {
-              console.log('Nombre del alimento:', alimento.nombre, 'Precio:', alimento.precio);
+          if (listas) {
+            this.listasDeUsuario = listas;
+            console.log('Listas del usuario:', listas);
+      
+            // Imprimir el ID y el nombre de la lista, y el precio de cada alimento en la consola
+            listas.forEach(lista => {
+              console.log('ID de la lista:', lista.id);
+              console.log('Nombre de la lista:', lista.nombre);
+              if (lista.alimentos) {
+                lista.alimentos.forEach(alimento => {
+                  console.log('Nombre del alimento:', alimento.nombre, 'Precio:', alimento.precio);
+                });
+              } else {
+                console.log('La lista no tiene alimentos.');
+              }
             });
-          });
+          } else {
+            console.error('La respuesta del servicio es undefined.');
+          }
         }, error => {
           console.error('Error al obtener listas del usuario:', error);
         });
@@ -85,6 +94,8 @@ export class NewlistPage implements OnInit {
       console.error('UID del usuario no disponible.');
     }
   }
+  
+  
   
 
   verDetallesLista(id: string) {

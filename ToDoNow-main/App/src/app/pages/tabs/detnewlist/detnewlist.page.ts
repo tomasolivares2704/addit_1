@@ -25,6 +25,7 @@ export class DetnewlistPage implements OnInit {
   ngOnInit() {
     this.getUser();
     this.getAllFoods();
+    this.loadNewListDetails();
   }
 
   getUser() {
@@ -39,6 +40,7 @@ export class DetnewlistPage implements OnInit {
 
   loadNewListDetails() {
     const listId = this.route.snapshot.paramMap.get('id');
+    console.log('List ID en loadNewListDetails:', listId); // Agregamos esta línea para depuración
     if (listId) {
       this.newlist.id = listId;
       this.firebaseSvc.obtenerDetallesLista(this.userUid, listId).subscribe(
@@ -53,6 +55,8 @@ export class DetnewlistPage implements OnInit {
       console.error('No se encontró el ID de la lista en la ruta');
     }
   }
+  
+  
 
   getAllFoods() {
     this.loading = true;
@@ -72,17 +76,19 @@ export class DetnewlistPage implements OnInit {
 
   initNewListFromFoods() {
     this.newlist.alimentos = [];
-    this.foods.forEach(food => {
+    this.foods.forEach((food, index) => {
+      // Usar un ID único generado automáticamente por Firebase si food.id no está definido
       const alimento: AlimentoListaCompra = {
-        id: food.id,
+        id: food.id || `food_${index}`, // Usar un ID predeterminado si food.id no está disponible
         nombre: food.name,
         cantidad: 0,
-        precio: food.price, // Agregar el precio del alimento al inicializar
+        precio: food.price,
         subtotal: 0,
       };
       this.newlist.alimentos.push(alimento);
     });
   }
+  
 
   calcularSubtotal() {
     this.newlist.total = 0;
@@ -102,7 +108,7 @@ export class DetnewlistPage implements OnInit {
       // Por ejemplo, si tienes un servicio de Firebase, podrías actualizar cada documento de la subcolección correspondiente
       this.firebaseSvc.actualizarAlimento(this.userUid, this.newlist.id, alimento)
         .then(() => {
-          //console.log('Alimento actualizado exitosamente:', alimento);
+          console.log('Alimento actualizado exitosamente:', alimento);
         })
         .catch(error => {
           console.error('Error al actualizar el alimento:', error);

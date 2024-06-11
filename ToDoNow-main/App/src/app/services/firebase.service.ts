@@ -274,18 +274,29 @@ export class FirebaseService {
 
 
 
-async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
-  if (listId && alimento.id) { // Verificar que el ID de la lista y el ID del alimento no estén vacíos
+  async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
+    if (!listId || !alimento.id) {
+      console.error('El ID de la lista o el ID del alimento es inválido.');
+      console.error('List ID:', listId);
+      console.error('Alimento ID:', alimento.id);
+      return;
+    }
+  
+    console.log('List ID:', listId);
+    console.log('Alimento ID:', alimento.id);
+  
     try {
-      await this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`).doc(alimento.id).update(alimento);
+      const alimentosRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`).doc(alimento.id);
+      console.log('Alimentos Ref:', alimentosRef);
+      await alimentosRef.update(alimento);
       console.log('Alimento actualizado exitosamente en la lista.');
     } catch (error) {
       console.error('Error al actualizar el alimento en la lista:', error);
     }
-  } else {
-    console.error('El ID de la lista o el ID del alimento es inválido.');
   }
-}
+  
+  
+  
 
 
 
