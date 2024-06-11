@@ -37,6 +37,9 @@ async presentLoading(opts?: LoadingOptions) {
   await loading.present();
 }
 
+loading() {
+  return this.loadingController.create({ spinner: 'crescent'})
+}
 /**
 * Función asincrónica para descartar la carga actual.
 */

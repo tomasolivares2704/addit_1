@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from '../models/user.models';
-import { getAuth, updateProfile } from 'firebase/auth';
+import { getAuth, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
 import { Observable } from 'rxjs';
 import { Receta } from '../models/receta.models';
@@ -230,6 +230,12 @@ addProductsToList(userId: string, listId: string, foods: Foods[]): Promise<void>
       return Promise.reject('Document does not exist');
     }
   });
+}
+
+//=========== RECUPERAR CONTRASEÑA ===========//
+
+sendRecoveryEmail(email: string) {
+  return sendPasswordResetEmail(getAuth(), email)
 }
 
 }

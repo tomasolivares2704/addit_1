@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user.models';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -21,7 +22,8 @@ export class SignUpPage implements OnInit {
 
   constructor(
     private firebaseSvc: FirebaseService,
-    private utilsSvc: UtilsService
+    private utilsSvc: UtilsService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -111,10 +113,12 @@ export class SignUpPage implements OnInit {
     }
   }
   
-  
-
   limpiar(){
     this.form.reset();
   }
 
+  
+  goBack() {
+    this.navCtrl.back();
+  }
 }
