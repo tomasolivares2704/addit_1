@@ -33,10 +33,6 @@ const routes: Routes = [
         loadChildren: () => import('./listacompras/listacompras.module').then( m => m.ListacomprasPageModule)
       },
       {
-        path: 'tabnutri/:id',
-        loadChildren: () => import('./tabnutri/tabnutri.module').then( m => m.TabnutriPageModule)
-      },
-      {
         path: 'detalle-lista/:id',
         loadChildren: () => import('./detalle-lista/detalle-lista.module').then( m => m.DetalleListaPageModule)
       },
