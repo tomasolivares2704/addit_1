@@ -209,14 +209,11 @@ export class FirebaseService {
     return this.db.collection('food').valueChanges();
   }
 
-  getSpecificList() {
-
-  }
-
   getListById(id: string): Observable<List> {
     return this.db.collection('list').doc<List>(id).valueChanges();
   }
 
+//=======AÑADIR PRODUCTOS ========//
 addProductsToList(userId: string, listId: string, foods: Foods[]): Promise<void> {
   const listRef = this.db.collection(`user/${userId}/list`).doc(listId);
   

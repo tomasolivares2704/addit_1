@@ -49,19 +49,21 @@ export class CreateListModalComponent implements OnInit {
 
   //Crear una nueva lista
   async createNewList() {
-    const newListData = {
+    const newListData: List = {
+      id: this.firebaseService.generateId(), // Asegúrate de tener una manera de generar un ID único para la lista
       title: this.listForm.value.title,
-      image: this.listForm.value.image.toString(),
+      image: this.listForm.value.image?.toString() || '',
       purchaseFrequency: this.listForm.value.purchaseFrequency.toString(),
+      createdAt: new Date(),
+      product: [] // Inicializa el array de productos vacío
     };
-
+  
     const path = `user/${this.user.uid}`;
   
     try {
       await this.firebaseService.addToSubcollection(path, 'list', newListData);
       console.log('Nueva lista añadida correctamente.');
       this.listForm.reset(); // Limpiar el formulario después de agregar la nueva lista
-      
   
       // Mostrar una alerta que indica que se ha agregado una nueva lista
       const alert = await this.alertController.create({
@@ -71,7 +73,6 @@ export class CreateListModalComponent implements OnInit {
           {
             text: 'Aceptar',
             handler: () => {
-              
               this.modalController.dismiss({ listCreated: true });
             }
           }

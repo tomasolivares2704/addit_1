@@ -6,12 +6,12 @@ export interface List {
     image?: string;
     purchaseFrequency: string;
     createdAt: Date; 
-    product: Product[];  
+    product?: Product[];  
   }
 
 export interface Product{
   id: string;
   cantidad: number;
-  product: Foods;
+  product?: Foods;
   Total: number;
 }

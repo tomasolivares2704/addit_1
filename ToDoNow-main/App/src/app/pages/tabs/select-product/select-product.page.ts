@@ -12,7 +12,7 @@ import { Foods } from 'src/app/models/food.models';
 export class SelectProductPage implements OnInit {
 
   foods: Foods[] = [];
-  selectedProducts: Set<string> = new Set();
+  selectedProducts: Foods[] = [];
   loading: boolean = false;
 
   constructor(
@@ -28,11 +28,27 @@ export class SelectProductPage implements OnInit {
   }
 
   toggleProductSelection(foodId: string) {
-    if (this.selectedProducts.has(foodId)) {
-      this.selectedProducts.delete(foodId);
+    const index = this.selectedProducts.findIndex(food => food.id === foodId);
+    if (index > -1) {
+      this.selectedProducts.splice(index, 1); // Elimina el producto si ya está en el array
     } else {
-      this.selectedProducts.add(foodId);
+      const selectedFood = this.foods.find(food => food.id === foodId);
+      if (selectedFood) {
+        this.selectedProducts.push(selectedFood); // Agrega el producto si no está en el array
+      }
     }
+    this.updateLocalStorage(); // Actualizar localStorage
+    console.log('Selected products:', this.selectedProducts); // Para verificar que los productos se están seleccionando correctamente
+  }
+
+  //Actualiza los elementos en el localStorage
+  updateLocalStorage() {
+    localStorage.setItem('selectedProducts', JSON.stringify(this.selectedProducts));
+  }
+
+  clearSelectedProducts() {
+    localStorage.removeItem('selectedProducts');
+    this.selectedProducts = [];
   }
   getListId() {
     const listId = this.route.snapshot.paramMap.get('id');
@@ -46,16 +62,49 @@ export class SelectProductPage implements OnInit {
   addSelectedProducts() {
     const userId = this.utilsService.getElementInLocalStorage('user'); 
     const listId = this.route.snapshot.paramMap.get('id'); 
-    //const selectedFoods = this.foods.filter(food => this.selectedProducts.has(food.id));
-    const selectedFoods = this.utilsService.getElementInLocalStorage('myfoods');
-    
-
-    this.firebaseService.addProductsToList(userId, listId, selectedFoods)
+  
+    if (!userId || !listId) {
+      console.error('User ID or List ID is missing');
+      return;
+    }
+  
+    if (this.selectedProducts.length === 0) {
+      console.error('No foods selected');
+      this.utilsService.presentToast({
+        message: `No has seleccionado ningún producto`,
+        duration: 1500,
+        color: 'primary',
+        icon: 'person-outline',
+        mode: 'ios'
+      });
+      return;
+    }
+  
+    this.loading = true;
+    this.firebaseService.addProductsToList(userId, listId, this.selectedProducts)
       .then(() => {
+        this.loading = false;
         console.log('Foods added successfully');
+        this.utilsService.presentToast({
+          message: `Productos añadidos correctamente`,
+          duration: 1500,
+          color: 'primary',
+          icon: 'person-outline',
+          mode: 'ios'
+
+        });
+        this.clearSelectedProducts();
       })
       .catch(error => {
+        this.loading = false;
         console.error('Error adding foods:', error);
+        this.utilsService.presentToast({
+          message: `Error al añadir los productos`,
+          duration: 1500,
+          color: 'primary',
+          icon: 'person-outline',
+          mode: 'ios'
+        })
       });
   }
 

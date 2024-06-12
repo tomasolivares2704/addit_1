@@ -53,10 +53,11 @@ export class DetalleListaPage implements OnInit {
   getProductsByListId(listId: string) {
     this.firebaseService.getListById(listId).subscribe((list: List) => {
       this.selectedList = list;
-      this.product = list.product; // Asignamos los alimentos de la lista a la variable foods
+      this.product = list?.product || []; // Proporciona un valor predeterminado si product es undefined
+    }, error => {
+      console.error('Error al obtener los productos de la lista:', error);
     });
   }
-
   async deleteList(productId: string) {
     const listId = this.route.snapshot.paramMap.get('id');
     const path = `user/${this.user.uid}/list/${listId}`;
