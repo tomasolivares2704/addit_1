@@ -13,6 +13,7 @@ import { NotificacionesComponent } from './components/notificaciones/notificacio
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { CreateListModalComponent } from './components/create-list-modal/create-list-modal.component';
+import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-modal.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { CreateListModalComponent } from './components/create-list-modal/create-
     /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
-    CreateListModalComponent
+    CreateListModalComponent,
+    TabNutriModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -33,7 +35,8 @@ import { CreateListModalComponent } from './components/create-list-modal/create-
     /*AddUpdateTaskComponent,*/
     BarraComponent,
     NotificacionesComponent,
-    CreateListModalComponent
+    CreateListModalComponent,
+    TabNutriModalComponent
   ],
   imports: [
     CommonModule,

@@ -4,7 +4,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Foods } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TabNutriModalComponent } from 'src/app/shared/components/tab-nutri-modal/tab-nutri-modal.component';
 
 
 @Component({
@@ -24,8 +26,8 @@ export class InventarioPage implements OnInit {
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
     private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
-    private route: ActivatedRoute,
-    private router: Router // Inyectar Router en el constructor
+    private router: Router, // Inyectar Router en el constructor
+    private modalController: ModalController,
   ) { 
 
     
@@ -96,6 +98,19 @@ export class InventarioPage implements OnInit {
   // Método para redirigir a la vista de detalles del alimento
   viewFoodDetails(foodId: string) {
     this.router.navigate(['/tabs/tabnutri', foodId]);
+  }
+
+  async openFoodDetailsModal(foodId: string) {
+    const modal = await this.modalController.create({
+      component: TabNutriModalComponent,
+      cssClass: 'custom-modal',
+      backdropDismiss: true,
+      componentProps: {
+        foodId: foodId 
+      }
+    });
+  
+    return await modal.present();
   }
   
 

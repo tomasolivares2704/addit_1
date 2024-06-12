@@ -13,7 +13,7 @@
       <ion-row>
         <ng-container *ngFor="let food of foods">
           <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
-            <ion-card class="food-card" onclick="viewFoodDetails()">
+            <ion-card class="food-card" (click)="openFoodDetailsModal(food.id)">
               <div class="image-container">
                 <img [src]="food.imagen" alt="Imagen de {{ food.name }}">
               </div>
@@ -26,18 +26,6 @@
         
       </ion-row>
     </ion-grid>
-<!--
-      <ion-list *ngIf="foods.length > 0">
-        <ion-item *ngFor="let food of foods">
-          <ion-thumbnail slot="start">
-            <img [src]="food.imagen" alt="Imagen de {{ food.name }}">
-          </ion-thumbnail>
-          <ion-label>
-            <h2>{{ food.name }}</h2>
-            <p>Calorías: {{ food.calories }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list> -->
   </div>  
 
   <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
