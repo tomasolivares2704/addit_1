@@ -1,12 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Detalle de la lista
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
+<ion-content *ngIf="newlist">
   <ion-card>
     <ion-card-header>
       {{ newlist.nombre }}
@@ -27,7 +19,6 @@
       <ion-item *ngFor="let alimento of newlist.alimentos">
         <ion-label>{{ alimento.nombre }}</ion-label>
         <ion-input [(ngModel)]="alimento.cantidad" type="number"></ion-input>
-        <ion-input [(ngModel)]="alimento.precio" type="number"></ion-input>
         <ion-label>{{ (alimento.cantidad * alimento.precio) | currency:'USD':'symbol':'1.2-2' }}</ion-label>
       </ion-item>
     </ion-list>

@@ -11,7 +11,7 @@ import { Foods } from 'src/app/models/food.models';
   styleUrls: ['./detnewlist.page.scss'],
 })
 export class DetnewlistPage implements OnInit {
-  newlist: NewList = { id: '', nombre: '', total: 0, alimentos: [] };
+  newlist: NewList = null;
   userUid: string;
   foods: Foods[] = [];
   loading: boolean = false;
@@ -40,10 +40,9 @@ export class DetnewlistPage implements OnInit {
     const listId = this.route.snapshot.paramMap.get('id');
     console.log('List ID en loadNewListDetails:', listId); // Agregamos esta línea para depuración
     if (listId) {
-      this.newlist.id = listId;
       this.firebaseSvc.obtenerDetallesLista(this.userUid, listId).subscribe(
         (list) => {
-          this.newlist = list;
+          this.newlist = list; // Asignar los detalles de la lista obtenidos de Firebase
           // Obtener detalles de los alimentos
           this.loadAlimentosDetails(listId);
         },
@@ -55,6 +54,7 @@ export class DetnewlistPage implements OnInit {
       console.error('No se encontró el ID de la lista en la ruta');
     }
   }
+  
 
   loadAlimentosDetails(listId: string) {
     this.firebaseSvc.obtenerDetallesAlimentos(this.userUid, listId).subscribe(
@@ -70,23 +70,23 @@ export class DetnewlistPage implements OnInit {
 
   guardarCambios() {
     console.log('Guardando cambios...');
-  
+    
     // Obtener el ID de la lista
     const listId = this.route.snapshot.paramMap.get('id');
-    console.log('List ID XD:', listId);
-  
+    console.log('List ID:', listId);
+    
     // Verificar si el ID de la lista está presente y válido
-    if (!listId) {
-      console.error('ID de lista no encontrado.');
+    if (!listId || !this.newlist) {
+      console.error('ID de lista no encontrado o lista no inicializada.');
       return;
     }
-  
+    
     // Calcular los subtotales antes de guardar los cambios
     this.calcularSubtotal();
-  
+    
     // Filtrar los alimentos con IDs válidos
     const alimentosValidos = this.newlist.alimentos.filter(alimento => alimento.id);
-  
+    
     // Crear un array de promesas para todas las actualizaciones de alimentos
     const promises = alimentosValidos.map(alimento => {
       // Actualizar el alimento en Firestore
@@ -99,16 +99,18 @@ export class DetnewlistPage implements OnInit {
           return Promise.reject(error);
         });
     });
-  
+    
     // Esperar a que todas las actualizaciones se completen
     Promise.all(promises)
       .then(() => {
-        console.log('Todos los alimentos actualizados exitosamente XSSS.');
+        console.log('Todos los alimentos actualizados exitosamente.');
       })
       .catch(error => {
         console.error('Error al actualizar uno o más alimentos:', error);
       });
   }
+  
+  
   
 
   calcularSubtotal() {
