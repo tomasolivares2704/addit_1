@@ -22,7 +22,22 @@ export interface Foods {
     Carnes = 'Carnes',
     Pescado = 'Pescado',
     Legumbres = 'Legumbres',
-    Otros = 'Otros' // Puedes agregar más categorías según tus necesidades
+    Otros = 'Otros',
+    Frutas = 'Frutas',
+    Lácteos = 'Lácteos',
+    Panadería = 'Panadería',
+    Bebidas = 'Bebidas',
+    Postres = 'Postres',
+    Snacks = 'Snacks',
+    Salsas = 'Salsas',
+    Cereales = 'Cereales',
+    Vegano = 'Vegano',
+    Alcohol = 'Alcohol',
+    Arroz = 'Arroz',
+  Pastas = 'Pastas',
+  Sopas = 'Sopas'
+
   }
+  
   
   
