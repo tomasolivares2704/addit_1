@@ -99,4 +99,33 @@ export class UtilsService {
     toast.present();
   }
 
+  async presentAlertConfirm(title: string, message: string): Promise<boolean> {
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            return false; // No confirmar la eliminación
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            return true; // Confirmar la eliminación
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+    const { role } = await alert.onDidDismiss();
+  
+    return role === 'ok'; // Devuelve true si se hace clic en 'Eliminar'
+  }
+  
+
 }

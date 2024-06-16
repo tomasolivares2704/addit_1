@@ -126,16 +126,47 @@ export class NewlistPage implements OnInit {
     }
   }
 
+  
+
   eliminarLista(id: string) {
-    this.firebaseService.deleteDocument(`user/${this.user.uid}/newlist/${id}`)
-      .then(() => {
-        console.log('Lista eliminada correctamente');
-        // Aquí podrías actualizar la lista de nuevo si es necesario
-      })
-      .catch(error => {
-        console.error('Error al eliminar la lista:', error);
-      });
+        this.utilsSvc.presentAlert({
+          header: 'Confirmación',
+          message: '¿Estás seguro de que deseas eliminar esta lista?',
+          buttons: [
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {
+                console.log('Eliminación cancelada');
+              }
+            }, {
+              text: 'Eliminar',
+              handler: () => {
+                this.firebaseService.deleteDocument(`user/${this.user.uid}/newlist/${id}`)
+                  .then(() => {
+                    console.log('Lista eliminada correctamente');
+                    // Aquí podrías actualizar la lista de nuevo si es necesario
+                    this.utilsSvc.presentToast({ message: 'Lista eliminada correctamente' });
+                  })
+                  .catch(error => {
+                    console.error('Error al eliminar la lista:', error);
+                    this.utilsSvc.presentToast({ message: 'Error al eliminar la lista. Inténtalo nuevamente' });
+                  });
+              }
+            }
+          ]
+        });
+
+     }
+
+     verDetallesLista(id: string) {
+      this.navCtrl.navigateForward(['/tabs/detnewlist', id]);
   }
+    
+
+}
+  
   
   
   
@@ -144,8 +175,5 @@ export class NewlistPage implements OnInit {
   
   
 
-  verDetallesLista(id: string) {
-    this.navCtrl.navigateForward(['/tabs/detnewlist', id]);
-  }
-  
-}
+ 
+
