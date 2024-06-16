@@ -13,6 +13,9 @@ import { NewList } from '../models/newlist.models';
 import {FoodList} from '../models/detnewlist.models';
 import { AlimentoListaCompra } from '../models/newlist.models';
 import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 
 
 @Injectable({
@@ -232,28 +235,25 @@ export class FirebaseService {
   }
 
 
+
+  // METODOS NEWLIST //
   async crearNewList(userUid: string, newListData: NewList): Promise<string> {
     try {
       const newListRef = await this.db.collection('user').doc(userUid).collection('newlist').add({
         nombre: newListData.nombre,
-        total: newListData.total
+        total: newListData.total,
+        alimentos: newListData.alimentos.map(alimento => ({
+          nombre: alimento.nombre,
+          cantidad: alimento.cantidad,
+          precio: alimento.precio,
+          subtotal: alimento.subtotal
+        }))
       });
-  
+
       const newListId = newListRef.id; // Obtener el ID del documento creado
-      
-      const alimentos = newListData.alimentos.map(alimento => ({
-        nombre: alimento.nombre,
-        cantidad: alimento.cantidad,
-        precio: alimento.precio,
-        subtotal: alimento.subtotal
-      }));
-  
-      await Promise.all(alimentos.map(async alimento => {
-        await newListRef.collection('alimentos').add(alimento);
-      }));
-  
+
       console.log('Nueva lista creada exitosamente.');
-      
+
       return newListId; // Devolver el ID del documento creado
     } catch (error) {
       console.error('Error al crear nueva lista:', error);
@@ -262,70 +262,45 @@ export class FirebaseService {
   }
   
   
-  
-  
-  
-
   // Método para obtener todas las newlist de un usuario
-  obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
-    return this.db.collection('user').doc(uid).collection<NewList>('newlist').valueChanges({ idField: 'id' });
-  }
+obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
+  return this.db.collection(`user/${uid}/newlist`).snapshotChanges().pipe(
+    map(actions => {
+      return actions.map(action => {
+        const data = action.payload.doc.data() as NewList;
+        const id = action.payload.doc.id;
+        return { id, ...data };
+      });
+    })
+  );
+}
 
-  obtenerDetallesLista(uid: string, idLista: string): Observable<NewList> {
-    return this.db.collection('user').doc(uid).collection('newlist').doc<NewList>(idLista).valueChanges();
-  }
-
-  obtenerDetallesAlimentos(userUid: string, listId: string): Observable<AlimentoListaCompra[]> {
-    return this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`)
-      .valueChanges()
-      .pipe(
-        map((data: any[]) => {
-          // Mapear los datos recibidos al tipo AlimentoListaCompra
-          return data.map(item => ({
-            id: item.id,
-            nombre: item.nombre,
-            cantidad: item.cantidad,
-            precio: item.precio,
-            subtotal: item.subtotal
-          }));
-        })
-      );
-  }
-
-
-
-
-
-  async actualizarAlimento(userUid: string, listId: string, alimento: AlimentoListaCompra) {
-    if (!listId || !alimento.id) {
-      console.error('FIRESERVICE. El ID de la lista o el ID del alimento es inválido.');
-      console.error('FIRESERVICE. List ID:', listId);
-      console.error('FIRESERVICE. Alimento ID:', alimento.id);
-      return;
-    }
   
-    console.log('FIRESERVICE. List ID:', listId);
-    console.log('FIRESERVICE. Alimento ID:', alimento.id);
-  
-    try {
-      const alimentosRef = this.db.collection(`user/${userUid}/newlist/${listId}/alimentos`).doc(alimento.id);
-      console.log('FIRESERVICE. Alimentos Ref:', alimentosRef);
-  
-      // Obtener el documento
-      const doc = await alimentosRef.get().toPromise();
-  
-      // Verificar si el documento existe
-      if (doc.exists) {
-        // El documento existe, ahora puedes actualizarlo
-        await alimentosRef.update(alimento);
-        console.log('FIRESERVICE.Alimento actualizado exitosamente en la lista.');
-      } else {
-        console.error('FIRESERVICE.El documento no existe en la base de datos.');
-      }
-    } catch (error) {
-      console.error('FIRESERVICE.Error al actualizar el alimento en la lista:', error);
-    }
-  }
+obtenerDetallesAlimentos(userUid: string, listId: string): Observable<NewList | null> {
+  return this.db.collection(`user/${userUid}/newlist`).doc<NewList>(listId).valueChanges().pipe(
+    catchError(error => {
+      console.error('Error al obtener los detalles de los alimentos:', error);
+      return of(null); // Devuelve null en caso de error
+    })
+  );
+}
+
+
+
+
+// METODOS DETNEWLIST //
+
+
+obtenerDetallesLista(userId: string, newListId: string): Observable<NewList> {
+  return this.db.doc<NewList>(`user/${userId}/newlist/${newListId}`).valueChanges({ idField: 'id' });
+}
+
+// Método para actualizar una lista existente
+actualizarLista(userUid: string, newListId: string, newListData: NewList): Promise<void> {
+  return this.db.collection(`user/${userUid}/newlist`).doc(newListId).update(newListData);
+}
+
+
   
   
   

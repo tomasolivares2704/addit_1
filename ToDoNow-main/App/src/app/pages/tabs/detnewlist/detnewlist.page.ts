@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/services/firebase.service';
 import { ActivatedRoute } from '@angular/router';
 import { NewList, AlimentoListaCompra } from 'src/app/models/newlist.models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Foods } from 'src/app/models/food.models';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-detnewlist',
@@ -12,9 +13,8 @@ import { Foods } from 'src/app/models/food.models';
 })
 export class DetnewlistPage implements OnInit {
   newlist: NewList = null;
-  userUid: string;
-  foods: Foods[] = [];
   loading: boolean = false;
+  user: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,109 +23,60 @@ export class DetnewlistPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUser();
+    this.getUser(); // Obtener el usuario al iniciar el componente
+
+    this.route.paramMap.subscribe(params => {
+      const newListId = params.get('id');
+      if (newListId) {
+        this.loading = true;
+        if (this.user && this.user.uid) {
+          // Utilizar el userId obtenido del usuario actual
+          const userId = this.user.uid;
+          this.firebaseSvc.obtenerDetallesLista(userId, newListId).subscribe(
+            (lista: NewList) => {
+              this.newlist = lista;
+              console.log('Detalles de la lista: EN DETNEWLIST', this.newlist);
+              this.loading = false;
+            },
+            error => {
+              console.error('Error al obtener detalles de la lista:', error);
+              this.loading = false;
+            }
+          );
+        } else {
+          console.error('No se pudo obtener el userId del usuario.');
+          this.loading = false;
+        }
+      }
+    });
   }
 
   getUser() {
-    const user = this.utilsSvc.getElementInLocalStorage('user');
-    if (user && user.uid) {
-      this.userUid = user.uid;
-      this.loadNewListDetails();
-    } else {
-      console.error('No se pudo obtener el UID del usuario');
-    }
+    this.user = this.utilsSvc.getElementInLocalStorage('user');
   }
 
-  loadNewListDetails() {
-    const listId = this.route.snapshot.paramMap.get('id');
-    console.log('List ID en loadNewListDetails:', listId); // Agregamos esta línea para depuración
-    if (listId) {
-      this.firebaseSvc.obtenerDetallesLista(this.userUid, listId).subscribe(
-        (list) => {
-          this.newlist = list; // Asignar los detalles de la lista obtenidos de Firebase
-          // Obtener detalles de los alimentos
-          this.loadAlimentosDetails(listId);
-        },
-        (error) => {
-          console.error('Error al obtener los detalles de la lista:', error);
-        }
-      );
-    } else {
-      console.error('No se encontró el ID de la lista en la ruta');
-    }
-  }
-  
-
-  loadAlimentosDetails(listId: string) {
-    this.firebaseSvc.obtenerDetallesAlimentos(this.userUid, listId).subscribe(
-      (alimentos) => {
-        // Asignar los detalles de los alimentos a la lista
-        this.newlist.alimentos = alimentos;
-      },
-      (error) => {
-        console.error('Error al obtener los detalles de los alimentos:', error);
-      }
-    );
+  actualizarCantidad(alimento: AlimentoListaCompra, nuevaCantidad: number) {
+    alimento.cantidad = nuevaCantidad;
+    alimento.subtotal = alimento.cantidad * alimento.precio;
+    this.actualizarTotalLista();
   }
 
-  guardarCambios() {
-    console.log('Guardando cambios...');
-    
-    // Obtener el ID de la lista
-    const listId = this.route.snapshot.paramMap.get('id');
-    console.log('List ID:', listId);
-    
-    // Verificar si el ID de la lista está presente y válido
-    if (!listId || !this.newlist) {
-      console.error('ID de lista no encontrado o lista no inicializada.');
-      return;
-    }
-    
-    // Calcular los subtotales antes de guardar los cambios
-    this.calcularSubtotal();
-    
-    // Filtrar los alimentos con IDs válidos
-    const alimentosValidos = this.newlist.alimentos.filter(alimento => alimento.id);
-    
-    // Crear un array de promesas para todas las actualizaciones de alimentos
-    const promises = alimentosValidos.map(alimento => {
-      // Actualizar el alimento en Firestore
-      return this.firebaseSvc.actualizarAlimento(this.userUid, listId, alimento)
+  actualizarTotalLista() {
+    if (this.newlist && this.newlist.alimentos) {
+      this.newlist.total = this.newlist.alimentos.reduce((total, alimento) => {
+        return total + (alimento.cantidad * alimento.precio);
+      }, 0);
+      this.firebaseSvc.actualizarLista(this.user.uid, this.newlist.id, this.newlist)
         .then(() => {
-          console.log('Alimento actualizado exitosamente:', alimento);
+          console.log('Lista actualizada correctamente en la base de datos.');
         })
         .catch(error => {
-          console.error('Error al actualizar el alimento:', error);
-          return Promise.reject(error);
+          console.error('Error al actualizar lista en la base de datos:', error);
         });
-    });
-    
-    // Esperar a que todas las actualizaciones se completen
-    Promise.all(promises)
-      .then(() => {
-        console.log('Todos los alimentos actualizados exitosamente.');
-      })
-      .catch(error => {
-        console.error('Error al actualizar uno o más alimentos:', error);
-      });
-  }
-  
-  
-  
-
-  calcularSubtotal() {
-    this.newlist.total = 0;
-    this.newlist.alimentos.forEach(alimento => {
-      alimento.subtotal = alimento.cantidad * alimento.precio;
-      this.newlist.total += alimento.subtotal;
-    });
+    }
   }
 
-  calcularTotal(): number {
-    let total = 0;
-    this.newlist.alimentos.forEach(alimento => {
-      total += alimento.cantidad * alimento.precio;
-    });
-    return total;
-  }
+
+
+  
 }

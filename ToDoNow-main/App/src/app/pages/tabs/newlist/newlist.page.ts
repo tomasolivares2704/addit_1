@@ -42,13 +42,8 @@ export class NewlistPage implements OnInit {
     if (this.nombreLista && this.user.uid) {
       this.firebaseService.getAllFoods().subscribe(
         (foods: Foods[]) => {
-          this.newlist = {
-            id: '', 
-            nombre: this.nombreLista,
-            alimentos: [], 
-            total: 0,
-          };
-  
+          const alimentos: AlimentoListaCompra[] = [];
+
           foods.forEach((food, index) => {
             const alimento: AlimentoListaCompra = {
               id: food.id || `food_${index}`,
@@ -57,12 +52,21 @@ export class NewlistPage implements OnInit {
               precio: food.price,
               subtotal: 0,
             };
-            this.newlist.alimentos.push(alimento);
+            alimentos.push(alimento);
           });
-  
-          this.firebaseService.crearNewList(this.user.uid, this.newlist)
+
+          // Crear la nueva lista en Firestore
+          const newList: NewList = {
+            id: '', // Se asignará automáticamente por Firestore
+            nombre: this.nombreLista,
+            total: 0, // Puedes calcular esto según sea necesario
+            alimentos: alimentos, // Asignar el array de alimentos directamente
+          };
+
+          this.firebaseService.crearNewList(this.user.uid, newList)
             .then((newListId) => {
-              this.newlist.id = newListId;
+              newList.id = newListId;
+              this.newlist = newList; // Asignar la nueva lista creada a newlist
               console.log('Nueva lista creada exitosamente:', this.newlist);
             })
             .catch(error => {
@@ -86,27 +90,25 @@ export class NewlistPage implements OnInit {
             if (listas.length > 0) {
               this.listasDeUsuario = listas;
               console.log('Listas del usuario:', listas);
-  
-              // Iterar sobre cada lista para cargar los alimentos desde la subcolección
+    
+              // Iterar sobre cada lista para cargar los alimentos
               listas.forEach(lista => {
                 console.log('ID de la lista:', lista.id);
                 console.log('Nombre de la lista:', lista.nombre);
-  
-                // Obtener los detalles de los alimentos desde la subcolección
+    
+                // Obtener los detalles de la lista incluyendo alimentos
                 this.firebaseService.obtenerDetallesAlimentos(this.user.uid, lista.id)
                   .subscribe(
-                    (alimentos: AlimentoListaCompra[]) => {
-                      if (alimentos.length > 0) {
-                        lista.alimentos = alimentos; // Asignar los alimentos a la lista
-                        alimentos.forEach(alimento => {
-                          console.log('Nombre del alimento:', alimento.nombre, 'Precio:', alimento.precio);
-                        });
+                    (listaConAlimentos: NewList | null) => {
+                      if (listaConAlimentos) {
+                        console.log('Alimentos de la lista:', listaConAlimentos.alimentos);
+                        lista.alimentos = listaConAlimentos.alimentos;
                       } else {
                         console.log('La lista no tiene alimentos o está vacía.');
                       }
                     },
                     error => {
-                      console.error('Error al obtener los detalles de los alimentos:', error);
+                      console.error('Error al obtener los detalles de los alimentos de la lista:', error);
                     }
                   );
               });
@@ -125,8 +127,12 @@ export class NewlistPage implements OnInit {
   }
   
   
+  
+  
+  
 
   verDetallesLista(id: string) {
     this.navCtrl.navigateForward(['/tabs/detnewlist', id]);
   }
+  
 }
