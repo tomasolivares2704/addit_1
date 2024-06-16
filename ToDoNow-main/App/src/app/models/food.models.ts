@@ -13,6 +13,16 @@ export interface Foods {
     fibra: number;
     medida: string;
     price: number;
-
+    categoria: CategoriaAlimento;
   }
+
+
+  export enum CategoriaAlimento {
+    Verduras = 'Verduras',
+    Carnes = 'Carnes',
+    Pescado = 'Pescado',
+    Legumbres = 'Legumbres',
+    Otros = 'Otros' // Puedes agregar más categorías según tus necesidades
+  }
+  
   

@@ -1,4 +1,5 @@
 <app-header title="Mi Inventario"></app-header>
+
 <ion-content>
   <ion-spinner *ngIf="loading"></ion-spinner>
 
@@ -21,6 +22,14 @@
         <ion-item>
           <ion-label position="floating">Calorías</ion-label>
           <ion-input formControlName="calories" type="number" required></ion-input>
+        </ion-item>
+
+        <!-- Agrega ion-select para la categoría -->
+        <ion-item>
+          <ion-label>Categoría</ion-label>
+          <ion-select formControlName="categoria" interface="action-sheet">
+            <ion-select-option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</ion-select-option>
+          </ion-select>
         </ion-item>
 
         <ion-item>
@@ -68,8 +77,6 @@
       </form>
     </ion-card-content>
   </ion-card>
-
-  
 
   <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
 </ion-content>

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { Foods, CategoriaAlimento } from 'src/app/models/food.models';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Foods } from 'src/app/models/food.models';
+
 import { User } from 'src/app/models/user.models';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar FormGroup, FormBuilder y Validators
-import { ModalController } from '@ionic/angular'; // Importar ModalController
-import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-formfood',
   templateUrl: './formfood.page.html',
@@ -18,14 +20,17 @@ export class FormfoodPage implements OnInit {
   loading: boolean = false;
   newFoodForm: FormGroup; // Definir la variable para el formulario
   selectedFood: Foods;
+  categorias: string[]; // Array de categorías disponibles
 
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
-    private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
-    private modalController: ModalController ,
-    private router: Router // Inyectar Router en el constructor
-  ) { 
+    private formBuilder: FormBuilder,
+    private modalController: ModalController,
+    private router: Router
+  ) {
+    // Inicializa las categorías disponibles
+    this.categorias = Object.values(CategoriaAlimento); // Obtén los valores del enum como array
 
     // Formulario
     this.newFoodForm = this.formBuilder.group({
@@ -41,10 +46,10 @@ export class FormfoodPage implements OnInit {
       colesterol: ['', Validators.required],
       fibra: ['', Validators.required],
       medida: ['', Validators.required],
-      price: ['',Validators.required],
+      price: ['', Validators.required],
+      categoria: [CategoriaAlimento.Verduras, Validators.required] // Valor por defecto y validación
     });
   }
-  
 
   ngOnInit() {
     this.getUser(); // Obtener datos del usuario al cargar la vista
@@ -54,7 +59,7 @@ export class FormfoodPage implements OnInit {
   getUser() {
     // Obtener los datos del usuario del almacenamiento local
     this.user = this.utilsSvc.getElementInLocalStorage('user');
-    
+
     // Verificar si el usuario tiene el rol de administrador
     if (this.user && this.user.isAdmin) {
       // Si el usuario es administrador, establecer isAdmin en true en el almacenamiento local
@@ -79,7 +84,7 @@ export class FormfoodPage implements OnInit {
         id: ''
       };
       this.loading = true;
-  
+
       this.firebaseSvc.addFoodToCollections(newFoodData).then(() => {
         this.newFoodForm.reset();
         this.loading = false;
@@ -96,6 +101,5 @@ export class FormfoodPage implements OnInit {
   viewFoodDetails(foodId: string) {
     this.router.navigate(['/tabs/tabnutri', foodId]);
   }
-
 
 }

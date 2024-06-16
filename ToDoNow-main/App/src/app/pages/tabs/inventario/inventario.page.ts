@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Foods } from 'src/app/models/food.models';
+import { Foods, CategoriaAlimento } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,23 +28,7 @@ export class InventarioPage implements OnInit {
     private router: Router // Inyectar Router en el constructor
   ) { 
 
-    
-
-    // Crear el formulario en el constructor
-    this.newFoodForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      calories: ['', Validators.required],
-      imagen: ['', Validators.required],
-      fat: ['', Validators.required],
-      fat_sat: ['', Validators.required],
-      fat_trans: ['', Validators.required],
-      sodio: ['', Validators.required],
-      carbs: ['', Validators.required],
-      protein: ['', Validators.required],
-      colesterol: ['', Validators.required],
-      fibra: ['', Validators.required],
-      medida: ['', Validators.required],
-    });
+  
   }
 
   ngOnInit() {
@@ -73,25 +57,6 @@ export class InventarioPage implements OnInit {
     });
   }
 
-  addNewFood() {
-    if (this.newFoodForm.valid) {
-      const newFoodData: Foods = {
-        ...this.newFoodForm.value,
-        id: ''
-      };
-      this.loading = true;
-  
-      this.firebaseSvc.addFoodToCollections(newFoodData).then(() => {
-        this.newFoodForm.reset();
-        this.loading = false;
-      }).catch(error => {
-        this.loading = false;
-        console.error('Error al agregar alimento:', error);
-      });
-    } else {
-      console.error('Formulario no válido');
-    }
-  }
 
   // Método para redirigir a la vista de detalles del alimento
   viewFoodDetails(foodId: string) {
