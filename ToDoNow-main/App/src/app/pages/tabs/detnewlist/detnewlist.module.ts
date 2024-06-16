@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { DetnewlistPageRoutingModule } from './detnewlist-routing.module';
 
 import { DetnewlistPage } from './detnewlist.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DetnewlistPageRoutingModule
+    DetnewlistPageRoutingModule,
+    SharedModule
   ],
   declarations: [DetnewlistPage]
 })

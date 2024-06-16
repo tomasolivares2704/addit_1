@@ -300,6 +300,11 @@ actualizarLista(userUid: string, newListId: string, newListData: NewList): Promi
   return this.db.collection(`user/${userUid}/newlist`).doc(newListId).update(newListData);
 }
 
+// Método para eliminar una lista de compra existente
+deleteList(listId: string): Promise<void> {
+  return this.db.collection('lists').doc(listId).delete();
+}
+
 
   
   
