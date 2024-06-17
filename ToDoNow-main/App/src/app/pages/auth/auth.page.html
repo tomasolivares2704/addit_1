@@ -12,7 +12,11 @@
           </ion-card-title>
         </ion-card-header>
 
+        <app-button-providers></app-button-providers>
+
         <form (keyup.enter)="submit()" (ngSubmit)="submit()" class="ion-text-center">
+
+          <span>¿Tienes cuenta de Google o Facebook?</span>
 
           <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" label="Correo" icon="mail-outline"></app-custom-input>
           <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.dirty">
