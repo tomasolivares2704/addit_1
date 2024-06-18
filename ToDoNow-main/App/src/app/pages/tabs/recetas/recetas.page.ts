@@ -23,22 +23,11 @@ export class RecetasPage implements OnInit {
     private formBuilder: FormBuilder,
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService
-  ) {
-    this.newRecetaForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      imagen: ['', Validators.required],
-      calories: ['', Validators.required],
-      protein: ['', Validators.required],
-      fats: ['', Validators.required],
-      carbohydrates: ['', Validators.required],
-      ingredients: this.formBuilder.array([])
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.getUser();
     this.getRecetas();
-    this.addIngredient(); // Inicialmente añade un ingrediente vacío
     this.getMyFoods();
   }
 
@@ -46,37 +35,9 @@ export class RecetasPage implements OnInit {
     return this.newRecetaForm.get('ingredients') as FormArray;
   }
 
-  addIngredient() {
-    const ingredientForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      stock: ['', Validators.required]
-    });
-    this.ingredients.push(ingredientForm);
-  }
+  
 
-  removeIngredient(index: number) {
-    this.ingredients.removeAt(index);
-  }
-
-  addNewReceta() {
-    if (this.newRecetaForm.invalid) {
-      return;
-    }
-
-    const newRecetaData = this.newRecetaForm.value as Receta;
-    this.loading = true;
-
-    this.firebaseSvc.addReceta(newRecetaData).then(() => {
-      this.newRecetaForm.reset();
-      this.ingredients.clear(); // Clear ingredients array after form reset
-      this.addIngredient(); // Add an initial empty ingredient form group
-      this.loading = false;
-      this.getRecetas(); // Refresh the list of recipes
-    }).catch(error => {
-      this.loading = false;
-      console.error('Error al agregar receta:', error);
-    });
-  }
+ 
 
   getRecetas() {
     this.loading = true;
@@ -188,6 +149,32 @@ export class RecetasPage implements OnInit {
     const food = this.myfoods.find(food => food.name === name);
     return food ? food.stock : 0;
   }
+
+  actualizarTotalLista() {
+    if (this.recetas) {
+      this.recetas.forEach(receta => {
+        receta.ingredients.forEach(ingredient => {
+          const matchingFood = this.myfoods.find(food => food.name === ingredient.name);
+          if (matchingFood) {
+            ingredient.faltante = Math.max(ingredient.stock - matchingFood.stock, 0);
+          } else {
+            ingredient.faltante = ingredient.stock; // Si no hay coincidencia, se asume que falta todo el stock requerido
+          }
+        });
+      });
+    }
+
+  }
+
+  getFaltante(ing: any): number {
+    const matchingFood = this.myfoods.find(food => food.name === ing.name);
+    if (matchingFood) {
+      return ing.stock - matchingFood.stock;
+    }
+    return ing.stock; // Otra acción si no se encuentra coincidencia
+  }
   
+
+
 
 }

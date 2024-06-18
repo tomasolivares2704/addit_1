@@ -35,3 +35,25 @@
 .receta-ingredient ion-label {
   font-size: 14px;
 }
+///
+.stock-info {
+  display: flex;
+  align-items: center;
+}
+
+.stock-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.faltante {
+  margin-left: 10px;
+  color: red; /* Estilos para indicar que hay faltante */
+}
+
+.suficiente {
+  margin-left: 10px;
+  color: green; /* Estilos para indicar que hay suficiente stock */
+}
+
+

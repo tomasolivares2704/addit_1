@@ -1,6 +1,7 @@
 export interface Ingredient {
     name: string;
     stock: number;
+    faltante: number;
   }
   
   export interface Receta {
@@ -11,7 +12,7 @@ export interface Ingredient {
     protein: number;
     fats: number;
     carbohydrates: number;
-    ingredients: { name: string; stock: number }[];
+    ingredients: { name: string; stock: number;faltante: number;  }[];
   }
   
   
