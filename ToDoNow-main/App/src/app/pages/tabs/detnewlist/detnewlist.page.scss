@@ -1,0 +1,49 @@
+/* Estilo general para ion-content */
+ion-content {
+    --background: #44B0F1; /* Color de fondo para ion-content */
+    color: white; /* Color de texto para ion-content */
+  }
+  
+  /* Estilos para ion-card */
+  .custom-card {
+    background-color: white; /* Color de fondo para ion-card */
+    margin-bottom: 20px; /* Margen inferior */
+    border-radius: 8px; /* Redondea los bordes */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+  }
+  
+  .custom-card-header {
+    background-color: #ffffff; /* Color de fondo para el encabezado de ion-card */
+    color: rgb(0, 0, 0); /* Color de texto para el encabezado de ion-card */
+  }
+  
+  /* Estilos para la tabla */
+  .custom-table ion-item-divider {
+    --background: #ffffff; /* Color de fondo para los dividers de ion-item */
+    color: rgb(0, 0, 0); /* Color de texto para los dividers de ion-item */
+    font-weight: bold; /* Texto en negrita */
+  }
+  
+  .custom-table ion-item {
+    --background: transparent; /* Fondo transparente para ion-item */
+    --min-height: auto; /* Altura mínima automática */
+    --padding-start: 0; /* Padding a la izquierda */
+    --padding-end: 0; /* Padding a la derecha */
+  }
+  
+  .table-header {
+    font-weight: bold; /* Texto en negrita para el encabezado */
+    padding-bottom: 8px; /* Espacio inferior */
+  }
+  
+  .table-cell {
+    flex: 1; /* Distribución flexible */
+    text-align: center; /* Alineación central */
+    padding: 8px; /* Añade relleno */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Borde inferior */
+  }
+  
+  .wide-cell {
+    flex: 2; /* Hace que la celda sea más ancha */
+  }
+  

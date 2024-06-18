@@ -48,8 +48,18 @@ const routes: Routes = [
         path: 'detalle-lista/:id/select-products',
         loadChildren: () => import('./select-product/select-product.module').then(m => m.SelectProductPageModule)
       },
+      {
+        path: 'newlist',
+        loadChildren: () => import('./newlist/newlist.module').then( m => m.NewlistPageModule)
+      },
+      {
+        path: 'detnewlist/:id',
+        loadChildren: () => import('./detnewlist/detnewlist.module').then( m => m.DetnewlistPageModule)
+      },
     ],
   },
+ 
+
   
 
 

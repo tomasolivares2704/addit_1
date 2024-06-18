@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Foods } from 'src/app/models/food.models';
+import { Foods,CategoriaAlimento } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -21,6 +21,8 @@ export class InventarioPage implements OnInit {
   loading: boolean = false;
   newFoodForm: FormGroup;
   selectedFood: Foods;
+  selectedCategoria: CategoriaAlimento; // Variable para almacenar la categoría seleccionada
+  categorias: CategoriaAlimento[] = Object.values(CategoriaAlimento); // Array de categorías
 
   constructor(
     private firebaseSvc: FirebaseService,
@@ -28,26 +30,7 @@ export class InventarioPage implements OnInit {
     private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
     private router: Router, // Inyectar Router en el constructor
     private modalController: ModalController,
-  ) { 
-
-    
-
-    // Crear el formulario en el constructor
-    this.newFoodForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      calories: ['', Validators.required],
-      imagen: ['', Validators.required],
-      fat: ['', Validators.required],
-      fat_sat: ['', Validators.required],
-      fat_trans: ['', Validators.required],
-      sodio: ['', Validators.required],
-      carbs: ['', Validators.required],
-      protein: ['', Validators.required],
-      colesterol: ['', Validators.required],
-      fibra: ['', Validators.required],
-      medida: ['', Validators.required],
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.getUser(); // Obtener datos del usuario al cargar la vista
@@ -75,29 +58,24 @@ export class InventarioPage implements OnInit {
     });
   }
 
-  addNewFood() {
-    if (this.newFoodForm.valid) {
-      const newFoodData: Foods = {
-        ...this.newFoodForm.value,
-        id: ''
-      };
-      this.loading = true;
-  
-      this.firebaseSvc.addFoodToCollections(newFoodData).then(() => {
-        this.newFoodForm.reset();
-        this.loading = false;
-      }).catch(error => {
-        this.loading = false;
-        console.error('Error al agregar alimento:', error);
-      });
-    } else {
-      console.error('Formulario no válido');
-    }
-  }
+
 
   // Método para redirigir a la vista de detalles del alimento
   viewFoodDetails(foodId: string) {
     this.router.navigate(['/tabs/tabnutri', foodId]);
+  }
+
+  // Método para resetear el filtro y mostrar todos los alimentos
+  resetFilter() {
+    this.selectedCategoria = null;
+  }
+
+  // Propiedad calculada para almacenar los alimentos filtrados
+  get filteredFoods(): Foods[] {
+    if (!this.selectedCategoria) {
+      return this.foods; // Devuelve todos los alimentos si no hay categoría seleccionada
+    }
+    return this.foods.filter(food => food.categoria === this.selectedCategoria);
   }
 
   async openFoodDetailsModal(foodId: string) {

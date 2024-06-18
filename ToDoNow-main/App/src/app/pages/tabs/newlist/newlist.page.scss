@@ -1,0 +1,71 @@
+/* styles.css (o el nombre que prefieras) */
+
+/* Estilo general para ion-content */
+ion-content {
+    --background: #44B0F1; /* Color de fondo para ion-content */
+    color: white; /* Color de texto para ion-content */
+  }
+  
+  /* Estilos para ion-icon */
+  ion-icon {
+    color: #44B0F1;
+    font-size: 20px;
+  }
+
+  .extra-large-icon {
+    font-size: 3rem; /* Ajusta el tamaño del ícono según lo necesites */
+  }
+  
+  /* Estilos para ion-tab-button */
+  ion-tab-button {
+    --background: white;
+    --color: #44B0F1;
+    font-size: 9px;
+    border-radius: 50%;
+    height: 68px;
+    width: 68px;
+    margin: 2px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Estilos para ion-tab-bar */
+  ion-tab-bar {
+    height: 80px;
+    --background: #44B0F1;
+    --color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Estilos para ion-card */
+  ion-card {
+    background-color: white;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-card-header,
+  ion-card-content {
+    color: #44B0F1;
+    text-align: center;
+  }
+  
+  /* Estilos para ion-button */
+  ion-button {
+    --background: #44B0F1; /* Color de fondo para el botón */
+    --color: white; /* Color de texto para el botón */
+    border-radius: 8px; /* Redondea los bordes del botón */
+  }
+  
+  /* Estilos para ion-list */
+  ion-list {
+    background-color: transparent; /* Fondo transparente para ion-list */
+    padding: 10px; /* Añade relleno alrededor del ion-list */
+  }
+  

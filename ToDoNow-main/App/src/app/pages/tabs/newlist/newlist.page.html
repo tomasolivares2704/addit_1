@@ -1,0 +1,45 @@
+
+<app-header title="Lista de Compras" ></app-header>
+<ion-content>
+  <!-- Lista de listas del usuario -->
+  <ion-list>
+    <ion-card *ngFor="let lista of listasDeUsuario" >
+      <ion-card-header>
+        <ion-row align-items-center>
+          <!-- Icono grande -->
+          <ion-col size="3">
+            <ion-icon name="cart-outline" class="extra-large-icon" (click)="verDetallesLista(lista.id)"></ion-icon>
+          </ion-col>
+          <!-- Nombre, Total y Botón -->
+          <ion-col size="9">
+            <ion-card-title>{{ lista.nombre }}</ion-card-title>
+            <ion-card-subtitle>Total: {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-subtitle>
+            <ion-button (click)="eliminarLista(lista.id)" color="danger" size="small">Eliminar</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
+
+  <!-- Formulario para crear nueva lista -->
+  <ion-grid style="margin-top: 20px;">
+    <ion-row justify-content-center>
+      <ion-col size="12" size-md="8" size-lg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Crear Nueva Lista</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-item lines="full">
+              <ion-label position="floating" color="primary">Nombre de la lista</ion-label>
+              <ion-input type="text" [(ngModel)]="nombreLista" name="nombreLista" required></ion-input>
+            </ion-item>
+
+            <ion-button expand="block" (click)="crearNuevaLista()">Crear Lista</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

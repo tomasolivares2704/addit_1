@@ -7,12 +7,25 @@
       <h1 class="d-flex-center">Alimentos</h1>
     </div>
 
+    <!-- Selector de categoría -->
+    <ion-item>
+      <ion-label>Categoría</ion-label>
+      <ion-select [(ngModel)]="selectedCategoria">
+        <ion-select-option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Botón para cancelar la selección de categoría -->
+    <ion-button (click)="selectedCategoria = null" color="medium" expand="block" *ngIf="selectedCategoria">
+      Mostrar todos
+    </ion-button>
+
     <ion-spinner *ngIf="loading"></ion-spinner>
 
-    <ion-grid>
+    <ion-grid *ngIf="filteredFoods.length > 0">
       <ion-row>
         <ng-container *ngFor="let food of foods">
-          <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
+          <ion-col size="3" size-sm="6" size-md="4" size-lg="3" *ngIf="!selectedCategoria || food.categoria === selectedCategoria">
             <ion-card class="food-card" (click)="openFoodDetailsModal(food.id)">
               <div class="image-container">
                 <img [src]="food.imagen" alt="Imagen de {{ food.name }}">
@@ -23,10 +36,9 @@
             </ion-card>
           </ion-col>
         </ng-container>
-        
       </ion-row>
     </ion-grid>
-  </div>  
 
-  <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
+    <ion-note *ngIf="filteredFoods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
+  </div>
 </ion-content>

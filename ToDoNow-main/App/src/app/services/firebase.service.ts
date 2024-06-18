@@ -10,6 +10,12 @@ import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
 import { List } from '../models/list.models';
 import { ActivatedRoute } from '@angular/router';
+import { AlimentoListaCompra } from '../models/newlist.models';
+import { NewList } from '../models/newlist.models';
+import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 
 
 @Injectable({
@@ -234,6 +240,77 @@ addProductsToList(userId: string, listId: string, foods: Foods[]): Promise<void>
 sendRecoveryEmail(email: string) {
   return sendPasswordResetEmail(getAuth(), email)
 }
+
+//=========== CREAR NEWLIST ===========//
+
+async crearNewList(userUid: string, newListData: NewList): Promise<string> {
+  try {
+    const newListRef = await this.db.collection('user').doc(userUid).collection('newlist').add({
+      nombre: newListData.nombre,
+      total: newListData.total,
+      alimentos: newListData.alimentos.map(alimento => ({
+        nombre: alimento.nombre,
+        cantidad: alimento.cantidad,
+        precio: alimento.precio,
+        subtotal: alimento.subtotal
+      }))
+    });
+
+    const newListId = newListRef.id; // Obtener el ID del documento creado
+
+    console.log('Nueva lista creada exitosamente.');
+
+    return newListId; // Devolver el ID del documento creado
+  } catch (error) {
+    console.error('Error al crear nueva lista:', error);
+    throw error;
+  }
+}
+
+  //=========== OBTENER NEWLIST USUARIOS ===========//
+  obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
+    return this.db.collection(`user/${uid}/newlist`).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(action => {
+          const data = action.payload.doc.data() as NewList;
+          const id = action.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
+  }
+
+  //=========== OBTENER DETALLE DE ALIMENTOS NEWLIST ===========//
+  obtenerDetallesAlimentos(userUid: string, listId: string): Observable<NewList | null> {
+    return this.db.collection(`user/${userUid}/newlist`).doc<NewList>(listId).valueChanges().pipe(
+      catchError(error => {
+        console.error('Error al obtener los detalles de los alimentos:', error);
+        return of(null); // Devuelve null en caso de error
+      })
+    );
+  }
+
+  //=========== OBTENER DETALLE DE NEWLIST ===========//
+  obtenerDetallesLista(userId: string, newListId: string): Observable<NewList> {
+    return this.db.doc<NewList>(`user/${userId}/newlist/${newListId}`).valueChanges({ idField: 'id' });
+  }
+  
+  //=========== ACTUALIZAR NEWLIST ===========//
+  actualizarLista(userUid: string, newListId: string, newListData: NewList): Promise<void> {
+    return this.db.collection(`user/${userUid}/newlist`).doc(newListId).update(newListData);
+  }
+
+  
+  //=========== ELIMINAR NEWLIST ===========//
+  deleteList(listId: string): Promise<void> {
+    return this.db.collection('lists').doc(listId).delete();
+  }
+  
+
+
+
+
+
 
 
 

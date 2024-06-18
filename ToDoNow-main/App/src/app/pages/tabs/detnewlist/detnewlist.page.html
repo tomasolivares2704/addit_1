@@ -1,0 +1,34 @@
+<app-header title="Detalle Lista" ></app-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card class="custom-card" *ngIf="newlist">
+    <ion-card-header class="custom-card-header">
+      <ion-card-title>Nombre Lista: {{ newlist.nombre }}</ion-card-title>
+      <ion-card-title>Total Lista: {{ newlist.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list class="custom-table">
+        <ion-item-divider class="table-header">
+          <ion-label class="table-cell wide-cell">Nombre</ion-label>
+          <ion-label class="table-cell">Cantidad</ion-label>
+          <ion-label class="table-cell">Precio</ion-label>
+          <ion-label class="table-cell wide-cell">Subtotal</ion-label>
+        </ion-item-divider>
+
+        <ion-item class="table-row" *ngFor="let alimento of newlist.alimentos; let i = index">
+          <ion-label class="table-cell wide-cell">{{ alimento.nombre }}</ion-label>
+          <ion-input class="table-cell" type="number" [(ngModel)]="alimento.cantidad" (ionChange)="actualizarCantidad(alimento, alimento.cantidad)"></ion-input>
+          <ion-label class="table-cell">{{ alimento.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
+          <ion-label class="table-cell wide-cell">{{ alimento.subtotal | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <ion-item>
+        <ion-back-button defaultHref="/tabs/newlist">Volver atrás</ion-back-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-spinner *ngIf="loading"></ion-spinner>
+</ion-content>
