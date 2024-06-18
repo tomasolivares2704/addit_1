@@ -42,6 +42,7 @@ export class InventoryPage implements OnInit {
 
   getUser() {
     this.user = this.utilsSvc.getElementInLocalStorage('user');
+    console.log('ID DEL USUARIOS:', this.user.uid);
   }
 
 

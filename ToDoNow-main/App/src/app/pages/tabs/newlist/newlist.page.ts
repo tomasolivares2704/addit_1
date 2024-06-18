@@ -33,10 +33,9 @@ export class NewlistPage implements OnInit {
 
   getUser() {
     this.user = this.utilsSvc.getElementInLocalStorage('user');
-    if (this.user && this.user.isAdmin) {
-      this.utilsSvc.setElementInLocalStorage('isAdmin', true);
-    }
+    console.log('ID DEL USUARIOS:', this.user.uid);
   }
+  
 
   crearNuevaLista() {
     if (this.nombreLista && this.user.uid) {

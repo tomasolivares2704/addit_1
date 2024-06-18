@@ -245,7 +245,12 @@ sendRecoveryEmail(email: string) {
 
 async crearNewList(userUid: string, newListData: NewList): Promise<string> {
   try {
-    const newListRef = await this.db.collection('user').doc(userUid).collection('newlist').add({
+    const currentUser = await this.auth.currentUser;
+    if (!currentUser || currentUser.uid !== userUid) {
+      throw new Error('Usuario no autenticado o no autorizado.');
+    }
+
+    const newListRef = await this.db.collection(`user/${userUid}/newlist`).add({
       nombre: newListData.nombre,
       total: newListData.total,
       alimentos: newListData.alimentos.map(alimento => ({
@@ -266,6 +271,7 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
     throw error;
   }
 }
+
 
   //=========== OBTENER NEWLIST USUARIOS ===========//
   obtenerNewListDeUsuario(uid: string): Observable<NewList[]> {
