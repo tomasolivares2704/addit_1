@@ -150,18 +150,32 @@ export class FirebaseService {
   observeFoodChangesAndUpdateMyFoods(user: User) {
     const foodsCollection = this.db.collection('food');
     const myfoodsCollection = this.db.collection(`user/${user.uid}/myfoods`);
-
-    // Observar cambios en la colección food
+  
+    // Observar cambios en la colección 'food'
     foodsCollection.snapshotChanges().subscribe(changes => {
       changes.forEach(change => {
         const food = change.payload.doc.data() as myfood;
         const foodId = change.payload.doc.id;
-        
-        // Actualizar myfoods con el mismo ID que el alimento modificado
-        myfoodsCollection.doc(foodId).set(food);
+  
+        // Actualizar solo las propiedades específicas en 'myfoods'
+        const updateObject: Partial<myfood> = {
+          stock: food.stock,
+          stock_ideal: food.stock_ideal,
+          // Agrega más campos si es necesario
+        };
+  
+        // Actualizar el documento correspondiente en 'myfoods' usando 'update'
+        myfoodsCollection.doc(foodId).update(updateObject)
+          .then(() => {
+            console.log(`Datos de ${foodId} actualizados en myfoods.`);
+          })
+          .catch(error => {
+            console.error(`Error al actualizar datos de ${foodId} en myfoods:`, error);
+          });
       });
     });
   }
+  
 
   // Gestión de listas de compras
   createList(list: List) {
