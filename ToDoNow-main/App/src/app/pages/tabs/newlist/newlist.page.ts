@@ -49,7 +49,9 @@ export class NewlistPage implements OnInit {
               nombre: food.name,
               cantidad: 0,
               precio: food.price,
+              precio2: food.price2,
               subtotal: 0,
+              subtotal2: 0,
             };
             alimentos.push(alimento);
           });
@@ -59,6 +61,7 @@ export class NewlistPage implements OnInit {
             id: '', // Se asignará automáticamente por Firestore
             nombre: this.nombreLista,
             total: 0, // Puedes calcular esto según sea necesario
+            total2: 0, // Puedes calcular esto según sea necesario
             alimentos: alimentos, // Asignar el array de alimentos directamente
           };
 

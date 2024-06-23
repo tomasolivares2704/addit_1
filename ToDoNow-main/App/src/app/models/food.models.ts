@@ -13,6 +13,7 @@ export interface Foods {
   fibra: number;
   medida: string;
   price: number;
+  price2: number;
   categoria: CategoriaAlimento;
 }
 

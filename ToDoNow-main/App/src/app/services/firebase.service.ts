@@ -271,7 +271,9 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
         nombre: alimento.nombre,
         cantidad: alimento.cantidad,
         precio: alimento.precio,
-        subtotal: alimento.subtotal
+        precio2: alimento.precio2,
+        subtotal: alimento.subtotal,
+        subtotal2: alimento.subtotal2
       }))
     });
 
@@ -317,6 +319,11 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
   
   //=========== ACTUALIZAR NEWLIST ===========//
   actualizarLista(userUid: string, newListId: string, newListData: NewList): Promise<void> {
+    return this.db.collection(`user/${userUid}/newlist`).doc(newListId).update(newListData);
+  }
+
+   //=========== ACTUALIZAR NEWLIST ===========//
+   actualizarLista2(userUid: string, newListId: string, newListData: NewList): Promise<void> {
     return this.db.collection(`user/${userUid}/newlist`).doc(newListId).update(newListData);
   }
 

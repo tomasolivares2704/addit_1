@@ -47,6 +47,7 @@ export class FormfoodPage implements OnInit {
       fibra: ['', Validators.required],
       medida: ['', Validators.required],
       price: ['', Validators.required],
+      price2: ['', Validators.required],
       categoria: [CategoriaAlimento.Verduras, Validators.required] // Valor por defecto y validación
     });
   }
