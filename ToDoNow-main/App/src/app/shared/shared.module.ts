@@ -12,8 +12,13 @@ import { NotificacionesComponent } from './components/notificaciones/notificacio
 
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
+
+// Import Modales de Creación
 import { CreateListModalComponent } from './components/create-list-modal/create-list-modal.component';
+import { CreateProfileModalComponent } from './components/create-profile-modal/create-profile-modal.component';
 import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-modal.component';
+
+// Import Autenticación
 import { ButtonProvidersComponent } from './components/button-providers/button-providers.component';
 
 
@@ -27,7 +32,8 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     NotificacionesComponent,
     CreateListModalComponent,
     TabNutriModalComponent,
-    ButtonProvidersComponent
+    ButtonProvidersComponent,
+    CreateProfileModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -39,7 +45,8 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     NotificacionesComponent,
     CreateListModalComponent,
     TabNutriModalComponent,
-    ButtonProvidersComponent
+    ButtonProvidersComponent,
+    CreateProfileModalComponent
   ],
   imports: [
     CommonModule,

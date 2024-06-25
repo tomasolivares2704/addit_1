@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { TogglerService } from 'src/app/services/toggler.service';
 import { Foods,CategoriaAlimento } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -18,6 +19,8 @@ export class InventarioPage implements OnInit {
 
   user = {} as User;
   foods: Foods[] = [];
+  filtered: Foods[] = [];
+
   loading: boolean = false;
   newFoodForm: FormGroup;
   selectedFood: Foods;
@@ -30,11 +33,18 @@ export class InventarioPage implements OnInit {
     private formBuilder: FormBuilder, // Inyectar FormBuilder en el constructor
     private router: Router, // Inyectar Router en el constructor
     private modalController: ModalController,
+    private togglerService: TogglerService,
   ) {}
 
   ngOnInit() {
     this.getUser(); // Obtener datos del usuario al cargar la vista
     this.getAllFoods();
+    this.loadActiveProfile();
+  }
+
+  ionViewWillEnter() {
+    this.getAllFoods(); // Asegura que los alimentos se carguen al entrar en la vista
+    this.loadActiveProfile(); // Llama al método para cargar el perfil activo
   }
 
   getUser() {
@@ -55,6 +65,8 @@ export class InventarioPage implements OnInit {
       this.foods = foods;
       this.loading = false;
       console.log('Alimentos recibidos:', foods);
+      this.filterFoods();
+      console.log('Alimentos permitidos:', foods);
     });
   }
 
@@ -68,6 +80,7 @@ export class InventarioPage implements OnInit {
   // Método para resetear el filtro y mostrar todos los alimentos
   resetFilter() {
     this.selectedCategoria = null;
+    this.filterFoods();
   }
 
   // Propiedad calculada para almacenar los alimentos filtrados
@@ -90,6 +103,29 @@ export class InventarioPage implements OnInit {
   
     return await modal.present();
   }
+
+  filterFoods() {
+    const activeProfile = this.togglerService.getActiveProfile();
+    if (activeProfile) {
+      this.filtered = this.foods.filter(food => {
+        return (
+          food.calories === activeProfile.calories &&
+          food.protein === activeProfile.protein &&
+          food.carbs === activeProfile.carbs
+        );
+      });
+    } else {
+      this.filtered = this.foods;
+    }
+  }
   
+  private loadActiveProfile() {
+    this.togglerService.loadActiveProfile();
+  }
 
 }
+
+//
+//
+//
+//

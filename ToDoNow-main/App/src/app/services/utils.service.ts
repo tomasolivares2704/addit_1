@@ -1,11 +1,3 @@
-/**
- * Servicio de utilidades que proporciona funciones para mostrar cargas, alertas, modales, notificaciones, y gestionar el almacenamiento local y la navegación.
- */
-
-/**
- * Importa las clases y opciones necesarias para la gestión de alertas, cargas, modales y toasts en una aplicación Ionic.
- * También importa el enrutador de Angular y el modelo de datos de una tarea.
- */
 import { Injectable } from '@angular/core';
 import { AlertController, AlertOptions, LoadingController, LoadingOptions, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 import { Router } from '@angular/router';
