@@ -52,8 +52,17 @@
                 <ion-icon name="create-outline"></ion-icon>
               </ion-button>
               <div class="stock-label">
+                
                 <h5>{{ food.stock }}</h5>
               </div>
+
+                  <!-- 
+                  Botón para abrir el modal de stock ideal 
+                <ion-button fill="clear" class="edit-ideal-button" *ngIf="!food.showStockEditor && !food.showIdealStockEditor" (click)="showIdealStockEditor(food)">
+                  <ion-icon name="create-outline"></ion-icon>
+                  Editar Stock Ideal
+                </ion-button>
+                  -->
             </div>
             <ion-card-content class="food-card-content">
               <p style="font-size: 10px; color: #44B0F1; font-weight: bold;">{{ food.name }}</p>
@@ -82,7 +91,40 @@
               </ion-row>
             </ion-card-content>
         </ion-card>
+
+        <!-- Card para mostrar el editor de stock ideal -
+        <ion-card>
+          <ion-card-content *ngIf="food.showIdealStockEditor">
+            <ion-row>
+              <ion-col size="4">
+                <ion-button expand="block" color="success" (click)="incrementStockIdeal(food)">+</ion-button>
+              </ion-col>
+              <ion-col size="4">
+                <ion-input type="number" [(ngModel)]="stockIdealToShow" name="stockIdealToShow"></ion-input>
+                <p>Stock ideal actual: {{ food.stock_ideal }}</p>
+              </ion-col>
+              <ion-col size="4">
+                <ion-button expand="block" color="warning" (click)="decrementStockIdeal(food)">-</ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-button expand="block" color="primary" (click)="submitIdealStock(food)">Confirmar</ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-button expand="block" color="danger" (click)="cancelIdealStockEdit(food)">Cancelar</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+
+        -->
+        
+        
+
+        
+
       </ng-container>
+
+      
     </ion-row>
   </ion-grid>
   </div>

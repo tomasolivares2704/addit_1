@@ -61,6 +61,12 @@ export class DetnewlistPage implements OnInit {
     this.actualizarTotalLista();
   }
 
+  actualizarCantidad2(alimento: AlimentoListaCompra, nuevaCantidad: number) {
+    alimento.cantidad = nuevaCantidad;
+    alimento.subtotal2 = alimento.cantidad * alimento.precio2;
+    this.actualizarTotalLista2();
+  }
+
   actualizarTotalLista() {
     if (this.newlist && this.newlist.alimentos) {
       this.newlist.total = this.newlist.alimentos.reduce((total, alimento) => {
@@ -72,6 +78,21 @@ export class DetnewlistPage implements OnInit {
         })
         .catch(error => {
           console.error('Error al actualizar lista en la base de datos:', error);
+        });
+    }
+  }
+
+  actualizarTotalLista2() {
+    if (this.newlist && this.newlist.alimentos) {
+      this.newlist.total2 = this.newlist.alimentos.reduce((total2, alimento) => {
+        return total2 + (alimento.cantidad * alimento.precio2);
+      }, 0);
+      this.firebaseSvc.actualizarLista2(this.user.uid, this.newlist.id, this.newlist)
+        .then(() => {
+          console.log('Lista Nº2 actualizada correctamente en la base de datos.');
+        })
+        .catch(error => {
+          console.error('Error al actualizar lista Nº2 en la base de datos:', error);
         });
     }
   }

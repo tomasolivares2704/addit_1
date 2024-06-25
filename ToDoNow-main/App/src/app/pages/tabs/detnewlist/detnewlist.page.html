@@ -13,14 +13,18 @@
           <ion-label class="table-cell wide-cell">Nombre</ion-label>
           <ion-label class="table-cell">Cantidad</ion-label>
           <ion-label class="table-cell">Precio</ion-label>
+          <ion-label class="table-cell">Precio 2</ion-label>
           <ion-label class="table-cell wide-cell">Subtotal</ion-label>
+          <ion-label class="table-cell wide-cell">Subtotal 2</ion-label>
         </ion-item-divider>
 
         <ion-item class="table-row" *ngFor="let alimento of newlist.alimentos; let i = index">
           <ion-label class="table-cell wide-cell">{{ alimento.nombre }}</ion-label>
-          <ion-input class="table-cell" type="number" [(ngModel)]="alimento.cantidad" (ionChange)="actualizarCantidad(alimento, alimento.cantidad)"></ion-input>
+          <ion-input class="table-cell" type="number" [(ngModel)]="alimento.cantidad" (ionChange)="actualizarCantidad(alimento, alimento.cantidad); actualizarCantidad2(alimento, alimento.cantidad)"></ion-input>
           <ion-label class="table-cell">{{ alimento.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
+          <ion-label class="table-cell">{{ alimento.precio2 | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
           <ion-label class="table-cell wide-cell">{{ alimento.subtotal | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
+          <ion-label class="table-cell wide-cell">{{ alimento.subtotal2 | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
         </ion-item>
       </ion-list>
 

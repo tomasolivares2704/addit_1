@@ -19,6 +19,7 @@ export class NewlistPage implements OnInit {
   user = {} as User;
   listasDeUsuario: NewList[] = [];
   newlist: NewList = null; // Inicializar newlist como null o undefined al inicio
+  alimentosadd: { nombre: string, cantidad: number }[] = []; // Nuevo array de alimentos con nombre y cantidad
 
   constructor(
     private firebaseService: FirebaseService,
@@ -49,7 +50,9 @@ export class NewlistPage implements OnInit {
               nombre: food.name,
               cantidad: 0,
               precio: food.price,
+              precio2: food.price2,
               subtotal: 0,
+              subtotal2: 0,
             };
             alimentos.push(alimento);
           });
@@ -59,6 +62,7 @@ export class NewlistPage implements OnInit {
             id: '', // Se asignará automáticamente por Firestore
             nombre: this.nombreLista,
             total: 0, // Puedes calcular esto según sea necesario
+            total2: 0, // Puedes calcular esto según sea necesario
             alimentos: alimentos, // Asignar el array de alimentos directamente
           };
 
@@ -89,19 +93,33 @@ export class NewlistPage implements OnInit {
             if (listas.length > 0) {
               this.listasDeUsuario = listas;
               console.log('Listas del usuario:', listas);
-    
+  
+              // Usar un conjunto para evitar duplicados
+              const alimentosSet = new Set<{ nombre: string, cantidad: number }>();
+  
               // Iterar sobre cada lista para cargar los alimentos
               listas.forEach(lista => {
                 console.log('ID de la lista:', lista.id);
                 console.log('Nombre de la lista:', lista.nombre);
-    
+  
                 // Obtener los detalles de la lista incluyendo alimentos
                 this.firebaseService.obtenerDetallesAlimentos(this.user.uid, lista.id)
                   .subscribe(
                     (listaConAlimentos: NewList | null) => {
-                      if (listaConAlimentos) {
+                      if (listaConAlimentos && listaConAlimentos.alimentos) {
                         console.log('Alimentos de la lista:', listaConAlimentos.alimentos);
-                        lista.alimentos = listaConAlimentos.alimentos;
+                        // Iterar sobre los alimentos de la lista y agregarlos al conjunto
+                        listaConAlimentos.alimentos.forEach(alimento => {
+                          if (alimento.cantidad > 0) {
+                            alimentosSet.add({ nombre: alimento.nombre, cantidad: alimento.cantidad });
+                          }
+                        });
+  
+                        // Convertir el conjunto a un arreglo al final
+                        this.alimentosadd = Array.from(alimentosSet);
+  
+                        // Agregar console.log para verificar si se guardaron los alimentos en alimentosadd
+                        console.log('Alimentos agregados:', this.alimentosadd);
                       } else {
                         console.log('La lista no tiene alimentos o está vacía.');
                       }
@@ -113,6 +131,8 @@ export class NewlistPage implements OnInit {
               });
             } else {
               console.warn('El usuario no tiene listas definidas.');
+              // Reinicializar alimentosadd como un array vacío si no hay listas
+              this.alimentosadd = [];
               this.listasDeUsuario = []; // Asegurarse de que listasDeUsuario esté vacío si no hay listas
             }
           },
@@ -124,6 +144,8 @@ export class NewlistPage implements OnInit {
       console.error('UID del usuario no disponible.');
     }
   }
+  
+  
 
   
 
@@ -162,6 +184,15 @@ export class NewlistPage implements OnInit {
      verDetallesLista(id: string) {
       this.navCtrl.navigateForward(['/tabs/detnewlist', id]);
   }
+
+
+  
+
+
+
+
+
+
     
 
 }
