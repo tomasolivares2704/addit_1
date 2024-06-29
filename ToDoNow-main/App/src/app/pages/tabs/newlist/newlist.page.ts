@@ -8,6 +8,8 @@ import { User } from 'src/app/models/user.models';
 import { Foods } from 'src/app/models/food.models';
 import { AlimentoListaCompra } from 'src/app/models/newlist.models';
 
+import { myfood } from 'src/app/models/myfood.models';
+
 @Component({
   selector: 'app-newlist',
   templateUrl: './newlist.page.html',
@@ -20,6 +22,7 @@ export class NewlistPage implements OnInit {
   listasDeUsuario: NewList[] = [];
   newlist: NewList = null; // Inicializar newlist como null o undefined al inicio
   alimentosadd: { nombre: string, cantidad: number }[] = []; // Nuevo array de alimentos con nombre y cantidad
+  myfoods: myfood[] = [];  
 
   constructor(
     private firebaseService: FirebaseService,
@@ -187,6 +190,7 @@ export class NewlistPage implements OnInit {
 
 
   
+ 
 
 
 
