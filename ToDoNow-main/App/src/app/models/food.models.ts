@@ -15,6 +15,7 @@ export interface Foods {
   price: number;
   price2: number;
   categoria: CategoriaAlimento;
+  codigoBarras?: string; 
 }
 
 

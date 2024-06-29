@@ -1,4 +1,8 @@
-<app-header title="Mi Inventario"></app-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mi Inventario</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
   <ion-spinner *ngIf="loading"></ion-spinner>
@@ -53,15 +57,15 @@
           <ion-input formControlName="fat_trans" type="number" required></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">sodio</ion-label>
+          <ion-label position="floating">Sodio</ion-label>
           <ion-input formControlName="sodio" type="number" required></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">carbohidratos</ion-label>
+          <ion-label position="floating">Carbohidratos</ion-label>
           <ion-input formControlName="carbs" type="number" required></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label position="floating">Proteina</ion-label>
+          <ion-label position="floating">Proteína</ion-label>
           <ion-input formControlName="protein" type="number" required></ion-input>
         </ion-item>
         <ion-item>
@@ -76,6 +80,11 @@
           <ion-label position="floating">Unidad Medida</ion-label>
           <ion-input formControlName="medida" type="text" required></ion-input>
         </ion-item>
+        <ion-item>
+          <ion-label position="floating">Código de Barras</ion-label>
+          <ion-input formControlName="codigoBarras" type="text" required></ion-input>
+          <ion-button slot="end" (click)="scanBarcode()">Escanear</ion-button>
+        </ion-item>
 
         <ion-button type="submit" expand="block" [disabled]="!newFoodForm.valid">Agregar Alimento</ion-button>
       </form>
@@ -83,4 +92,10 @@
   </ion-card>
 
   <ion-note *ngIf="foods.length === 0 && !loading">No hay alimentos disponibles.</ion-note>
+
+  <!-- Vista de la cámara para escaneo de código de barras -->
+  <div class="video-container">
+    <video #videoElement id="video" playsinline autoplay style="width: 100%; height: auto; transform: scaleX(-1);"></video>
+    <canvas #canvasElement style="display: none;"></canvas>
+  </div>
 </ion-content>
