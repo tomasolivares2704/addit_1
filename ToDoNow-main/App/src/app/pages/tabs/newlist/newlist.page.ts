@@ -134,7 +134,7 @@ export class NewlistPage implements OnInit {
               });
             } else {
               console.warn('El usuario no tiene listas definidas.');
-              // Reinicializar alimentosadd como un array vacío si no hay listas
+              // Reinicializar alimentosadd como un aarray vacío si no hay listas
               this.alimentosadd = [];
               this.listasDeUsuario = []; // Asegurarse de que listasDeUsuario esté vacío si no hay listas
             }
