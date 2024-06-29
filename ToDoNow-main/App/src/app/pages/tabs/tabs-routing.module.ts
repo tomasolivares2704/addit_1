@@ -56,8 +56,14 @@ const routes: Routes = [
         path: 'detnewlist/:id',
         loadChildren: () => import('./detnewlist/detnewlist.module').then( m => m.DetnewlistPageModule)
       },
+      {
+        path: 'testcam',
+        loadChildren: () => import('./testcam/testcam.module').then( m => m.TestcamPageModule)
+      },
+    
     ],
   },
+  
  
 
   
