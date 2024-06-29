@@ -1,13 +1,18 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>testcam</ion-title>
+    <ion-title>
+      Test Camera
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">testcam</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-button expand="block" (click)="activarCamara()">Activar Cámara</ion-button>
+  <br>
+  <video #videoElement autoplay></video>
+  <canvas #canvasElement style="display:none;"></canvas>
+  <br>
+  <ion-button expand="block" (click)="tomarFoto()">Tomar Foto</ion-button>
+  <br>
+  <img [src]="fotoCapturada" *ngIf="fotoCapturada">
 </ion-content>

@@ -1,34 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { Plugins } from '@capacitor/core';
-
-const { Camera } = Plugins; // Accedemos al plugin Camera
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-testcam',
   templateUrl: './testcam.page.html',
   styleUrls: ['./testcam.page.scss'],
 })
-export class TestcamPage implements OnInit {
+export class TestcamPage {
+  @ViewChild('videoElement', { static: false }) videoElement: ElementRef;
+  @ViewChild('canvasElement', { static: false }) canvasElement: ElementRef;
 
-  constructor() { }
+  fotoCapturada: string;
 
-  ngOnInit() {
+  constructor() {}
+
+  async activarCamara() {
+    try {
+      const video = this.videoElement.nativeElement;
+      const constraints = { video: true };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+    } catch (error) {
+      console.error('Error al acceder a la cámara:', error);
+    }
   }
 
-  async takePicture() {
-    try {
-      const capturedPhoto = await Camera['getPhoto']({
-        quality: 90,
-        allowEditing: false,
-        resultType: 'uri', // Utiliza 'uri' en lugar de CameraResultType.Uri
-        source: 'camera', // Utiliza 'camera' en lugar de CameraSource.Camera
-      });
-      
+  tomarFoto() {
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
 
-      console.log('Foto capturada:', capturedPhoto);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    } catch (error) {
-      console.error('Error capturando foto:', error);
-    }
+    // Convertir la imagen del canvas a Base64
+    this.fotoCapturada = canvas.toDataURL('image/png');
+    
+    // Detener la reproducción del video
+    video.srcObject.getVideoTracks().forEach(track => track.stop());
   }
 }
