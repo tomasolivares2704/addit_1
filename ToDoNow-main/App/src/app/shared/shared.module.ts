@@ -20,6 +20,7 @@ import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-m
 
 // Import Autenticación
 import { ButtonProvidersComponent } from './components/button-providers/button-providers.component';
+import { ChangeEmailModalComponent } from './components/change-email-modal/change-email-modal.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     CreateListModalComponent,
     TabNutriModalComponent,
     ButtonProvidersComponent,
-    CreateProfileModalComponent
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -46,7 +48,8 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     CreateListModalComponent,
     TabNutriModalComponent,
     ButtonProvidersComponent,
-    CreateProfileModalComponent
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent
   ],
   imports: [
     CommonModule,

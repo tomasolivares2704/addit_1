@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
 import { User } from '../models/user.models';
-import { getAuth, sendPasswordResetEmail, updateProfile } from 'firebase/auth';
+import { getAuth, updateEmail as fbUpdateEmail, EmailAuthProvider, reauthenticateWithCredential, updateProfile, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 import { UtilsService } from './utils.service';
 import { Observable } from 'rxjs';
 import { Receta } from '../models/receta.models';
 import { Foods } from '../models/food.models';
 import { myfood } from '../models/myfood.models';
 import { List } from '../models/list.models';
-import { ActivatedRoute } from '@angular/router';
-import { AlimentoListaCompra } from '../models/newlist.models';
 import { NewList } from '../models/newlist.models';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
@@ -27,7 +26,6 @@ export class FirebaseService {
     private auth: AngularFireAuth,
     private db: AngularFirestore,
     private utilsSvc: UtilsService,
-    private route: ActivatedRoute
   ) { }
 
   // Autenticación
@@ -41,7 +39,12 @@ export class FirebaseService {
 
   updateUser(user: any){
     const auth = getAuth();
-    return updateProfile(auth.currentUser, user);
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      return updateProfile(currentUser, user);
+    } else {
+      return Promise.reject('No hay ningún usuario conectado.');
+    }
   }
 
   getAuthState() {
@@ -52,6 +55,52 @@ export class FirebaseService {
     await this.auth.signOut();
     this.utilsSvc.routerLink('/auth');
     this.utilsSvc.removeElementInLocalStorage('user');
+  }
+
+  reauthenticate(email: string, password: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const credential = EmailAuthProvider.credential(email, password);
+      return reauthenticateWithCredential(user, credential);
+    } else {
+      return Promise.reject('No user is currently signed in.');
+    }
+  }
+  
+  async updateEmail(newEmail: string): Promise<void> {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await fbUpdateEmail(user, newEmail); // Actualiza el email en Firebase Auth
+        return Promise.resolve();
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    } else {
+      return Promise.reject('No user is currently signed in.');
+    }
+  }
+
+  async updateEmailInFirestore(userId: string, newEmail: string) {
+    try {
+      await this.db.collection('user').doc(userId).update({
+        email: newEmail
+      });
+    } catch (error) {
+      console.error('Error al actualizar el correo en Firestore:', error);
+      throw error;
+    }
+  }
+
+  async sendVerificationEmail(user: firebase.User): Promise<void> {
+    try {
+      await sendEmailVerification(user);
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // Firebase (base de datos)

@@ -7,6 +7,9 @@ import { getAuth, deleteUser } from 'firebase/auth';
 import { TogglerService } from 'src/app/services/toggler.service';
 import { ModalController } from '@ionic/angular';
 import { CreateProfileModalComponent } from 'src/app/shared/components/create-profile-modal/create-profile-modal.component';
+import { ChangeEmailModalComponent } from 'src/app/shared/components/change-email-modal/change-email-modal.component';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -23,6 +26,7 @@ export class ProfilePage implements OnInit {
     private utilsService: UtilsService,
     private togglerService: TogglerService,
     private modalController: ModalController,
+    private auth: AngularFireAuth, // Inject AngularFireAuth
   ) { }
 
   ngOnInit() {
@@ -80,6 +84,7 @@ export class ProfilePage implements OnInit {
       console.error('No hay un usuario autenticado actualmente.');
     }
   }
+
   //PERFILES NUTRICIONALES//
   getProfiles(){
 
@@ -128,6 +133,27 @@ export class ProfilePage implements OnInit {
       .catch(error => {
         console.error('Error updating profile:', error);
       });
+  }
+
+  async openChangeEmailModal() {
+    const modal = await this.modalController.create({
+      component: ChangeEmailModalComponent,
+      cssClass: 'custom-modal',
+      backdropDismiss: true,
+      componentProps: {
+        auth: this.auth, // Pasa el servicio 'auth'
+      }
+    });
+
+    // Maneja la respuesta de la modal cuando se cierra
+    modal.onDidDismiss().then((data) => {
+      if (data.data && data.data.emailUpdated) {
+        // Si se actualizó el email, actualiza la información del usuario
+        this.getUser(); 
+      }
+    });
+
+    return await modal.present();
   }
 
 }

@@ -17,8 +17,17 @@
         </ion-col>
       
             <ion-col class="nombre" size="10">
+
               <h2>{{user.name}}</h2>
-              <p color="primary">{{user.email}}</p>
+
+              <div class="email-edit-container">
+                <p color="primary">{{user.email}}</p>
+                <ion-button (click)="openChangeEmailModal()" shape="round">
+                  Cambiar Correo
+                  <ion-icon slot="end" name="mail-outline"></ion-icon>
+                </ion-button>
+              </div>
+
             </ion-col>
       
             <ion-col size="12">
