@@ -4,6 +4,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
+import { Foods } from 'src/app/models/food.models';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-inventory',
@@ -24,7 +27,9 @@ export class InventoryPage implements OnInit {
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private auth: AngularFireAuth,
+    private db: AngularFirestore,
   ) {
     // Inicialización del formulario reactivo para agregar nuevos alimentos
     this.newFoodForm = this.formBuilder.group({
@@ -46,32 +51,74 @@ export class InventoryPage implements OnInit {
   }
 
   // Función para obtener los alimentos del usuario
-  getMyFoods() {
-    let user: User = this.utilsSvc.getElementInLocalStorage('user');
-    let path = `user/${user.uid}`;
-    this.loading = true;
+getMyFoods() {
+  let user: User = this.utilsSvc.getElementInLocalStorage('user');
+let path = `user/${user.uid}`; // Corregir el path para apuntar directamente a la subcolección myfoods
+this.loading = true;
 
-    this.firebaseSvc.getSubcollection(path, 'myfoods').subscribe({
-      next: (myfoods: myfood[]) => {
-        // Asigna y procesa los alimentos obtenidos
-        this.myfoods = myfoods.map(food => ({
-          ...food,
-          stock: food.stock !== undefined ? food.stock : 1,
-          stock_ideal: food.stock_ideal !== undefined ? food.stock_ideal : 1,
-          showStockEditor: false, // Propiedad para mostrar el editor de stock
-          showIdealStockEditor: false // Propiedad para mostrar el editor de stock ideal
-        }));
-        this.filteredFoods = this.myfoods;   // Inicialmente muestra todos los alimentos
-        this.loading = false;                // Finaliza la carga
-        this.applyStockColors();             // Aplica los colores según el stock
-        this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);  // Guarda en localStorage
-      },
-      error: (error) => {
-        console.error('Error al obtener alimentos:', error);
-        this.loading = false;                // Finaliza la carga en caso de error
-      }
-    });
+// Llamada al método getSubcollection1 con los dos argumentos necesarios
+this.firebaseSvc.getSubcollection1(path, 'myfoods').subscribe({
+  next: (myfoods: myfood[]) => {
+    if (myfoods.length === 0) {
+      // Si no hay documentos en myfoods, replicar desde la colección food
+      this.replicateFoodToMyFoods(user.uid);
+    } else {
+      // Si hay documentos, usar los alimentos obtenidos
+      this.myfoods = myfoods.map(food => ({
+        ...food,
+        showStockEditor: false,
+        showIdealStockEditor: false
+      }));
+      this.filteredFoods = this.myfoods;
+      this.loading = false;
+      this.applyStockColors();
+      this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
+    }
+  },
+  error: (error) => {
+    console.error('Error al obtener alimentos:', error);
+    this.loading = false;
   }
+});
+
+
+}
+
+// Método para replicar documentos desde food a myfoods
+replicateFoodToMyFoods(userId: string): Promise<void> {
+  const batch = this.db.firestore.batch();
+  const foodsCollection = this.db.collection('food').ref; // Referencia a la colección 'foods'
+  const myfoodsCollection = this.db.collection(`user/${userId}/myfoods`).ref; // Referencia a la subcolección 'myfoods'
+
+  return foodsCollection.get().then(snapshot => {
+    snapshot.forEach(doc => {
+      const food = doc.data() as Foods;
+      const newFood: myfood = {
+        id: doc.id,
+        name: food.name,
+        imagen: food.imagen,
+        stock: 1,
+        stock_ideal: 1,
+        showStockEditor: false,
+        showIdealStockEditor: false,
+        activo: true,
+      };
+      const docRef = myfoodsCollection.doc(doc.id); // Referencia correcta al documento en 'myfoods'
+      batch.set(docRef, newFood);
+    });
+
+    return batch.commit().then(() => {
+      console.log('Replicación completada correctamente');
+    }).catch(error => {
+      console.error('Error al replicar alimentos:', error);
+    });
+  });
+}
+
+
+  
+
+ 
 
   // Función para observar cambios en los alimentos y actualizar
   observeFoodChangesAndUpdateMyFoods() {

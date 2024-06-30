@@ -332,6 +332,15 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
   deleteList(listId: string): Promise<void> {
     return this.db.collection('lists').doc(listId).delete();
   }
+
+
+  // Método para obtener una subcolección
+  getSubcollection1(parentPath: string, subcollectionName: string): Observable<any[]> {
+    const collectionRef = this.db.collection(`${parentPath}/${subcollectionName}`);
+    return collectionRef.valueChanges({ idField: 'id' });
+  }
+
+  
   
 
 
