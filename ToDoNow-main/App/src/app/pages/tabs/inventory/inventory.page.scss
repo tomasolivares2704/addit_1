@@ -71,3 +71,49 @@ ion-icon {
   --ionicon-stroke-width: 70px;
 }
 
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Ajusta el ancho máximo según tus necesidades */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+  border: 2px solid #333; /* Borde sólido */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  border-radius: 8px; /* Bordes redondeados */
+  overflow: hidden; /* Para que el vídeo y el canvas no sobresalgan */
+
+  /* Estilos para las líneas del código de barras */
+  .barcode-line {
+    position: absolute;
+    background-color: red; /* Cambia el color de las líneas a rojo */
+    z-index: 1; /* Asegura que las líneas estén por encima del vídeo */
+  }
+
+  .vertical {
+    width: 2px; /* Ancho de la línea vertical */
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .horizontal {
+    width: 100%;
+    height: 2px; /* Alto de la línea horizontal */
+    left: 0;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+}
+
+/* Estilos para el vídeo dentro del contenedor */
+.video-container video {
+  width: 100%;
+  height: auto;
+  transform: scaleX(-1); /* Voltea horizontalmente el vídeo */
+}
+
+/* Estilos para el canvas (puedes mostrarlo o esconderlo según sea necesario) */
+.video-container canvas {
+  display: none; /* Oculto por defecto, puedes mostrarlo dinámicamente en JS */
+}

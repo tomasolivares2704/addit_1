@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { BrowserBarcodeReader, Result } from '@zxing/library';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -24,6 +25,11 @@ export class InventoryPage implements OnInit {
   searchTerm: string = '';          // Término de búsqueda para filtrar alimentos
   stockIdealToShow: number;         // Valor del stock ideal a mostrar en el formulario
 
+  @ViewChild('videoElement', { static: false }) videoElement: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement', { static: false }) canvasElement: ElementRef<HTMLCanvasElement>;
+  codeReader: BrowserBarcodeReader;
+  showScanner: boolean = false; 
+
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
@@ -36,6 +42,9 @@ export class InventoryPage implements OnInit {
       name: ['', Validators.required],
       imagen: ['', Validators.required]
     });
+
+    this.codeReader = new BrowserBarcodeReader();
+
   }
 
   ngOnInit() {
@@ -257,4 +266,64 @@ replicateFoodToMyFoods(userId: string): Promise<void> {
       food.stock_ideal--;
     }
   }
+  async scanBarcode() {
+    try {
+      if (this.videoElement && this.videoElement.nativeElement) {
+        const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
+
+        if (result) {
+          console.log('Código de barras escaneado:', result.getText());
+          this.newFoodForm.patchValue({ codigoBarras: result.getText() });
+        } else {
+          console.log('No se pudo escanear ningún código de barras.');
+        }
+      } else {
+        console.error('Elemento de video no encontrado en el DOM.');
+      }
+    } catch (error) {
+      console.error('Error al escanear código de barras:', error);
+    }
+  }
+
+  async startScanner() {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 100)); // Asegura que el DOM esté completamente cargado
+  
+      if (this.videoElement && this.videoElement.nativeElement) {
+        const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
+  
+        if (result) {
+          console.log('Código de barras escaneado:', result.getText());
+          this.showStockEditorIfFound(result.getText()); // Llama a la función para mostrar el editor si se encuentra el código
+        } else {
+          console.log('No se pudo escanear ningún código de barras.');
+        }
+      } else {
+        console.error('Elemento de video no encontrado en el DOM.');
+      }
+    } catch (error) {
+      console.error('Error al escanear código de barras:', error);
+    } finally {
+      this.showScanner = false; // Cierra el div de la cámara después de escanear
+    }
+  }
+  
+
+  // Función para mostrar el editor de stock si se encuentra el código en myfoods
+  showStockEditorIfFound(code: string) {
+    const foundFood = this.myfoods.find(food => food.codigoBarras === code);
+    if (foundFood) {
+      this.showStockEditor(foundFood);
+    }
+  }
+  
+
+  scanAndSearchInMyFoods() {
+    this.showScanner = true; // Mostrar el scanner al hacer clic en el botón
+    this.startScanner();
+  }
+
+  
+  
+  
 }

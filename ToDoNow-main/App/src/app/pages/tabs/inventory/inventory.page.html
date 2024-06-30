@@ -10,11 +10,21 @@
     <ion-row>
       <ion-col size="12">
         <div class="scanner">
-          <ion-icon name="scan-outline" size="large"></ion-icon>
+          <ion-icon name="scan-outline" size="large" (click)="scanAndSearchInMyFoods()"></ion-icon>
           <p>Escanea para agregar tus productos al inventario!</p>
+        </div>
+    
+        <div class="video-container" *ngIf="showScanner">
+          <div class="barcode-line vertical"></div>
+          <div class="barcode-line horizontal"></div>
+          <video #videoElement id="video" playsinline autoplay style="width: 100%; height: auto; transform: scaleX(-1);"></video>
+          <canvas #canvasElement style="display: none;"></canvas>
         </div>
       </ion-col>
     </ion-row>
+    
+    
+    
 
     <ion-row>
       <ion-col size="12">
