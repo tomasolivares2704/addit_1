@@ -15,6 +15,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { CreateListModalComponent } from './components/create-list-modal/create-list-modal.component';
 import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-modal.component';
 import { ButtonProvidersComponent } from './components/button-providers/button-providers.component';
+import { CreateProfileModalComponent } from './components/create-profile-modal/create-profile-modal.component';
+import { ChangeEmailModalComponent } from './components/change-email-modal/change-email-modal.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     NotificacionesComponent,
     CreateListModalComponent,
     TabNutriModalComponent,
-    ButtonProvidersComponent
+    ButtonProvidersComponent,
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -39,7 +43,9 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
     NotificacionesComponent,
     CreateListModalComponent,
     TabNutriModalComponent,
-    ButtonProvidersComponent
+    ButtonProvidersComponent,
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent
   ],
   imports: [
     CommonModule,

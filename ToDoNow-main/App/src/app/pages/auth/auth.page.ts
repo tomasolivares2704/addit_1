@@ -26,37 +26,49 @@ export class AuthPage implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      this.utilsSvc.presentLoading({message: 'Autenticando...', mode: 'ios' });
+      this.utilsSvc.presentLoading({ message: 'Autenticando...', mode: 'ios' });
       this.firebaseSvc.login(this.form.value as User).then(async res => {
-        console.log(res);
-        let user: User = {
-          uid: res.user.uid,
-          name: res.user.displayName,
-          email: res.user.email
+        const user = res.user;
+        if (user && user.emailVerified) {
+          let userData: User = {
+            uid: user.uid,
+            name: user.displayName || '',
+            email: user.email || ''
+          };
+
+          this.utilsSvc.setElementInLocalStorage('user', userData);
+          this.utilsSvc.dismissLoading();
+          this.utilsSvc.routerLink('/tabs/inventory');
+
+          this.utilsSvc.presentToast({
+            message: `Bienvenido ${userData.name}`,
+            duration: 1500,
+            color: 'primary',
+            icon: 'person-outline',
+            mode: 'ios'
+          });
+
+          this.form.reset();
+        } else {
+          this.utilsSvc.dismissLoading();
+          this.utilsSvc.presentToast({
+            message: 'Debes verificar tu correo electrónico para iniciar sesión.',
+            duration: 5000,
+            color: 'warning',
+            icon: 'alert-circle-outline',
+            mode: 'ios'
+          });
         }
-
-        this.utilsSvc.setElementInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/tabs/home');
-        this.utilsSvc.dismissLoading();
-
-        this.utilsSvc.presentToast({
-          message: `Te damos la bienvenida ${user.name}`,
-          duration: 1500,
-          color: 'primary',
-          icon: 'person-outline',
-          mode: 'ios'
-        });
-        this.form.reset();
-      }, error => {
+      }).catch(error => {
         this.utilsSvc.dismissLoading();
         this.utilsSvc.presentToast({
           message: error.message,
           duration: 5000,
           color: 'warning',
-          icon: 'alert-circle-outline'
+          icon: 'alert-circle-outline',
+          mode: 'ios'
         });
       });
     }
   }
-
 }

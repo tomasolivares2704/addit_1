@@ -1,7 +1,62 @@
 .avatar {
     font-size: 130px;
+    color: #3880ff;
+    margin: auto;
+}
+
+.info-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    color: #3880ff;
+}
+  
+.nombre {
+    color: #3880ff;
+    margin: auto;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 20px;
+    background-color: white;
+    padding: 10px 0;
+}
+
+ion-icon {
+    font-size: 30px;
+    color:#3880ff
 }
 
 ion-button {
-    margin-top: 50px;
+    width: 250px;
+    --background: white;
+    color: #3880ff;
+}
+
+.agregar {
+    --background: #3880ff;
+    color: white;
+    margin: 10px 10px 0% 15%;
+}
+
+.center {
+    margin: auto;
+}
+
+.perfil {
+    height: fit-content;
+}
+
+.content {
+    background-color:#3880ff; 
+    border-radius: 5% 5%;
+}
+
+.editemail {
+    width: 150px;
+}
+
+
+.editemail ion-icon{
+    font-size: 15px;
+    --ionicon-stroke-width: 70px;
 }

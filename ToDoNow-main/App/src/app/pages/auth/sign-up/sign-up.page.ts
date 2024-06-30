@@ -38,70 +38,41 @@ export class SignUpPage implements OnInit {
     this.form.controls.confirmPassword.updateValueAndValidity();
   }
 
- /* submit() {
-    if (this.form.valid) {
-      this.utilsSvc.presentLoading({message: 'Registrando...'});
-      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-        console.log(res);
-        await this.firebaseSvc.updateUser({ displayName: this.form.value.name})
-        let user: User = {
-          uid: res.user.uid,
-          name: res.user.displayName,
-          email: res.user.email
-        }
-
-        this.utilsSvc.setElementInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/tabs');
-        this.utilsSvc.dismissLoading();
-
-        this.utilsSvc.presentToast({
-          message: 'Te damos la bienvenida ${user.name}',
-          duration: 1500,
-          color: 'primary',
-          icon: 'person-outline'
-        });
-        this.form.reset();
-      }, error => {
-        this.utilsSvc.dismissLoading();
-        this.utilsSvc.presentToast({
-          message: error,
-          duration: 5000,
-          color: 'warning',
-          icon: 'alert-circle-outline'
-        });
-      });
-    }
-  } */
-
- submit() {
+  submit() {
     if (this.form.valid) {
       this.utilsSvc.presentLoading({ message: 'Registrando...' });
-      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-        console.log(res);
-        await this.firebaseSvc.updateUser({ displayName: this.form.value.name})
-        let user: User = {
-          uid: res.user.uid,
-          name: res.user.displayName,
-          email: res.user.email,
-          isAdmin: false // Por defecto, los usuarios no son administradores
-        };
-
-        // Agregar usuario a la colección de usuarios en Firestore
-        await this.firebaseSvc.createUserDocument(user);
-
-        this.utilsSvc.setElementInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/tabs');
+      const { name, email, password } = this.form.value;
+  
+      const newUser: User = {
+        uid: '', // Firebase asignará este valor automáticamente al crear el usuario
+        name: name,
+        email: email,
+        password: password,
+        isAdmin: false // Por defecto, los usuarios no son administradores
+      };
+  
+      this.firebaseSvc.signUp(newUser).then(async res => {
+        await res.user.sendEmailVerification();
+        await this.firebaseSvc.updateUser({ displayName: newUser.name });
+  
+        // Asignar el UID generado por Firebase al usuario
+        newUser.uid = res.user.uid;
+  
+        await this.firebaseSvc.createUserDocument(newUser);
+  
+        this.utilsSvc.setElementInLocalStorage('user', newUser);
+        this.utilsSvc.routerLink('/auth');
         this.utilsSvc.dismissLoading();
-
+  
         this.utilsSvc.presentToast({
-          message: `Te damos la bienvenida ${user.name}`,
-          duration: 1500,
+          message: `Registro exitoso. Por favor, verifica tu correo electrónico.`,
+          duration: 5000,
           color: 'primary',
-          icon: 'person-outline',
+          icon: 'mail-outline',
           mode: 'ios'
         });
         this.form.reset();
-      }, error => {
+      }).catch(error => {
         this.utilsSvc.dismissLoading();
         this.utilsSvc.presentToast({
           message: error.message,
