@@ -9,4 +9,5 @@ export interface myfood {
   showStockEditor?: boolean;
   stockToShow?: number;
   showIdealStockEditor?: boolean; // Nueva propiedad
+  codigoBarras: string; 
 }

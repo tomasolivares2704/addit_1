@@ -102,6 +102,7 @@ replicateFoodToMyFoods(userId: string): Promise<void> {
         showStockEditor: false,
         showIdealStockEditor: false,
         activo: true,
+        codigoBarras: food.codigoBarras ? food.codigoBarras : 'aaaa111',
       };
       const docRef = myfoodsCollection.doc(doc.id); // Referencia correcta al documento en 'myfoods'
       batch.set(docRef, newFood);
