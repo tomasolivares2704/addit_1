@@ -3,10 +3,9 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
-//Modelos
-import { List } from 'src/app/models/list.models';
+// Modelos
+import { NewList, AlimentoListaCompra } from 'src/app/models/newlist.models'; // Asegúrate de importar correctamente los modelos
 import { User } from 'src/app/models/user.models';
 
 @Component({
@@ -16,9 +15,11 @@ import { User } from 'src/app/models/user.models';
 })
 export class CreateListModalComponent implements OnInit {
 
-  listForm: FormGroup;
-
+  newListForm: FormGroup;
   user = {} as User;
+  alimentos: AlimentoListaCompra[] = []; // Array para almacenar los alimentos seleccionados
+
+  frecuenciasCompra = ['Diaria', 'Semanal', 'Quincenal', 'Mensual'];
 
   constructor(
     private modalController: ModalController,
@@ -26,69 +27,72 @@ export class CreateListModalComponent implements OnInit {
     private utilsService: UtilsService,
     private formBuilder: FormBuilder,
     private alertController: AlertController,
-    private router: Router,
   ) {}
 
   ngOnInit() {
     this.getUser();
     this.initForm();
-    
+    this.getAllFoods();
   }
 
   getUser() {
-    return this.user = this.utilsService.getElementInLocalStorage('user');
+    // Implementación para obtener el usuario según tu lógica
+    this.user = this.utilsService.getElementInLocalStorage('user');
   }
   
   initForm() {
-    this.listForm = this.formBuilder.group({
-      title: ['', Validators.required],
-      image: ['', Validators.required],
-      purchaseFrequency: ['', Validators.required],
+    this.newListForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      frecuenciaCompra: ['', Validators.required],
     });
   }
 
-  //Crear una nueva lista
-  async createNewList() {
-    const newListData: List = {
-      id: this.firebaseService.generateId(), // Asegúrate de tener una manera de generar un ID único para la lista
-      title: this.listForm.value.title,
-      image: this.listForm.value.image?.toString() || '',
-      purchaseFrequency: this.listForm.value.purchaseFrequency.toString(),
-      createdAt: new Date(),
-      product: [] // Inicializa el array de productos vacío
-    };
-  
-    const path = `user/${this.user.uid}`;
-  
-    try {
-      await this.firebaseService.addToSubcollection(path, 'list', newListData);
-      console.log('Nueva lista añadida correctamente.');
-      this.listForm.reset(); // Limpiar el formulario después de agregar la nueva lista
-  
-      // Mostrar una alerta que indica que se ha agregado una nueva lista
-      const alert = await this.alertController.create({
-        header: 'Nueva lista creada',
-        message: 'Se ha agregado una nueva lista de forma exitosa.',
-        buttons: [
-          {
-            text: 'Aceptar',
-            handler: () => {
-              this.modalController.dismiss({ listCreated: true });
-            }
-          }
-        ],
-      });
-  
-      await alert.present();
-    } catch (error) {
-      console.error('Error al añadir la nueva lista:', error);
-      // Manejo de errores si es necesario
+  getAllFoods() {
+    this.firebaseService.getAllFoods().subscribe(
+      (foods: any[]) => {
+        this.alimentos = foods.map((food, index) => ({
+          id: food.id || `food_${index}`,
+          nombre: food.name,
+          cantidad: 0,
+          precio: food.price,
+          precio2: food.price2,
+          subtotal: 0,
+          subtotal2: 0,
+        }));
+      },
+      (error) => {
+        console.error('Error al obtener alimentos:', error);
+      }
+    );
+  }
+
+  async crearNuevaLista() {
+    if (this.newListForm.valid && this.user.uid) {
+      const newListData: NewList = {
+        id: '', // Se asignará automáticamente por Firestore
+        nombre: this.newListForm.value.nombre,
+        total: 0, // Calculado según sea necesario
+        total2: 0, // Calculado según sea necesario
+        alimentos: this.alimentos, // Asignar el array de alimentos
+        frecuenciaCompra: this.newListForm.value.frecuenciaCompra,
+      };
+
+      try {
+        const newListId = await this.firebaseService.crearNewList(this.user.uid, newListData);
+        newListData.id = newListId;
+        console.log('Nueva lista creada exitosamente:', newListData);
+        this.dismiss(true); // Cerrar modal y pasar true si se creó la lista correctamente
+      } catch (error) {
+        console.error('Error al crear nueva lista:', error);
+        // Manejo de errores si es necesario
+      }
+    } else {
+      console.error('El formulario no es válido o falta el UID del usuario.');
     }
   }
 
-
-  //Modal
-  dismiss() {
-    this.modalController.dismiss();
+  async dismiss(listCreated: boolean = false) {
+    await this.modalController.dismiss({ listCreated });
   }
+
 }

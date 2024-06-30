@@ -320,7 +320,8 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
         precio2: alimento.precio2,
         subtotal: alimento.subtotal,
         subtotal2: alimento.subtotal2
-      }))
+      })),
+      frecuenciaCompra: newListData.frecuenciaCompra // Añadir frecuenciaCompra aquí
     });
 
     const newListId = newListRef.id; // Obtener el ID del documento creado

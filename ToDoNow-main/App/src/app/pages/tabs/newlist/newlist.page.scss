@@ -1,71 +1,105 @@
-/* styles.css (o el nombre que prefieras) */
+.add {
+  --background: rgb(43, 197, 82) !important;
+  --color: white !important;
+  margin-top: 3%;
+  margin-left: auto;
+  width: 100px;
+  --border-radius: 20px !important;
+}
 
-/* Estilo general para ion-content */
-ion-content {
-    --background: #44B0F1; /* Color de fondo para ion-content */
-    color: white; /* Color de texto para ion-content */
-  }
-  
-  /* Estilos para ion-icon */
-  ion-icon {
-    color: #44B0F1;
-    font-size: 20px;
-  }
+.delete {
+  --background: rgb(190, 54, 54) !important;
+  --color: white !important;
+  margin-top: 3%;
+  margin-right: auto;
+  width: 100px;
+  --border-radius: 20px !important;
+}
 
-  .extra-large-icon {
-    font-size: 3rem; /* Ajusta el tamaño del ícono según lo necesites */
-  }
-  
-  /* Estilos para ion-tab-button */
-  ion-tab-button {
-    --background: white;
-    --color: #44B0F1;
-    font-size: 9px;
-    border-radius: 50%;
-    height: 68px;
-    width: 68px;
-    margin: 2px 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Estilos para ion-tab-bar */
-  ion-tab-bar {
-    height: 80px;
-    --background: #44B0F1;
-    --color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-  
-  /* Estilos para ion-card */
-  ion-card {
-    background-color: white;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  ion-card-header,
-  ion-card-content {
-    color: #44B0F1;
-    text-align: center;
-  }
-  
-  /* Estilos para ion-button */
-  ion-button {
-    --background: #44B0F1; /* Color de fondo para el botón */
-    --color: white; /* Color de texto para el botón */
-    border-radius: 8px; /* Redondea los bordes del botón */
-  }
-  
-  /* Estilos para ion-list */
-  ion-list {
-    background-color: transparent; /* Fondo transparente para ion-list */
-    padding: 10px; /* Añade relleno alrededor del ion-list */
-  }
-  
+ion-item.delete-mode {
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid red;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin: 10px 20px;
+}
+
+ion-card {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ion-list {
+  padding: 10px;
+}
+
+ion-item {
+  --background: #fff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-icon {
+  font-size: 2rem;
+  color: #666;
+}
+
+ion-card-title {
+  font-size: 1.2rem;
+  color: #222;
+}
+
+ion-card-subtitle {
+  font-size: 1rem;
+  color: #666;
+}
+
+ion-card-subtitle p {
+  color: #3880ff;
+}
+
+ion-thumbnail img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+ion-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  height: 40px;
+}
+
+ion-icon {
+  font-size: 1.5rem;
+}
+
+ion-grid {
+  margin-top: 20px;
+}
+
+ion-card-header {
+  background-color: #f8f8f8;
+  border-radius: 10px 10px 0 0;
+}
+
+ion-card-title {
+  font-size: 1.5rem;
+  color: #444;
+}
+
+ion-card-content {
+  padding: 20px;
+}

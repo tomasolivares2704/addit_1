@@ -5,7 +5,8 @@ export interface NewList {
     total: number;
     total2: number;
     // Descomentar la propiedad alimentos
-    alimentos: AlimentoListaCompra[]; 
+    alimentos: AlimentoListaCompra[];
+    frecuenciaCompra: string; 
   }
   
   export interface AlimentoListaCompra {

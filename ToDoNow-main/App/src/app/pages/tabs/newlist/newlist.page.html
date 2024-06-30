@@ -1,46 +1,82 @@
-
-<app-header title="Lista de Compras" ></app-header>
 <ion-content>
-  <!-- Lista de listas del usuario -->
-  <ion-list>
-    <ion-card *ngFor="let lista of listasDeUsuario" >
-      <ion-card-header>
-        <ion-row align-items-center>
-          <!-- Icono grande -->
-          <ion-col size="3">
-            <ion-icon name="cart-outline" class="extra-large-icon" (click)="verDetallesLista(lista.id)"></ion-icon>
-          </ion-col>
-          <!-- Nombre, Total y Botón -->
-          <ion-col size="9">
-            <ion-card-title>{{ lista.nombre }}</ion-card-title>
-            <ion-card-subtitle>Total: {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-subtitle>
-            <ion-card-subtitle>Total 2: {{ lista.total2 | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-subtitle>
-            <ion-button (click)="eliminarLista(lista.id)" color="danger" size="small">Eliminar</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-card-header>
-    </ion-card>
-  </ion-list>
+  <app-header title="Lista de Compras"></app-header>
+  <app-logo></app-logo>
 
-  <!-- Formulario para crear nueva lista -->
-  <ion-grid style="margin-top: 20px;">
-    <ion-row justify-content-center>
-      <ion-col size="12" size-md="8" size-lg="6">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Crear Nueva Lista</ion-card-title>
-          </ion-card-header>
+  <!-- Contenido Principal -->
+  <div class="contenido">
+    <div class="titulo">
+      <h1 class="d-flex-center">Lista de Compras</h1>
+    </div>
 
-          <ion-card-content>
-            <ion-item lines="full">
-              <ion-label position="floating" color="primary">Nombre de la lista</ion-label>
-              <ion-input type="text" [(ngModel)]="nombreLista" name="nombreLista" required></ion-input>
+    <div class="button-group">
+      <ion-buttons slot="start">
+        <ion-button class="add" (click)="openCreateListModal()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end">
+        <ion-button class="delete" (click)="toggleDeleteMode()">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-item *ngFor="let lista of listasDeUsuario" [class.delete-mode]="deleteMode" (click)="deleteMode ? confirmDeleteList(lista) : verDetallesLista(lista.id)">
+              <ion-row class="ion-align-items-center">
+                <ion-col size="3" class="ion-text-center">
+                  <ion-icon name="cart-outline" class="list-icon"></ion-icon>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-card-title>{{ lista.nombre }}</ion-card-title>
+                  <ion-card-subtitle class="ion-no-margin">
+                    <ion-label>
+                      <p class="ion-no-margin ion-text-start">Total:</p>
+                      {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}
+                    </ion-label>
+                  </ion-card-subtitle>
+                  <ion-card-subtitle class="ion-no-margin">
+                    <ion-label>
+                      <p class="ion-no-margin ion-text-start">Total 2:</p>
+                      {{ lista.total2 | currency:'CLP':'symbol-narrow':'1.0-0' }}
+                    </ion-label>
+                  </ion-card-subtitle>
+                  <ion-card-subtitle class="ion-no-margin">
+                    <ion-label>
+                      <p class="ion-no-margin ion-text-start">Frecuencia de compra:</p>
+                      {{ lista.frecuenciaCompra }}
+                    </ion-label>
+                  </ion-card-subtitle>
+                </ion-col>
+              </ion-row>
             </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
 
-            <ion-button expand="block" (click)="crearNuevaLista()">Crear Lista</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- Formulario para crear nueva lista -->
+    <ion-grid style="margin-top: 20px;">
+      <ion-row justify-content-center>
+        <ion-col size="12" size-md="8" size-lg="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Crear Nueva Lista</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-item lines="full">
+                <ion-label position="floating" color="primary">Nombre de la lista</ion-label>
+                <ion-input type="text" [(ngModel)]="nombreLista" name="nombreLista" required></ion-input>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
