@@ -5,6 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Receta } from 'src/app/models/receta.models';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
+import { Foods } from 'src/app/models/food.models';
 
 @Component({
   selector: 'app-formreceta',
@@ -18,6 +19,7 @@ export class FormrecetaPage implements OnInit {
   recetas: Receta[] = [];
   myfoods: myfood[] = [];
   user: User;
+  foods: Foods[] = [];
 
 
   constructor(
@@ -42,7 +44,7 @@ export class FormrecetaPage implements OnInit {
     this.getUser();
     this.getRecetas();
     this.addIngredient(); // Inicialmente añade un ingrediente vacío
-    this.getMyFoods();
+    this.getAllFoods();
   }
 
   get ingredients(): FormArray {
@@ -94,6 +96,16 @@ export class FormrecetaPage implements OnInit {
     });
   }
 
+
+  getAllFoods() {
+    this.loading = true;
+    this.firebaseSvc.getAllFoods().subscribe(foods => {
+      this.foods = foods;
+      this.loading = false;
+    });
+  }
+
+  /*
   getMyFoods() {
     this.loading = true;
   
@@ -121,6 +133,8 @@ export class FormrecetaPage implements OnInit {
       }
     });
   }
+
+  */
   
   
   canDiscountIngredients(receta: Receta): boolean {

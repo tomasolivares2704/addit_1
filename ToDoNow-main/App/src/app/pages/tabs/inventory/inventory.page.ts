@@ -50,7 +50,7 @@ export class InventoryPage implements OnInit {
   ngOnInit() {
     this.getUser();                         // Obtiene el usuario actual
     this.getMyFoods();                      // Obtiene los alimentos del usuario
-    this.observeFoodChangesAndUpdateMyFoods();  // Observa cambios en los alimentos
+    this.observeFoodChangesAndUpdateMyFoods(); 
   }
 
   // Función para obtener el usuario desde el almacenamiento local
@@ -60,81 +60,143 @@ export class InventoryPage implements OnInit {
   }
 
   // Función para obtener los alimentos del usuario
-getMyFoods() {
-  let user: User = this.utilsSvc.getElementInLocalStorage('user');
-let path = `user/${user.uid}`; // Corregir el path para apuntar directamente a la subcolección myfoods
-this.loading = true;
+  getMyFoods() {
+    let user: User = this.utilsSvc.getElementInLocalStorage('user');
+  let path = `user/${user.uid}`; // Corregir el path para apuntar directamente a la subcolección myfoods
+  this.loading = true;
 
-// Llamada al método getSubcollection1 con los dos argumentos necesarios
-this.firebaseSvc.getSubcollection1(path, 'myfoods').subscribe({
-  next: (myfoods: myfood[]) => {
-    if (myfoods.length === 0) {
-      // Si no hay documentos en myfoods, replicar desde la colección food
-      this.replicateFoodToMyFoods(user.uid);
-    } else {
-      // Si hay documentos, usar los alimentos obtenidos
-      this.myfoods = myfoods.map(food => ({
-        ...food,
-        showStockEditor: false,
-        showIdealStockEditor: false
-      }));
-      this.filteredFoods = this.myfoods;
+  // Llamada al método getSubcollection1 con los dos argumentos necesarios
+  this.firebaseSvc.getSubcollection1(path, 'myfoods').subscribe({
+    next: (myfoods: myfood[]) => {
+      if (myfoods.length === 0) {
+        // Si no hay documentos en myfoods, replicar desde la colección food
+        this.replicateFoodToMyFoods(user.uid);
+      } else {
+        // Si hay documentos, usar los alimentos obtenidos
+        this.myfoods = myfoods.map(food => ({
+          ...food,
+          showStockEditor: false,
+          showIdealStockEditor: false
+        }));
+        this.filteredFoods = this.myfoods;
+        this.loading = false;
+        this.applyStockColors();
+        this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
+      }
+    },
+    error: (error) => {
+      console.error('Error al obtener alimentos:', error);
       this.loading = false;
-      this.applyStockColors();
-      this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
     }
-  },
-  error: (error) => {
-    console.error('Error al obtener alimentos:', error);
-    this.loading = false;
-  }
-});
-
-
-}
-
-// Método para replicar documentos desde food a myfoods
-replicateFoodToMyFoods(userId: string): Promise<void> {
-  const batch = this.db.firestore.batch();
-  const foodsCollection = this.db.collection('food').ref; // Referencia a la colección 'foods'
-  const myfoodsCollection = this.db.collection(`user/${userId}/myfoods`).ref; // Referencia a la subcolección 'myfoods'
-
-  return foodsCollection.get().then(snapshot => {
-    snapshot.forEach(doc => {
-      const food = doc.data() as Foods;
-      const newFood: myfood = {
-        id: doc.id,
-        name: food.name,
-        imagen: food.imagen,
-        stock: 1,
-        stock_ideal: 1,
-        showStockEditor: false,
-        showIdealStockEditor: false,
-        activo: true,
-        codigoBarras: food.codigoBarras ? food.codigoBarras : 'aaaa111',
-      };
-      const docRef = myfoodsCollection.doc(doc.id); // Referencia correcta al documento en 'myfoods'
-      batch.set(docRef, newFood);
-    });
-
-    return batch.commit().then(() => {
-      console.log('Replicación completada correctamente');
-    }).catch(error => {
-      console.error('Error al replicar alimentos:', error);
-    });
   });
-}
 
 
+  }
+
+  // Método para replicar documentos desde food a myfoods
+  replicateFoodToMyFoods(userId: string): Promise<void> {
+    const batch = this.db.firestore.batch();
+    const foodsCollection = this.db.collection('food').ref; // Referencia a la colección 'foods'
+    const myfoodsCollection = this.db.collection(`user/${userId}/myfoods`).ref; // Referencia a la subcolección 'myfoods'
+
+    return foodsCollection.get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const food = doc.data() as Foods;
+        const newFood: myfood = {
+          id: doc.id,
+          name: food.name,
+          imagen: food.imagen,
+          stock: 1,
+          stock_ideal: 1,
+          showStockEditor: false,
+          showIdealStockEditor: false,
+          activo: true,
+          codigoBarras: food.codigoBarras ? food.codigoBarras : 'aaaa111',
+        };
+        const docRef = myfoodsCollection.doc(doc.id); // Referencia correcta al documento en 'myfoods'
+        batch.set(docRef, newFood);
+      });
+
+      return batch.commit().then(() => {
+        console.log('Replicación completada correctamente');
+      }).catch(error => {
+        console.error('Error al replicar alimentos:', error);
+      });
+    });
+  }
+
+  observeFoodChangesAndUpdateMyFoods() {
+    const user: User = this.utilsSvc.getElementInLocalStorage('user');
+    const foodsCollection = this.db.collection('food');
+    const myfoodsCollection = this.db.collection(`user/${user.uid}/myfoods`);
+  
+    foodsCollection.get().subscribe(foodsSnapshot => {
+      const foodIdsInFoodCollection: string[] = foodsSnapshot.docs.map(doc => doc.id);
+  
+      myfoodsCollection.get().subscribe(myfoodsSnapshot => {
+        const foodIdsInMyFoodsCollection: string[] = myfoodsSnapshot.docs.map(doc => doc.id);
+  
+        // Encuentra los nuevos alimentos en foodsCollection que no existen en myfoodsCollection
+        const newFoodIdsToReplicate = foodIdsInFoodCollection.filter(foodId => !foodIdsInMyFoodsCollection.includes(foodId));
+  
+        console.log('Nuevos alimentos a replicar:', newFoodIdsToReplicate);
+  
+        // Itera sobre los nuevos alimentos a replicar
+        newFoodIdsToReplicate.forEach(foodId => {
+          const foodDocRef = foodsCollection.doc(foodId);
+  
+          foodDocRef.get().subscribe(foodDoc => {
+            if (foodDoc.exists) {
+              const foodData = foodDoc.data() as Foods;
+              const newFood: myfood = {
+                id: foodId,
+                name: foodData.name,
+                imagen: foodData.imagen,
+                stock: 1,
+                stock_ideal: 1,
+                showStockEditor: false,
+                showIdealStockEditor: false,
+                activo: true,
+                codigoBarras: foodData.codigoBarras ? foodData.codigoBarras : 'aaaa111',
+              };
+  
+              // Crea el nuevo documento en myfoodsCollection
+              myfoodsCollection.doc(foodId).set(newFood)
+                .then(() => {
+                  console.log(`Alimento replicado en myfoods: ${foodData.name}`);
+                })
+                .catch(error => {
+                  console.error(`Error al replicar alimento en myfoods: ${foodData.name}`, error);
+                });
+            } else {
+              console.error(`No se encontró el alimento en foodsCollection: ${foodId}`);
+            }
+          });
+        });
+      });
+    });
+  }
+  
+  
+  
+  
   
 
- 
 
-  // Función para observar cambios en los alimentos y actualizar
-  observeFoodChangesAndUpdateMyFoods() {
-    let user: User = this.utilsSvc.getElementInLocalStorage('user');
-    this.firebaseSvc.observeFoodChangesAndUpdateMyFoods(user);
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Función para cambiar entre modo de agregar y editar alimentos
   toggleMode(event: any) {
