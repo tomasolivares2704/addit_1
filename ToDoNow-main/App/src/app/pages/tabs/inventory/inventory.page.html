@@ -66,19 +66,20 @@
                 <h5>{{ food.stock }}</h5>
               </div>
 
-                  <!-- 
-                  Botón para abrir el modal de stock ideal 
+                <!-- 
+                Botón para abrir el modal de stock ideal 
                 <ion-button fill="clear" class="edit-ideal-button" *ngIf="!food.showStockEditor && !food.showIdealStockEditor" (click)="showIdealStockEditor(food)">
                   <ion-icon name="create-outline"></ion-icon>
                   Editar Stock Ideal
                 </ion-button>
-                  -->
+                -->
             </div>
             <ion-card-content class="food-card-content">
               <p style="font-size: 10px; color: #44B0F1; font-weight: bold;">{{ food.name }}</p>
             </ion-card-content>
           </ion-card>
         </ion-col>
+        
         <ion-card>
           <ion-card-content *ngIf="food.showStockEditor">
               <ion-row>
@@ -102,7 +103,8 @@
             </ion-card-content>
         </ion-card>
 
-        <!-- Card para mostrar el editor de stock ideal -
+        <!-- Card para mostrar el editor de stock ideal -->
+        <!-- 
         <ion-card>
           <ion-card-content *ngIf="food.showIdealStockEditor">
             <ion-row>
@@ -125,12 +127,7 @@
             </ion-row>
           </ion-card-content>
         </ion-card>
-
         -->
-        
-        
-
-        
 
       </ng-container>
 

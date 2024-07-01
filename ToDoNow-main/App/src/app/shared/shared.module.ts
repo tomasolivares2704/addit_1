@@ -17,6 +17,7 @@ import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-m
 import { ButtonProvidersComponent } from './components/button-providers/button-providers.component';
 import { CreateProfileModalComponent } from './components/create-profile-modal/create-profile-modal.component';
 import { ChangeEmailModalComponent } from './components/change-email-modal/change-email-modal.component';
+import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { ChangeEmailModalComponent } from './components/change-email-modal/chang
     TabNutriModalComponent,
     ButtonProvidersComponent,
     CreateProfileModalComponent,
-    ChangeEmailModalComponent
+    ChangeEmailModalComponent,
+    EditStockModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -45,7 +47,8 @@ import { ChangeEmailModalComponent } from './components/change-email-modal/chang
     TabNutriModalComponent,
     ButtonProvidersComponent,
     CreateProfileModalComponent,
-    ChangeEmailModalComponent
+    ChangeEmailModalComponent,
+    EditStockModalComponent
   ],
   imports: [
     CommonModule,

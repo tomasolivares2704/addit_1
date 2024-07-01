@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Stock</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Stock Actual: {{ food.stock }}</ion-label>
+    <ion-button (click)="incrementStock()">+</ion-button>
+    <ion-button (click)="decrementStock()">-</ion-button>
+  </ion-item>
+  <ion-button expand="block" (click)="confirmStockChange()">Confirmar Cambios</ion-button>
+</ion-content>

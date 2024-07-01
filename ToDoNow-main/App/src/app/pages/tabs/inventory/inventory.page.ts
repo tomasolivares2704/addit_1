@@ -176,27 +176,6 @@ export class InventoryPage implements OnInit {
       });
     });
   }
-  
-  
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Función para cambiar entre modo de agregar y editar alimentos
   toggleMode(event: any) {
