@@ -1,49 +1,93 @@
-/* Estilo general para ion-content */
-ion-content {
-    --background: #44B0F1; /* Color de fondo para ion-content */
-    color: white; /* Color de texto para ion-content */
-  }
-  
-  /* Estilos para ion-card */
-  .custom-card {
-    background-color: white; /* Color de fondo para ion-card */
-    margin-bottom: 20px; /* Margen inferior */
-    border-radius: 8px; /* Redondea los bordes */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-  }
-  
-  .custom-card-header {
-    background-color: #ffffff; /* Color de fondo para el encabezado de ion-card */
-    color: rgb(0, 0, 0); /* Color de texto para el encabezado de ion-card */
-  }
-  
-  /* Estilos para la tabla */
-  .custom-table ion-item-divider {
-    --background: #ffffff; /* Color de fondo para los dividers de ion-item */
-    color: rgb(0, 0, 0); /* Color de texto para los dividers de ion-item */
-    font-weight: bold; /* Texto en negrita */
-  }
-  
-  .custom-table ion-item {
-    --background: transparent; /* Fondo transparente para ion-item */
-    --min-height: auto; /* Altura mínima automática */
-    --padding-start: 0; /* Padding a la izquierda */
-    --padding-end: 0; /* Padding a la derecha */
-  }
-  
-  .table-header {
-    font-weight: bold; /* Texto en negrita para el encabezado */
-    padding-bottom: 8px; /* Espacio inferior */
-  }
-  
-  .table-cell {
-    flex: 1; /* Distribución flexible */
-    text-align: center; /* Alineación central */
-    padding: 8px; /* Añade relleno */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Borde inferior */
-  }
-  
-  .wide-cell {
-    flex: 2; /* Hace que la celda sea más ancha */
-  }
-  
+/* Estilos para la información del producto */
+.product-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.product-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Hace la imagen circular */
+  margin-right: 10px; /* Espaciado entre la imagen y el nombre del producto */
+}
+
+.product-name {
+  font-size: 0.8rem;
+  color: #333;
+}
+
+/* Estilos para los controles de cantidad */
+.quantity-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Alineación vertical de los botones */
+}
+
+.quantity-controls .quantity-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row; /* Alineación horizontal de la cantidad y los botones */
+}
+
+.quantity-controls ion-button {
+  --background: #007bff;
+  --border: 1px solid #ccc;
+  --border-radius: 15%;
+  width: 25px;
+  height: 20px;
+  font-size: 5px;
+}
+
+.quantity-controls span {
+  align-self: center;
+  font-weight: bold;
+  font-size: 14px; 
+  margin: 0 10px; 
+}
+
+.quantity-controls .quantity-display {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+}
+
+/* Estilos para el selector de precio */
+.price-info ion-select {
+  --background: #f0f0f0;
+  --padding-horizontal: 5px;
+  width: 100%;
+}
+
+ion-select-option {
+  --color: #333;
+}
+
+/* Estilos generales de la grilla */
+.product-grid {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 0;
+}
+
+.product-row {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Botón de regreso */
+ion-back-button {
+  color: white;
+  background-color: #007bff;
+  width: 20%;
+  margin: 10px 0;
+}
+
+.table-header {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+table-row {
+  display: flex;
+  align-items: center;
+}

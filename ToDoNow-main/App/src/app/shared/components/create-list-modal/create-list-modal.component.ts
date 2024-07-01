@@ -53,11 +53,13 @@ export class CreateListModalComponent implements OnInit {
         this.alimentos = foods.map((food, index) => ({
           id: food.id || `food_${index}`,
           nombre: food.name,
+          imagen: food.imagen || '',
           cantidad: 0,
           precio: food.price,
           precio2: food.price2,
           subtotal: 0,
           subtotal2: 0,
+          precioSeleccionado: 0,
         }));
       },
       (error) => {

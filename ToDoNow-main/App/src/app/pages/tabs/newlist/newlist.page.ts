@@ -5,9 +5,6 @@ import { NewList } from 'src/app/models/newlist.models';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user.models';
 
-import { Foods } from 'src/app/models/food.models';
-import { AlimentoListaCompra } from 'src/app/models/newlist.models';
-
 import { myfood } from 'src/app/models/myfood.models';
 import { CreateListModalComponent } from 'src/app/shared/components/create-list-modal/create-list-modal.component';
 

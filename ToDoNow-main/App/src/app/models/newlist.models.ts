@@ -10,12 +10,13 @@ export interface NewList {
   }
   
   export interface AlimentoListaCompra {
-    id: string; // ID del alimento seleccionado
-    nombre: string; // Nombre del alimento
-    cantidad: number; // Cantidad del alimento
+    id: string;
+    nombre: string;
+    imagen: string;
+    cantidad: number;
     precio: number;
     precio2: number;
-    subtotal: number; // Subtotal del alimento (precio * cantidad)
-    subtotal2: number; // Subtotal del alimento (precio * cantidad)
+    subtotal: number;
+    subtotal2: number;
+    precioSeleccionado: number; // Añadir esta propiedad para almacenar el precio seleccionado
   }
-  

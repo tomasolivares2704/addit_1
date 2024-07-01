@@ -1,38 +1,66 @@
-<app-header title="Detalle Lista" ></app-header>
-
 <ion-content [fullscreen]="true">
-  <ion-card class="custom-card" *ngIf="newlist">
-    <ion-card-header class="custom-card-header">
-      <ion-card-title>Nombre Lista: {{ newlist.nombre }}</ion-card-title>
-      <ion-card-title>Total Lista: {{ newlist.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-title>
-    </ion-card-header>
+  <app-header title="Lista de Compras"></app-header>
+  <app-logo></app-logo>
 
-    <ion-card-content>
-      <ion-list class="custom-table">
-        <ion-item-divider class="table-header">
-          <ion-label class="table-cell wide-cell">Nombre</ion-label>
-          <ion-label class="table-cell">Cantidad</ion-label>
-          <ion-label class="table-cell">Precio</ion-label>
-          <ion-label class="table-cell">Precio 2</ion-label>
-          <ion-label class="table-cell wide-cell">Subtotal</ion-label>
-          <ion-label class="table-cell wide-cell">Subtotal 2</ion-label>
-        </ion-item-divider>
+  <div class="contenido">
+    <div class="titulo">
+      <h1 class="d-flex-center">{{ newlist?.nombre }}</h1>
+    </div>
 
-        <ion-item class="table-row" *ngFor="let alimento of newlist.alimentos; let i = index">
-          <ion-label class="table-cell wide-cell">{{ alimento.nombre }}</ion-label>
-          <ion-input class="table-cell" type="number" [(ngModel)]="alimento.cantidad" (ionChange)="actualizarCantidad(alimento, alimento.cantidad); actualizarCantidad2(alimento, alimento.cantidad)"></ion-input>
-          <ion-label class="table-cell">{{ alimento.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
-          <ion-label class="table-cell">{{ alimento.precio2 | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
-          <ion-label class="table-cell wide-cell">{{ alimento.subtotal | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
-          <ion-label class="table-cell wide-cell">{{ alimento.subtotal2 | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-label>
-        </ion-item>
-      </ion-list>
+    <ion-back-button slot="start" defaultHref="/tabs/newlist">Volver atrás</ion-back-button>
 
-      <ion-item>
-        <ion-back-button defaultHref="/tabs/newlist">Volver atrás</ion-back-button>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+    <ion-card class="custom-card" *ngIf="newlist">
+      <ion-card-header class="custom-card-header">
+        <ion-card-title>Total Lista: {{ newlist.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</ion-card-title>
+      </ion-card-header>
 
-  <ion-spinner *ngIf="loading"></ion-spinner>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="table-header">
+            <ion-col size="3">Producto</ion-col>
+            <ion-col size="3">Cantidad</ion-col>
+            <ion-col size="3">Precio</ion-col>
+            <ion-col size="3">Total</ion-col>
+          </ion-row>
+
+          <ion-row class="table-row" *ngFor="let alimento of newlist.alimentos; let i = index">
+            <ion-col size="3" class="table-cell product-info">
+              <div class="product-display">
+                <img [src]="alimento.imagen" alt="{{ alimento.nombre }}" class="product-image"/>
+                <span class="product-name">{{ alimento.nombre }}</span>
+              </div>
+            </ion-col>
+
+            <ion-col size="3" class="table-cell quantity-controls">
+              <div class="quantity-wrapper">
+                <!-- Botones ahora están uno sobre el otro, con cantidad al lado -->
+                <div class="buttons">
+                  <ion-button size="small" fill="outline" (click)="actualizarCantidad(alimento, alimento.cantidad + 1)">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button size="small" fill="outline" (click)="actualizarCantidad(alimento, alimento.cantidad - 1)">
+                    <ion-icon name="remove-circle-outline"></ion-icon>
+                  </ion-button>
+                </div>
+                <span class="quantity-display">{{ alimento.cantidad }}</span>
+              </div>
+            </ion-col>
+
+            <ion-col size="3" class="table-cell">
+              <ion-select [(ngModel)]="alimento.precioSeleccionado" (ionChange)="actualizarTotalLista()">
+                <ion-select-option [value]="alimento.precio">Precio</ion-select-option>
+                <ion-select-option [value]="alimento.precio2">Precio 2</ion-select-option>
+              </ion-select>
+            </ion-col>
+            <ion-col size="3" class="table-cell wide-cell">
+              {{ (alimento.cantidad * alimento.precioSeleccionado) | currency:'CLP':'symbol-narrow':'1.0-0' }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-spinner *ngIf="loading"></ion-spinner>
+  </div>
 </ion-content>

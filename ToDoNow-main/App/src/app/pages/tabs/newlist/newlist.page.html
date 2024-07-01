@@ -27,29 +27,20 @@
         <ion-col size="12">
           <ion-list>
             <ion-item *ngFor="let lista of listasDeUsuario" [class.delete-mode]="deleteMode" (click)="deleteMode ? confirmDeleteList(lista) : verDetallesLista(lista.id)">
-              <ion-row class="ion-align-items-center">
-                <ion-col size="3" class="ion-text-center">
+              <ion-row>
+                <ion-col size="3" class="icon-container">
                   <ion-icon name="cart-outline" class="list-icon"></ion-icon>
                 </ion-col>
-                <ion-col size="12">
-                  <ion-card-title>{{ lista.nombre }}</ion-card-title>
-                  <ion-card-subtitle class="ion-no-margin">
-                    <ion-label>
-                      <p class="ion-no-margin ion-text-start">Total:</p>
-                      {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}
-                    </ion-label>
+                <ion-col size="9">
+                  <ion-card-title>
+                    <strong>{{ lista.nombre }}</strong>
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    <strong style="color: #3880ff;">Total:</strong> {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}
                   </ion-card-subtitle>
-                  <ion-card-subtitle class="ion-no-margin">
-                    <ion-label>
-                      <p class="ion-no-margin ion-text-start">Total 2:</p>
-                      {{ lista.total2 | currency:'CLP':'symbol-narrow':'1.0-0' }}
-                    </ion-label>
-                  </ion-card-subtitle>
-                  <ion-card-subtitle class="ion-no-margin">
-                    <ion-label>
-                      <p class="ion-no-margin ion-text-start">Frecuencia de compra:</p>
-                      {{ lista.frecuenciaCompra }}
-                    </ion-label>
+                  <br>
+                  <ion-card-subtitle>
+                    <strong style="color: #3880ff;">Frecuencia de compra:</strong> {{ lista.frecuenciaCompra }}
                   </ion-card-subtitle>
                 </ion-col>
               </ion-row>
@@ -59,24 +50,5 @@
       </ion-row>
     </ion-card>
 
-    <!-- Formulario para crear nueva lista -->
-    <ion-grid style="margin-top: 20px;">
-      <ion-row justify-content-center>
-        <ion-col size="12" size-md="8" size-lg="6">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Crear Nueva Lista</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content>
-              <ion-item lines="full">
-                <ion-label position="floating" color="primary">Nombre de la lista</ion-label>
-                <ion-input type="text" [(ngModel)]="nombreLista" name="nombreLista" required></ion-input>
-              </ion-item>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
   </div>
 </ion-content>

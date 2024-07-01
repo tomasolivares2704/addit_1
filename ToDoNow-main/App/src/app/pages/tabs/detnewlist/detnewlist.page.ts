@@ -1,7 +1,6 @@
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NewList, AlimentoListaCompra } from 'src/app/models/newlist.models';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { User } from 'src/app/models/user.models';
@@ -23,19 +22,19 @@ export class DetnewlistPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUser(); // Obtener el usuario al iniciar el componente
+    this.getUser();
 
     this.route.paramMap.subscribe(params => {
       const newListId = params.get('id');
       if (newListId) {
         this.loading = true;
         if (this.user && this.user.uid) {
-          // Utilizar el userId obtenido del usuario actual
-          const userId = this.user.uid;
-          this.firebaseSvc.obtenerDetallesLista(userId, newListId).subscribe(
+          this.firebaseSvc.obtenerDetallesLista(this.user.uid, newListId).subscribe(
             (lista: NewList) => {
               this.newlist = lista;
-              console.log('Detalles de la lista: EN DETNEWLIST', this.newlist);
+              this.newlist.alimentos.forEach(alimento => {
+                alimento.precioSeleccionado = alimento.precioSeleccionado ?? alimento.precio; // Asegurarse de mantener el valor si ya está seleccionado
+              });
               this.loading = false;
             },
             error => {
@@ -56,21 +55,18 @@ export class DetnewlistPage implements OnInit {
   }
 
   actualizarCantidad(alimento: AlimentoListaCompra, nuevaCantidad: number) {
-    alimento.cantidad = nuevaCantidad;
-    alimento.subtotal = alimento.cantidad * alimento.precio;
-    this.actualizarTotalLista();
-  }
-
-  actualizarCantidad2(alimento: AlimentoListaCompra, nuevaCantidad: number) {
-    alimento.cantidad = nuevaCantidad;
-    alimento.subtotal2 = alimento.cantidad * alimento.precio2;
-    this.actualizarTotalLista2();
+    if (nuevaCantidad >= 0) {
+      alimento.cantidad = nuevaCantidad;
+      alimento.subtotal = alimento.cantidad * alimento.precio;
+      alimento.subtotal2 = alimento.cantidad * alimento.precio2;
+      this.actualizarTotalLista();
+    }
   }
 
   actualizarTotalLista() {
     if (this.newlist && this.newlist.alimentos) {
       this.newlist.total = this.newlist.alimentos.reduce((total, alimento) => {
-        return total + (alimento.cantidad * alimento.precio);
+        return total + (alimento.cantidad * alimento.precioSeleccionado);
       }, 0);
       this.firebaseSvc.actualizarLista(this.user.uid, this.newlist.id, this.newlist)
         .then(() => {
@@ -82,22 +78,13 @@ export class DetnewlistPage implements OnInit {
     }
   }
 
-  actualizarTotalLista2() {
-    if (this.newlist && this.newlist.alimentos) {
-      this.newlist.total2 = this.newlist.alimentos.reduce((total2, alimento) => {
-        return total2 + (alimento.cantidad * alimento.precio2);
-      }, 0);
-      this.firebaseSvc.actualizarLista2(this.user.uid, this.newlist.id, this.newlist)
-        .then(() => {
-          console.log('Lista Nº2 actualizada correctamente en la base de datos.');
-        })
-        .catch(error => {
-          console.error('Error al actualizar lista Nº2 en la base de datos:', error);
-        });
-    }
+  actualizarPrecioSeleccionado(alimento: AlimentoListaCompra, nuevoPrecio: number) {
+    alimento.precioSeleccionado = nuevoPrecio;
+    this.actualizarSubtotal(alimento);
+    this.actualizarTotalLista();
   }
-
-
-
   
+  actualizarSubtotal(alimento: AlimentoListaCompra) {
+    alimento.subtotal = alimento.cantidad * alimento.precioSeleccionado;
+  }
 }

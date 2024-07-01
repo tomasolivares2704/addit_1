@@ -313,8 +313,10 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
     const newListRef = await this.db.collection(`user/${userUid}/newlist`).add({
       nombre: newListData.nombre,
       total: newListData.total,
+      total2: newListData.total2,
       alimentos: newListData.alimentos.map(alimento => ({
         nombre: alimento.nombre,
+        imagen: alimento.imagen,
         cantidad: alimento.cantidad,
         precio: alimento.precio,
         precio2: alimento.precio2,
