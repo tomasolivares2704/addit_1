@@ -14,8 +14,18 @@
           <ion-input formControlName="name" type="text"></ion-input>
         </ion-item>
         <ion-item>
+          <ion-label>Categoría</ion-label>
+          <ion-select formControlName="categoria" interface="action-sheet">
+            <ion-select-option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
           <ion-label position="stacked">Imagen URL</ion-label>
           <ion-input formControlName="imagen" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Video URL</ion-label>
+          <ion-input formControlName="video" type="text"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="stacked">Calorías</ion-label>

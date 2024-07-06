@@ -5,6 +5,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { Receta } from 'src/app/models/receta.models';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
+import { CategoriaReceta } from 'src/app/models/receta.models';
 
 @Component({
   selector: 'app-recetas',
@@ -16,6 +17,7 @@ export class RecetasPage implements OnInit {
   newRecetaForm: FormGroup;
   loading: boolean = false;
   recetas: Receta[] = [];
+  categorias: string[];
   myfoods: myfood[] = [];
   user: User;
 

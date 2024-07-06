@@ -6,6 +6,7 @@ import { Receta } from 'src/app/models/receta.models';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
 import { Foods } from 'src/app/models/food.models';
+import { CategoriaReceta } from 'src/app/models/receta.models';
 
 @Component({
   selector: 'app-formreceta',
@@ -20,6 +21,8 @@ export class FormrecetaPage implements OnInit {
   myfoods: myfood[] = [];
   user: User;
   foods: Foods[] = [];
+  categorias: string[];
+  
 
 
   constructor(
@@ -35,8 +38,12 @@ export class FormrecetaPage implements OnInit {
       protein: ['', Validators.required],
       fats: ['', Validators.required],
       carbohydrates: ['', Validators.required],
+      video: ['', Validators.required],
+      categoria: [CategoriaReceta.Mariscos, Validators.required],
       ingredients: this.formBuilder.array([])
     });
+
+    this.categorias = Object.values(CategoriaReceta);
 
   }
 
