@@ -43,30 +43,36 @@
           <ion-label position="stacked">Carbohidratos</ion-label>
           <ion-input formControlName="carbohydrates" type="number"></ion-input>
         </ion-item>
-  
+
+        <!-- FormArray para los ingredientes -->
         <div formArrayName="ingredients">
           <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+            <!-- ion-select para seleccionar el alimento -->
             <ion-item>
               <ion-label position="stacked">Ingrediente {{ i + 1 }} - Nombre</ion-label>
-              <ion-input formControlName="name" type="text"></ion-input>
+              <ion-select formControlName="name">
+                <ion-select-option *ngFor="let food of foods" [value]="food.name">{{ food.name }}</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="stacked">Stock</ion-label>
               <ion-input formControlName="stock" type="number"></ion-input>
             </ion-item>
+            <!-- Botón para eliminar un ingrediente -->
             <ion-button expand="block" color="warning" (click)="removeIngredient(i)">
               Eliminar Ingrediente
             </ion-button>
           </div>
         </div>
-        <ion-button expand="block"  color="success"  (click)="addIngredient()">
+
+        <!-- Botón para añadir un nuevo ingrediente -->
+        <ion-button expand="block" color="success" (click)="addIngredient()">
           Añadir Ingrediente
         </ion-button>
-  
+
+        <!-- Botón para enviar el formulario y agregar la receta -->
         <ion-button expand="block" type="submit">Agregar Receta</ion-button>
       </form>
     </ion-card-content>
   </ion-card>
-  
-
 </ion-content>

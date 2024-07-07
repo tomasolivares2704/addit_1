@@ -48,8 +48,6 @@ export class FormrecetaPage implements OnInit {
   }
 
   ngOnInit() {
-    this.getUser();
-    this.getRecetas();
     this.addIngredient(); // Inicialmente añade un ingrediente vacío
     this.getAllFoods();
   }
@@ -60,11 +58,12 @@ export class FormrecetaPage implements OnInit {
 
   addIngredient() {
     const ingredientForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required], // Cambiar a 'name' en lugar de 'foodId'
       stock: ['', Validators.required]
     });
     this.ingredients.push(ingredientForm);
   }
+  
 
   removeIngredient(index: number) {
     this.ingredients.removeAt(index);
@@ -144,73 +143,6 @@ export class FormrecetaPage implements OnInit {
   */
   
   
-  canDiscountIngredients(receta: Receta): boolean {
-    for (const ingredient of receta.ingredients) {
-      const matchingFood = this.myfoods.find(food => food.name === ingredient.name);
-      if (!matchingFood || matchingFood.stock < ingredient.stock) {
-        return false; // No hay suficiente stock para al menos un ingrediente
-      }
-    }
-    return true; // Hay suficiente stock para todos los ingredientes
-  }
   
-  discountIngredients(receta: Receta) {
-    this.loading = true;
-  
-    for (const ingredient of receta.ingredients) {
-      const matchingFoodIndex = this.myfoods.findIndex(food => food.name === ingredient.name);
-      if (matchingFoodIndex !== -1 && this.myfoods[matchingFoodIndex].stock >= ingredient.stock) {
-        console.log(`Descontando ${ingredient.stock} de ${ingredient.name} de ${this.myfoods[matchingFoodIndex].stock}`);
-        this.myfoods[matchingFoodIndex].stock -= ingredient.stock;
-        this.updateFoodStock(this.myfoods[matchingFoodIndex]);
-      } else {
-        console.log(`No hay suficiente stock para descontar ${ingredient.stock} de ${ingredient.name}`);
-        this.utilsSvc.presentToast({ message: `Stock insuficiente para ${ingredient.name}` });
-        this.loading = false;
-        return; // Detener el proceso si no hay suficiente stock para un ingrediente
-      }
-    }
-  
-    // Actualizar los datos en el localStorage después de descontar los ingredientes
-    this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
-    console.log('myfoods después de descontar ingredientes:', this.myfoods);
-  
-    // Mostrar el mensaje de éxito y luego desaparecer automáticamente después de 1 segundo
-    this.utilsSvc.presentToast({ message: 'Ingredientes descontados correctamente.' });
-    setTimeout(() => {
-      this.utilsSvc.dismissToast();
-    }, 2500);
-  
-    this.loading = false;
-  }
-  
-  
-  
-
-  updateFoodStock(food: myfood) {
-    const user: User = this.utilsSvc.getElementInLocalStorage('user');
-    const path = `user/${user.uid}/myfoods/${food.id}`;
-
-    this.firebaseSvc.updateDocument(path, { stock: food.stock })
-      .then(() => {
-        console.log(`Stock de ${food.name} actualizado exitosamente`);
-      })
-      .catch(error => {
-        console.error(`Error al actualizar stock de ${food.name}:`, error);
-      });
-  }
-
-  getUser() {
-    this.user = this.utilsSvc.getElementInLocalStorage('user');
-  }
-
-  ingredientInMyFoods(name: string): boolean {
-    return this.myfoods.some(food => food.name === name);
-  }
-  
-  getMyFoodStock(name: string): number {
-    const food = this.myfoods.find(food => food.name === name);
-    return food ? food.stock : 0;
-  }
-
+ 
 }
