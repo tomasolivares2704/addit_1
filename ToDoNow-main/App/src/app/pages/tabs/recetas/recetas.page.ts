@@ -55,6 +55,7 @@ export class RecetasPage implements OnInit {
     });
   }
 
+  /*
   getMyFoods() {
     this.loading = true;
   
@@ -82,6 +83,30 @@ export class RecetasPage implements OnInit {
       }
     });
   }
+    */
+
+
+  getMyFoods() {
+    this.loading = true;
+  
+    const user: User = this.utilsSvc.getElementInLocalStorage('user');
+    const path = `user/${user.uid}`;
+  
+    this.firebaseSvc.getSubcollection(path, 'myfoods').subscribe({
+      next: (myfoods: myfood[]) => {
+        this.myfoods = myfoods;
+        console.log('Alimentos obtenidos:', this.myfoods); // Console log de los alimentos obtenidos
+        this.loading = false;
+        // Opcional: Guardar en localStorage después de obtener de la base de datos
+        // this.utilsSvc.setElementInLocalStorage('myfoods', this.myfoods);
+      },
+      error: (error) => {
+        console.error('Error al obtener alimentos:', error);
+        this.loading = false;
+      }
+    });
+  }
+  
   
   
   canDiscountIngredients(receta: Receta): boolean {
