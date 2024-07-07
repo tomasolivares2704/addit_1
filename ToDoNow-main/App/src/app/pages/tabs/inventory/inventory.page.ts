@@ -363,8 +363,5 @@ export class InventoryPage implements OnInit {
     this.showScanner = true; // Mostrar el scanner al hacer clic en el botón
     this.startScanner();
   }
-
-  
-  
   
 }

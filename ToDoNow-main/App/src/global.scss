@@ -85,11 +85,11 @@ ion-item{
 
 .contenido {
     width: 100%;
-    min-height: 85vh; /* Cambiado de height a min-height */
+    min-height: 85vh; 
     background: var(--ion-color-primary);
     color: var(--ion-color-light-contrast);
     border-radius: 20px 20px 0 0;
-    overflow: auto; /* Añadido para manejar contenido que desborda */
+    overflow: auto;
 }
 
 .titulo{
