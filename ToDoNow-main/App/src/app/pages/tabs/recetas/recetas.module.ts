@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { InventoryPageModule } from '../inventory/inventory.module';
 import { InventarioPageRoutingModule } from '../inventario/inventario-routing.module';
 
+
 @NgModule({
   imports: [
     CommonModule,
