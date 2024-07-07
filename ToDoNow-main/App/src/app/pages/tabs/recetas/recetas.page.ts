@@ -6,6 +6,8 @@ import { Receta } from 'src/app/models/receta.models';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
 import { CategoriaReceta } from 'src/app/models/receta.models';
+import { ModalController } from '@ionic/angular';
+import { VideoModalComponent } from 'src/app/shared/components/video-modal/video-modal.component';
 
 @Component({
   selector: 'app-recetas',
@@ -24,7 +26,8 @@ export class RecetasPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private firebaseSvc: FirebaseService,
-    private utilsSvc: UtilsService
+    private utilsSvc: UtilsService,
+    private modalController: ModalController,
   ) {}
 
   ngOnInit() {
@@ -37,9 +40,7 @@ export class RecetasPage implements OnInit {
     return this.newRecetaForm.get('ingredients') as FormArray;
   }
 
-  
 
- 
 
   getRecetas() {
     this.loading = true;
@@ -175,8 +176,19 @@ export class RecetasPage implements OnInit {
     }
     return ing.stock; // Otra acción si no se encuentra coincidencia
   }
+
+
+  async openVideoModal(receta: Receta) {
+    console.log('URL del video:', receta.video); // Añadir console.log para verificar la URL del video
+    const modal = await this.modalController.create({
+      component: VideoModalComponent,
+      componentProps: {
+        videoUrl: receta.video
+      }
+    });
   
-
-
+    await modal.present();
+  }
+  
 
 }
