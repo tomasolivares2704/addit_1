@@ -9,6 +9,7 @@ import { Foods } from 'src/app/models/food.models';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { EditStockModalComponent } from 'src/app/shared/components/edit-stock-modal/edit-stock-modal.component';
 import { ModalController } from '@ionic/angular';
+import { IdealStockModalComponent } from 'src/app/shared/components/ideal-stock-modal/ideal-stock-modal.component';
 
 @Component({
   selector: 'app-inventory',
@@ -217,7 +218,6 @@ export class InventoryPage implements OnInit {
   
     const { data } = await modal.onDidDismiss();
     if (data) {
-      // Aquí puedes manejar datos si el modal devuelve algo
       console.log('Datos del modal:', data);
     }
   }
@@ -285,6 +285,21 @@ export class InventoryPage implements OnInit {
   }
 
   // Función para mostrar el editor de stock ideal de un alimento
+
+  async openEditIdealStockModal(food: myfood) {
+    const modal = await this.modalCtrl.create({
+      component: IdealStockModalComponent,
+      componentProps: { food },
+      cssClass: 'stock-modal',
+    });
+  
+    await modal.present();
+    
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      console.log('Datos del modal:', data);
+    }
+  }
   showIdealStockEditor(food: myfood) {
     food.showIdealStockEditor = true;
     this.stockIdealToShow = food.stock_ideal;

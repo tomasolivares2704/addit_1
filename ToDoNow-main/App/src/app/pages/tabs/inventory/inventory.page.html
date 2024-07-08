@@ -41,29 +41,28 @@
       <ng-container *ngFor="let food of filteredFoods">
         <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
           <ion-card class="food-card" [ngStyle]="{'border-color': food.bgColor, 'border-width': '5px', 'border-style': 'solid'}">
-            <div class="image-container">
-              <ion-img [src]="food.imagen" alt="Imagen del alimento" class="food-image"></ion-img>
-              <ion-button fill="clear" class="edit-button" *ngIf="!food.showStockEditor" (click)="openEditStockModal(food)">
-                <ion-icon name="create-outline"></ion-icon>
-              </ion-button>
-              <div class="stock-label">
-                
-                <h5>{{ food.stock }}</h5>
+              <div class="image-container">
+                  <ion-img [src]="food.imagen" alt="Imagen del alimento" class="food-image"></ion-img>
+                  
+                  <!-- Botón para abrir el modal de modificar stock, asegúrate de que está encima y accesible -->
+                  <ion-button fill="clear" class="edit-button" *ngIf="!food.showStockEditor" (click)="openEditStockModal(food)">
+                      <ion-icon name="create-outline"></ion-icon>
+                  </ion-button>
+      
+                  <!-- Botón para establecer stock ideal, asegúrate de que no bloquea el botón de modificar -->
+                  <ion-button class="stock-id" *ngIf="!food.showStockEditor" (click)="openEditIdealStockModal(food)" fill="clear">
+                      <ion-icon name="settings-outline" style="opacity: 0;"></ion-icon>
+                  </ion-button>
+      
+                  <div class="stock-label">
+                      <h5>{{ food.stock }}</h5>
+                  </div>
               </div>
-
-                
-                <!--Botón para abrir el modal de stock ideal -->
-                <ion-button fill="clear" class="edit-ideal-button" *ngIf="!food.showStockEditor && !food.showIdealStockEditor" (click)="showIdealStockEditor(food)">
-                  <ion-icon name="create-outline"></ion-icon>
-                  Editar Stock Ideal
-                </ion-button>
-                
-            </div>
-            <ion-card-content class="food-card-content">
-              <p style="font-size: 10px; color: #44B0F1; font-weight: bold;">{{ food.name }}</p>
-            </ion-card-content>
+              <ion-card-content class="food-card-content">
+                  <p style="font-size: 10px; color: #44B0F1; font-weight: bold;">{{ food.name }}</p>
+              </ion-card-content>
           </ion-card>
-        </ion-col>
+      </ion-col>
         
         <!--ion-card style="position: absolute;">
           <ion-card-content *ngIf="food.showStockEditor">
@@ -89,7 +88,7 @@
         </ion-card-->
 
 
-        <ion-card>
+        <!--ion-card>
           <ion-card-content *ngIf="food.showIdealStockEditor">
             <ion-row>
               <ion-col size="4">
@@ -110,7 +109,7 @@
               </ion-col>
             </ion-row>
           </ion-card-content>
-        </ion-card>
+        </ion-card-->
 
 
       </ng-container>

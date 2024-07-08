@@ -33,6 +33,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 1;
 }
 
 .food-image {
@@ -49,6 +50,7 @@
   width: 25px;
   --background: rgba(255, 255, 255, 0); /* Botón semi-transparente */
   font-size: 1px;
+  z-index: 3;
 }
 
 .stock-label {
@@ -153,4 +155,20 @@ ion-icon {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999; 
   display: none; 
+}
+
+.stock-id {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Menor que el edit-button para asegurar la accesibilidad del botón de modificar */
+  opacity: 0; /* Invisible pero clickeable */
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

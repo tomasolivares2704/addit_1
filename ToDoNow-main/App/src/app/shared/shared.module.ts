@@ -18,6 +18,7 @@ import { ButtonProvidersComponent } from './components/button-providers/button-p
 import { CreateProfileModalComponent } from './components/create-profile-modal/create-profile-modal.component';
 import { ChangeEmailModalComponent } from './components/change-email-modal/change-email-modal.component';
 import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
+import { IdealStockModalComponent } from './components/ideal-stock-modal/ideal-stock-modal.component';
 import { VideoModalComponent } from './components/video-modal/video-modal.component';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { VideoModalComponent } from './components/video-modal/video-modal.compon
     CreateProfileModalComponent,
     ChangeEmailModalComponent,
     EditStockModalComponent,
+    IdealStockModalComponent,
     VideoModalComponent,
   ],
   exports: [
@@ -50,6 +52,7 @@ import { VideoModalComponent } from './components/video-modal/video-modal.compon
     CreateProfileModalComponent,
     ChangeEmailModalComponent,
     EditStockModalComponent,
+    IdealStockModalComponent,
     VideoModalComponent,
   ],
   imports: [
