@@ -1,17 +1,37 @@
+<!-- edit-stock-modal.component.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>Editar Stock</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">Cerrar</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>
-    <ion-label>Stock Actual: {{ food.stock }}</ion-label>
-    <ion-button (click)="incrementStock()">+</ion-button>
-    <ion-button (click)="decrementStock()">-</ion-button>
-  </ion-item>
-  <ion-button expand="block" (click)="confirmStockChange()">Confirmar Cambios</ion-button>
+<ion-content color="primary">
+  <ion-grid>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="auto">
+        <ion-button class="quantity" (click)="decrementStock()">
+          <ion-icon name="remove-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-input class="stock-input" type="number" [(ngModel)]="tempStock"></ion-input>
+      </ion-col>
+
+      <ion-col size="auto">
+        <ion-button class="quantity" (click)="incrementStock()">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="6">
+        <ion-button class="yes-no-btn" color="success" (click)="confirmChanges()">Confirmar</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button class="yes-no-btn" color="danger" (click)="closeModal()">Cancelar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

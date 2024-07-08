@@ -1,0 +1,30 @@
+ion-toolbar {
+    display: flex;
+    justify-content: center;
+}
+  
+ion-title {
+    flex: 1;
+    text-align: center; 
+}
+
+.stock-input {
+    height: 10px;
+    border-radius: 5%;
+    text-align: center; 
+    background-color: white; 
+    color: black;
+}
+
+.quantity {
+    --border-radius: 15%;
+    --background: white;
+  }
+
+.quantity ion-icon {
+    color: var(--ion-color-primary);
+}
+
+.yes-no-btn {
+    width: 100%;
+}

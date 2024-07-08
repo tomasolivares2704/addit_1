@@ -127,18 +127,18 @@ ion-icon {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000; /* Asegúrate de que sea superior a otros elementos */
-  width: 90%; /* O el ancho que prefieras */
-  max-width: 500px; /* Un máximo para no ocupar toda la pantalla en dispositivos grandes */
+  z-index: 1000; 
+  width: 90%; 
+  max-width: 500px; 
   background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   padding: 20px;
-  display: none; /* Oculto por defecto */
+  display: none; 
 }
 
 .show {
-  display: block; /* Muestra el modal cuando se añade esta clase */
+  display: block; 
 }
 
 .backdrop {
@@ -148,6 +148,6 @@ ion-icon {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Detrás del modal pero sobre otros contenidos */
-  display: none; /* Oculto por defecto */
+  z-index: 999; 
+  display: none; 
 }

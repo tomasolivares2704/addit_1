@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { BrowserBarcodeReader, Result } from '@zxing/library';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -6,8 +6,9 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { myfood } from 'src/app/models/myfood.models';
 import { User } from 'src/app/models/user.models';
 import { Foods } from 'src/app/models/food.models';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { EditStockModalComponent } from 'src/app/shared/components/edit-stock-modal/edit-stock-modal.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inventory',
@@ -34,8 +35,8 @@ export class InventoryPage implements OnInit {
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService,
     private formBuilder: FormBuilder,
-    private auth: AngularFireAuth,
     private db: AngularFirestore,
+    private modalCtrl: ModalController,
   ) {
     // Inicialización del formulario reactivo para agregar nuevos alimentos
     this.newFoodForm = this.formBuilder.group({
@@ -205,6 +206,22 @@ export class InventoryPage implements OnInit {
   showStockEditor(food: myfood) {
     food.showStockEditor = true;
   }
+  
+  async openEditStockModal(food: myfood) {
+    const modal = await this.modalCtrl.create({
+      component: EditStockModalComponent,
+      componentProps: { food },
+      cssClass: 'stock-modal',
+    });
+  
+    await modal.present();
+  
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      // Aquí puedes manejar datos si el modal devuelve algo
+      console.log('Datos del modal:', data);
+    }
+  }
 
   // Función para incrementar el stock de un alimento
   incrementStock(food: myfood) {
@@ -351,10 +368,11 @@ export class InventoryPage implements OnInit {
   
 
   // Función para mostrar el editor de stock si se encuentra el código en myfoods
+
   showStockEditorIfFound(code: string) {
     const foundFood = this.myfoods.find(food => food.codigoBarras === code);
     if (foundFood) {
-      this.showStockEditor(foundFood);
+      this.openEditStockModal(foundFood);
     }
   }
   

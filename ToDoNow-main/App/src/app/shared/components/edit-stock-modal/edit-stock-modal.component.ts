@@ -8,28 +8,29 @@ import { myfood } from 'src/app/models/myfood.models';
   styleUrls: ['./edit-stock-modal.component.scss'],
 })
 export class EditStockModalComponent  implements OnInit {
-
   @Input() food: myfood;
-  @Output() stockUpdated = new EventEmitter<myfood>();
+  @Output() updateFood = new EventEmitter<myfood>();
+  tempStock: number;  // Temporary variable for UI updates
 
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    
+    this.tempStock = this.food.stock; // Initialize tempStock with the current stock
   }
 
   incrementStock() {
-    this.food.stock++;
+    this.tempStock++;  // Update the temporary stock
   }
 
   decrementStock() {
-    if (this.food.stock > 0) {
-      this.food.stock--;
+    if (this.tempStock > 0) {
+      this.tempStock--;  // Update the temporary stock
     }
   }
 
-  confirmStockChange() {
-    this.stockUpdated.emit(this.food);
+  confirmChanges() {
+    this.food.stock = this.tempStock;  // Apply the temporary stock to the actual food stock
+    this.updateFood.emit(this.food);  // Emit the updated food
     this.closeModal();
   }
 

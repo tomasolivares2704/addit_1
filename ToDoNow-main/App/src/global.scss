@@ -112,4 +112,11 @@ ion-item{
     --top: 50%;
     --left: 50%;
     --transform: translate(-50%, -50%);
-  }
+}
+
+.stock-modal {
+    --width: 80%; 
+    --height: 22%;
+    --border-radius: 20px; 
+    background: rgba(32, 29, 29, 0.63);
+}
