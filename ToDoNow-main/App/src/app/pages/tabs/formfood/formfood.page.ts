@@ -6,6 +6,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { Foods, CategoriaAlimento } from 'src/app/models/food.models';
 import { User } from 'src/app/models/user.models';
+import { Capacitor, Plugins } from '@capacitor/core';
 
 @Component({
   selector: 'app-formfood',
@@ -21,6 +22,7 @@ export class FormfoodPage implements OnInit {
   categorias: string[];
   foods: Foods[] = [];
   codeReader: BrowserBarcodeReader;
+  showScanner: boolean = false; 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,6 +56,7 @@ export class FormfoodPage implements OnInit {
 
   ngOnInit() {
     this.getAllFoods();
+    this.checkCameraPermission();
   }
 
   getAllFoods() {
@@ -84,22 +87,49 @@ export class FormfoodPage implements OnInit {
     }
   }
 
+
+  async checkCameraPermission() {
+    if (Capacitor.isPluginAvailable('Camera')) {
+      const { Camera } = Plugins;
+      const status = await Camera['checkPermissions']();
+      if (status.camera !== 'granted') {
+        const permissionResult = await Camera['requestPermissions']();
+        if (permissionResult.camera !== 'granted') {
+          this.utilsSvc.presentToast({
+            message: 'Permiso para utilizar la cámara no otorgado',
+            duration: 2000,
+            color: 'danger'
+          });
+        }
+      }
+    } else {
+      this.utilsSvc.presentToast({
+        message: 'Camera API not available in this environment',
+        duration: 2000,
+        color: 'danger'
+      });
+    }
+  }
+
   async scanBarcode() {
     try {
-      if (this.videoElement && this.videoElement.nativeElement) {
-        const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
-
-        if (result) {
-          console.log('Código de barras escaneado:', result.getText());
-          this.newFoodForm.patchValue({ codigoBarras: result.getText() });
-        } else {
-          console.log('No se pudo escanear ningún código de barras.');
-        }
+      const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
+      if (result) {
+        console.log('Código de barras escaneado:', result.getText());
+        this.newFoodForm.patchValue({ codigoBarras: result.getText() });
       } else {
-        console.error('Elemento de video no encontrado en el DOM.');
+        console.log('No se pudo escanear ningún código de barras.');
       }
     } catch (error) {
       console.error('Error al escanear código de barras:', error);
     }
+  }
+
+  async startScanner() {
+    this.showScanner = true; // Mostrar el scanner
+    await this.checkCameraPermission();
+    await new Promise(resolve => setTimeout(resolve, 100)); // Asegura que el DOM esté completamente cargado
+    await this.scanBarcode();
+    this.showScanner = false; // Cierra el div de la cámara después de escanear
   }
 }

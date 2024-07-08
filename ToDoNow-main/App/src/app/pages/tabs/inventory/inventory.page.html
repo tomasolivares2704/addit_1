@@ -37,9 +37,9 @@
   </ion-grid>
 
   <ion-grid>
-    <ion-row>
+    <ion-row style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
       <ng-container *ngFor="let food of filteredFoods">
-        <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
+        <ion-col size="3" style="margin: 0 -1px;">
           <ion-card class="food-card" [ngStyle]="{'border-color': food.bgColor, 'border-width': '5px', 'border-style': 'solid'}">
               <div class="image-container">
                   <ion-img [src]="food.imagen" alt="Imagen del alimento" class="food-image"></ion-img>

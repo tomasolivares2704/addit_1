@@ -8,8 +8,9 @@ import { User } from 'src/app/models/user.models';
 import { Foods } from 'src/app/models/food.models';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { EditStockModalComponent } from 'src/app/shared/components/edit-stock-modal/edit-stock-modal.component';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { IdealStockModalComponent } from 'src/app/shared/components/ideal-stock-modal/ideal-stock-modal.component';
+import { Capacitor, Plugins } from '@capacitor/core';
 
 @Component({
   selector: 'app-inventory',
@@ -38,6 +39,7 @@ export class InventoryPage implements OnInit {
     private formBuilder: FormBuilder,
     private db: AngularFirestore,
     private modalCtrl: ModalController,
+    private alertController: AlertController,
   ) {
     // Inicialización del formulario reactivo para agregar nuevos alimentos
     this.newFoodForm = this.formBuilder.group({
@@ -46,6 +48,11 @@ export class InventoryPage implements OnInit {
     });
 
     this.codeReader = new BrowserBarcodeReader();
+    this.newFoodForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      imagen: ['', Validators.required],
+      codigoBarras: ['']
+    });
 
   }
 
@@ -54,6 +61,7 @@ export class InventoryPage implements OnInit {
     this.getMyFoods();                      // Obtiene los alimentos del usuario
     this.observeFoodChangesAndUpdateMyFoods(); 
     this.applyStockColors();
+    this.checkCameraPermission();
   }
 
   // Función para obtener el usuario desde el almacenamiento local
@@ -294,12 +302,14 @@ export class InventoryPage implements OnInit {
     });
   
     await modal.present();
-    
+
     const { data } = await modal.onDidDismiss();
     if (data) {
       console.log('Datos del modal:', data);
     }
   }
+
+  /*
   showIdealStockEditor(food: myfood) {
     food.showIdealStockEditor = true;
     this.stockIdealToShow = food.stock_ideal;
@@ -338,19 +348,76 @@ export class InventoryPage implements OnInit {
       food.stock_ideal--;
     }
   }
+    */
+
+  async checkCameraPermission() {
+    if (Capacitor.isPluginAvailable('Camera')) {
+      const { Camera } = Plugins;
+      const status = await Camera['checkPermissions']();
+      if (status.camera !== 'granted') {
+        const permissionResult = await Camera['requestPermissions']();
+        if (permissionResult.camera !== 'granted') {
+          console.error('Permiso para usar la cámara no otorgado');
+          this.utilsSvc.presentToast({
+            message: 'Permiso para utilizar la cámara no otorgado',
+            duration: 2000,
+            color: 'danger'
+          });
+        }
+      }
+    } else {
+      console.error('La cámara no está disponible en este dispositivo');
+      this.utilsSvc.presentToast({
+        message: 'Camera API not available in this environment',
+        duration: 2000,
+        color: 'danger'
+      });
+    }
+  }
+  
+  async presentCameraPermissionAlert() {
+    const alert = await this.alertController.create({
+      header: 'Permiso de cámara',
+      message: 'Necesitamos tu permiso para usar la cámara para escanear códigos de barras.',
+      buttons: [
+        {
+          text: 'Denegar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Permiso de cámara denegado');
+          }
+        },
+        {
+          text: 'Permitir',
+          handler: () => {
+            this.requestCameraPermission();
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+  
+  async requestCameraPermission() {
+    const { Camera } = Plugins;
+    const permissionResult = await Camera['requestPermissions']();
+    if (permissionResult.camera !== 'granted') {
+      console.error('Permission to use camera not granted');
+    } else {
+      console.log('Permission granted');
+    }
+  }
+
   async scanBarcode() {
     try {
-      if (this.videoElement && this.videoElement.nativeElement) {
-        const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
-
-        if (result) {
-          console.log('Código de barras escaneado:', result.getText());
-          this.newFoodForm.patchValue({ codigoBarras: result.getText() });
-        } else {
-          console.log('No se pudo escanear ningún código de barras.');
-        }
+      const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
+      if (result) {
+        console.log('Código de barras escaneado:', result.getText());
+        this.newFoodForm.patchValue({ codigoBarras: result.getText() });
+        this.showStockEditorIfFound(result.getText());
       } else {
-        console.error('Elemento de video no encontrado en el DOM.');
+        console.log('No se pudo escanear ningún código de barras.');
       }
     } catch (error) {
       console.error('Error al escanear código de barras:', error);
@@ -358,6 +425,19 @@ export class InventoryPage implements OnInit {
   }
 
   async startScanner() {
+    try {
+      this.showScanner = true; // Mostrar el scanner
+      await this.checkCameraPermission();
+      await new Promise(resolve => setTimeout(resolve, 100)); // Asegura que el DOM esté completamente cargado
+      await this.scanBarcode();
+    } catch (error) {
+      console.error('Error al iniciar el escáner:', error);
+    } finally {
+      this.showScanner = false; // Cierra el div de la cámara después de escanear
+    }
+  }
+
+  /*async startScanner() {
     try {
       await new Promise(resolve => setTimeout(resolve, 100)); // Asegura que el DOM esté completamente cargado
   
@@ -378,7 +458,7 @@ export class InventoryPage implements OnInit {
     } finally {
       this.showScanner = false; // Cierra el div de la cámara después de escanear
     }
-  }
+  }*/
   
 
   // Función para mostrar el editor de stock si se encuentra el código en myfoods
