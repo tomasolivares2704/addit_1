@@ -52,6 +52,7 @@ export class InventoryPage implements OnInit {
     this.getUser();                         // Obtiene el usuario actual
     this.getMyFoods();                      // Obtiene los alimentos del usuario
     this.observeFoodChangesAndUpdateMyFoods(); 
+    this.applyStockColors();
   }
 
   // Función para obtener el usuario desde el almacenamiento local
@@ -191,21 +192,19 @@ export class InventoryPage implements OnInit {
       const porcentajeStock = (food.stock / food.stock_ideal) * 100;
 
       if (porcentajeStock >= 100) {
-        food.bgColor = 'green';   // Stock igual o mayor al 100% del ideal
+        food.bgColor = 'var(--ion-color-success)';   // Stock igual o mayor al 100% del ideal
       } else if (porcentajeStock >= 50) {
-        food.bgColor = 'yellow';  // Stock entre el 50% y 99% del ideal
-      } else if (porcentajeStock >= 20) {
-        food.bgColor = 'orange';  // Stock entre el 20% y 49% del ideal
+        food.bgColor = 'var(--ion-color-warning)';  // Stock entre el 50% y 99% del ideal
       } else {
-        food.bgColor = 'red';     // Stock menor al 20% del ideal
+        food.bgColor = 'var(--ion-color-danger)';     // Stock menor al 20% del ideal
       }
     }
   }
 
-  // Función para mostrar el editor de stock de un alimento
+  /* Función para mostrar el editor de stock de un alimento
   showStockEditor(food: myfood) {
     food.showStockEditor = true;
-  }
+  }*/
   
   async openEditStockModal(food: myfood) {
     const modal = await this.modalCtrl.create({
@@ -223,7 +222,7 @@ export class InventoryPage implements OnInit {
     }
   }
 
-  // Función para incrementar el stock de un alimento
+  /* Función para incrementar el stock de un alimento
   incrementStock(food: myfood) {
     food.stock++;
     food.stockToShow = food.stock;
@@ -269,7 +268,7 @@ export class InventoryPage implements OnInit {
   cancelStockEdit(food: myfood) {
     food.stockToShow = food.stock;
     food.showStockEditor = false;
-  }
+  }*/
 
   // Función para filtrar alimentos según un término de búsqueda
   filterFoods(event: any) {

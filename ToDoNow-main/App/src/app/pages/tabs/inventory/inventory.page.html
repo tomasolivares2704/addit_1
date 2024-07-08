@@ -40,7 +40,7 @@
     <ion-row>
       <ng-container *ngFor="let food of filteredFoods">
         <ion-col size="3" size-sm="6" size-md="4" size-lg="3">
-          <ion-card class="food-card">
+          <ion-card class="food-card" [ngStyle]="{'border-color': food.bgColor, 'border-width': '5px', 'border-style': 'solid'}">
             <div class="image-container">
               <ion-img [src]="food.imagen" alt="Imagen del alimento" class="food-image"></ion-img>
               <ion-button fill="clear" class="edit-button" *ngIf="!food.showStockEditor" (click)="openEditStockModal(food)">
