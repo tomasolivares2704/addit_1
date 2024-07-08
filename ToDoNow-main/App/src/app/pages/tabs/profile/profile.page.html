@@ -64,8 +64,21 @@
                   Eliminar Cuenta
                 </ion-button>
               </ion-col>
+
+              <div *ngIf="user?.uid === '3pwh5nyiabZEDytYh44oD85zFi93'">
+                <ion-button (click)="navigateTo('tabs/formfood')" shape="round" class="form-button">
+                  Go to FormFood
+                </ion-button>
+                <ion-button (click)="navigateTo('tabs/formreceta')" shape="round" class="form-button">
+                  Go to FormReceta
+                </ion-button>
+              </div>
+              
+              
+              
   
     </ion-row>
   </ion-grid>
-  
+
+ 
   </ion-content>

@@ -9,6 +9,7 @@ import { ModalController } from '@ionic/angular';
 import { CreateProfileModalComponent } from 'src/app/shared/components/create-profile-modal/create-profile-modal.component';
 import { ChangeEmailModalComponent } from 'src/app/shared/components/change-email-modal/change-email-modal.component';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,7 @@ export class ProfilePage implements OnInit {
     private profileService: NProfileService,
     private modalController: ModalController,
     private auth: AngularFireAuth, // Inject AngularFireAuth
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -154,6 +156,10 @@ export class ProfilePage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]); // Navigate to specified path
   }
 
 }

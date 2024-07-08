@@ -1,62 +1,68 @@
 .avatar {
     font-size: 130px;
-    color: #3880ff;
+    color: #3880ff; /* Color principal */
     margin: auto;
-}
-
-.info-user {
+  }
+  
+  .info-user {
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    color: #3880ff;
-}
+    align-items: center;
+    color: #3880ff; /* Color principal */
+  }
   
-.nombre {
-    color: #3880ff;
+  .nombre {
+    color: #3880ff; /* Color principal */
     margin: auto;
     margin-top: 10px;
     text-align: center;
     border-radius: 20px;
     background-color: white;
     padding: 10px 0;
-}
-
-ion-icon {
+  }
+  
+  ion-icon {
     font-size: 30px;
-    color:#3880ff
-}
-
-ion-button {
+    color: #3880ff; /* Color principal */
+  }
+  
+  ion-button {
     width: 250px;
     --background: white;
-    color: #3880ff;
-}
-
-.agregar {
-    --background: #3880ff;
+    color: #3880ff; /* Color principal */
+  }
+  
+  .agregar {
+    --background: #3880ff; /* Color principal */
     color: white;
     margin: 10px 10px 0% 15%;
-}
-
-.center {
+  }
+  
+  .center {
     margin: auto;
-}
-
-.perfil {
+  }
+  
+  .perfil {
     height: fit-content;
-}
-
-.content {
-    background-color:#3880ff; 
+  }
+  
+  .content {
+    background-color: #3880ff; /* Color principal */
     border-radius: 5% 5%;
-}
-
-.editemail {
+  }
+  
+  .editemail {
     width: 150px;
-}
-
-
-.editemail ion-icon{
+  }
+  
+  .editemail ion-icon {
     font-size: 15px;
     --ionicon-stroke-width: 70px;
-}
+  }
+  
+  /* Estilos específicos para botones de formularios */
+  .form-button {
+    --background: #ffc409 !important; /* Color warning */
+    color: white !important;
+  }
+  

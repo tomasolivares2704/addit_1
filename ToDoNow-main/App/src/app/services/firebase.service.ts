@@ -389,14 +389,6 @@ async crearNewList(userUid: string, newListData: NewList): Promise<string> {
     return collectionRef.valueChanges({ idField: 'id' });
   }
 
-  
-  
-
-
-
-
-
-
 
 
 }
