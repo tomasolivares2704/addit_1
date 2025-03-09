@@ -1,0 +1,176 @@
+.scanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.scanner ion-icon {
+  margin-right: 10px;
+}
+
+.filtrar{
+  --background: rgb(255, 255, 255);
+  color: #3880ff;
+}
+
+.food-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-top: 100%; 
+  border-width: 5px; 
+  border-style: solid; 
+  border-radius: 20%;
+}
+
+.food-card .image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.food-image {
+  width: 80%;
+  height: 80%; 
+  margin: auto;
+}
+
+.edit-button {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  height: 25px;
+  width: 25px;
+  --background: rgba(255, 255, 255, 0); /* Botón semi-transparente */
+  font-size: 1px;
+  z-index: 3;
+}
+
+.stock-label {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  background: rgba(43, 37, 37, 0); /* Etiqueta semi-transparente */
+  padding: 0px 2px;
+  border-radius: 10px;
+}
+
+.food-card-content {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+ion-icon {
+  color: #3880ff;
+  --ionicon-stroke-width: 70px;
+}
+
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Ajusta el ancho máximo según tus necesidades */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+  border: 2px solid #333; /* Borde sólido */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  border-radius: 8px; /* Bordes redondeados */
+  overflow: hidden; /* Para que el vídeo y el canvas no sobresalgan */
+
+  /* Estilos para las líneas del código de barras */
+  .barcode-line {
+    position: absolute;
+    background-color: red; /* Cambia el color de las líneas a rojo */
+    z-index: 1; /* Asegura que las líneas estén por encima del vídeo */
+  }
+
+  .vertical {
+    width: 2px; /* Ancho de la línea vertical */
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .horizontal {
+    width: 100%;
+    height: 2px; /* Alto de la línea horizontal */
+    left: 0;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+}
+
+/* Estilos para el vídeo dentro del contenedor */
+.video-container video {
+  width: 100%;
+  height: auto;
+  transform: scaleX(-1); /* Voltea horizontalmente el vídeo */
+}
+
+/* Estilos para el canvas (puedes mostrarlo o esconderlo según sea necesario) */
+.video-container canvas {
+  display: none; /* Oculto por defecto, puedes mostrarlo dinámicamente en JS */
+}
+
+.ion-page {
+  position: relative; /* Asegura que el modal sea relativo a toda la página */
+}
+
+.stock-editor-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; 
+  width: 90%; 
+  max-width: 500px; 
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  padding: 20px;
+  display: none; 
+}
+
+.show {
+  display: block; 
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; 
+  display: none; 
+}
+
+.stock-id {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Menor que el edit-button para asegurar la accesibilidad del botón de modificar */
+  opacity: 0; /* Invisible pero clickeable */
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+

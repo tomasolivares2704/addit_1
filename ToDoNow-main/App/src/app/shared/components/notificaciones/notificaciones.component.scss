@@ -1,0 +1,25 @@
+/* styles.scss (o tu archivo de estilos correspondiente) */
+
+.modal-class {
+    --background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  }
+  
+  .modal-content {
+    background-color: white; /* Fondo blanco para el contenido del modal */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #ccc; /* Borde inferior */
+  }
+  
+  .modal-title {
+    font-weight: bold; /* Texto en negrita */
+  }
+  
+  .modal-message {
+    margin-top: 20px; /* Espaciado superior */
+  }
+  

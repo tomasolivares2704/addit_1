@@ -6,24 +6,54 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { CustomInputComponent } from './components/custom-input/custom-input.component';
 import { LogoComponent } from './components/logo/logo.component';
-import { AddUpdateTaskComponent } from './components/add-update-task/add-update-task.component';
+/*import { AddUpdateTaskComponent } from './components/add-update-task/add-update-task.component';*/
+import { BarraComponent } from './components/barra/barra.component';
+import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
 
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { CreateListModalComponent } from './components/create-list-modal/create-list-modal.component';
+import { TabNutriModalComponent } from './components/tab-nutri-modal/tab-nutri-modal.component';
+import { ButtonProvidersComponent } from './components/button-providers/button-providers.component';
+import { CreateProfileModalComponent } from './components/create-profile-modal/create-profile-modal.component';
+import { ChangeEmailModalComponent } from './components/change-email-modal/change-email-modal.component';
+import { EditStockModalComponent } from './components/edit-stock-modal/edit-stock-modal.component';
+import { IdealStockModalComponent } from './components/ideal-stock-modal/ideal-stock-modal.component';
+import { VideoModalComponent } from './components/video-modal/video-modal.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
-    AddUpdateTaskComponent
+    /*AddUpdateTaskComponent,*/
+    BarraComponent,
+    NotificacionesComponent,
+    CreateListModalComponent,
+    TabNutriModalComponent,
+    ButtonProvidersComponent,
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent,
+    EditStockModalComponent,
+    IdealStockModalComponent,
+    VideoModalComponent,
   ],
   exports: [
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
     NgCircleProgressModule,
-    AddUpdateTaskComponent
+    /*AddUpdateTaskComponent,*/
+    BarraComponent,
+    NotificacionesComponent,
+    CreateListModalComponent,
+    TabNutriModalComponent,
+    ButtonProvidersComponent,
+    CreateProfileModalComponent,
+    ChangeEmailModalComponent,
+    EditStockModalComponent,
+    IdealStockModalComponent,
+    VideoModalComponent,
   ],
   imports: [
     CommonModule,
@@ -38,7 +68,9 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
       outerStrokeColor: "#78C000",
       innerStrokeColor: "#C7E596",
       animationDuration: 300,
-    })
+    }),
+    
+    
   ]
 })
 export class SharedModule { }

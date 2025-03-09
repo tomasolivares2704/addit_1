@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Crear Nueva Lista</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="newListForm" (ngSubmit)="crearNuevaLista()">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-label position="floating">Nombre de la lista</ion-label>
+        <ion-input formControlName="nombre" type="text" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Frecuencia de compra</ion-label>
+        <ion-select formControlName="frecuenciaCompra" interface="action-sheet">
+          <ion-select-option *ngFor="let frecuencia of frecuenciasCompra" [value]="frecuencia">
+            {{ frecuencia }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button expand="block" type="submit">Crear Lista</ion-button>
+    </div>
+  </form>
+</ion-content>

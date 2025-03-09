@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user.models';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -21,7 +22,8 @@ export class SignUpPage implements OnInit {
 
   constructor(
     private firebaseSvc: FirebaseService,
-    private utilsSvc: UtilsService
+    private utilsSvc: UtilsService,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -38,31 +40,42 @@ export class SignUpPage implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      this.utilsSvc.presentLoading({message: 'Registrando...'});
-      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-        console.log(res);
-        await this.firebaseSvc.updateUser({ displayName: this.form.value.name})
-        let user: User = {
-          uid: res.user.uid,
-          name: res.user.displayName,
-          email: res.user.email
-        }
-
-        this.utilsSvc.setElementInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/tabs');
+      this.utilsSvc.presentLoading({ message: 'Registrando...' });
+      const { name, email, password } = this.form.value;
+  
+      const newUser: User = {
+        uid: '', // Firebase asignará este valor automáticamente al crear el usuario
+        name: name,
+        email: email,
+        password: password,
+        isAdmin: false // Por defecto, los usuarios no son administradores
+      };
+  
+      this.firebaseSvc.signUp(newUser).then(async res => {
+        await res.user.sendEmailVerification();
+        await this.firebaseSvc.updateUser({ displayName: newUser.name });
+  
+        // Asignar el UID generado por Firebase al usuario
+        newUser.uid = res.user.uid;
+  
+        await this.firebaseSvc.createUserDocument(newUser);
+  
+        this.utilsSvc.setElementInLocalStorage('user', newUser);
+        this.utilsSvc.routerLink('/auth');
         this.utilsSvc.dismissLoading();
-
+  
         this.utilsSvc.presentToast({
-          message: 'Te damos la bienvenida ${user.name}',
-          duration: 1500,
+          message: `Registro exitoso. Por favor, verifica tu correo electrónico.`,
+          duration: 5000,
           color: 'primary',
-          icon: 'person-outline'
+          icon: 'mail-outline',
+          mode: 'ios'
         });
         this.form.reset();
-      }, error => {
+      }).catch(error => {
         this.utilsSvc.dismissLoading();
         this.utilsSvc.presentToast({
-          message: error,
+          message: error.message,
           duration: 5000,
           color: 'warning',
           icon: 'alert-circle-outline'
@@ -70,9 +83,13 @@ export class SignUpPage implements OnInit {
       });
     }
   }
-
+  
   limpiar(){
     this.form.reset();
   }
 
+  
+  goBack() {
+    this.navCtrl.back();
+  }
 }

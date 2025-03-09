@@ -1,0 +1,54 @@
+<ion-content>
+  <app-header title="Lista de Compras"></app-header>
+  <app-logo></app-logo>
+
+  <!-- Contenido Principal -->
+  <div class="contenido">
+    <div class="titulo">
+      <h1 class="d-flex-center">Lista de Compras</h1>
+    </div>
+
+    <div class="button-group">
+      <ion-buttons slot="start">
+        <ion-button class="add" (click)="openCreateListModal()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end">
+        <ion-button class="delete" (click)="toggleDeleteMode()">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-item *ngFor="let lista of listasDeUsuario" [class.delete-mode]="deleteMode" (click)="deleteMode ? confirmDeleteList(lista) : verDetallesLista(lista.id)">
+              <ion-row>
+                <ion-col size="3" class="icon-container">
+                  <ion-icon name="cart-outline" class="list-icon"></ion-icon>
+                </ion-col>
+                <ion-col size="9">
+                  <ion-card-title>
+                    <strong>{{ lista.nombre }}</strong>
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    <strong style="color: #3880ff;">Total:</strong> {{ lista.total | currency:'CLP':'symbol-narrow':'1.0-0' }}
+                  </ion-card-subtitle>
+                  <br>
+                  <ion-card-subtitle>
+                    <strong style="color: #3880ff;">Frecuencia de compra:</strong> {{ lista.frecuenciaCompra }}
+                  </ion-card-subtitle>
+                </ion-col>
+              </ion-row>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+  </div>
+</ion-content>

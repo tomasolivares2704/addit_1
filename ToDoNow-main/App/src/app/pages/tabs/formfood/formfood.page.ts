@@ -1,0 +1,135 @@
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BrowserBarcodeReader, Result } from '@zxing/library';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
+import { Foods, CategoriaAlimento } from 'src/app/models/food.models';
+import { User } from 'src/app/models/user.models';
+import { Capacitor, Plugins } from '@capacitor/core';
+
+@Component({
+  selector: 'app-formfood',
+  templateUrl: './formfood.page.html',
+  styleUrls: ['./formfood.page.scss'],
+})
+export class FormfoodPage implements OnInit {
+
+  @ViewChild('videoElement', { static: false }) videoElement: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement', { static: false }) canvasElement: ElementRef<HTMLCanvasElement>;
+  newFoodForm: FormGroup;
+  loading: boolean = false;
+  categorias: string[];
+  foods: Foods[] = [];
+  codeReader: BrowserBarcodeReader;
+  showScanner: boolean = false; 
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private firebaseSvc: FirebaseService,
+    private utilsSvc: UtilsService,
+    private renderer: Renderer2
+  ) {
+    this.newFoodForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      price: ['', Validators.required],
+      price2: ['', Validators.required],
+      calories: ['', Validators.required],
+      categoria: [CategoriaAlimento.Verduras, Validators.required],
+      imagen: ['', Validators.required],
+      fat: ['', Validators.required],
+      fat_sat: ['', Validators.required],
+      fat_trans: ['', Validators.required],
+      sodio: ['', Validators.required],
+      carbs: ['', Validators.required],
+      protein: ['', Validators.required],
+      colesterol: ['', Validators.required],
+      fibra: ['', Validators.required],
+      medida: ['', Validators.required],
+      codigoBarras: ['', Validators.required]
+    });
+
+    this.categorias = Object.values(CategoriaAlimento);
+    this.codeReader = new BrowserBarcodeReader();
+  }
+
+  ngOnInit() {
+    this.getAllFoods();
+    this.checkCameraPermission();
+  }
+
+  getAllFoods() {
+    this.loading = true;
+    this.firebaseSvc.getAllFoods().subscribe(foods => {
+      this.foods = foods;
+      this.loading = false;
+    });
+  }
+
+  addNewFood() {
+    if (this.newFoodForm.valid) {
+      const newFoodData: Foods = {
+        ...this.newFoodForm.value,
+        id: ''
+      };
+
+      this.loading = true;
+      this.firebaseSvc.addFoodToCollections(newFoodData).then(() => {
+        this.newFoodForm.reset();
+        this.loading = false;
+      }).catch(error => {
+        console.error('Error al agregar alimento:', error);
+        this.loading = false;
+      });
+    } else {
+      console.error('Formulario no válido');
+    }
+  }
+
+
+  async checkCameraPermission() {
+    if (Capacitor.isPluginAvailable('Camera')) {
+      const { Camera } = Plugins;
+      const status = await Camera['checkPermissions']();
+      if (status.camera !== 'granted') {
+        const permissionResult = await Camera['requestPermissions']();
+        if (permissionResult.camera !== 'granted') {
+          this.utilsSvc.presentToast({
+            message: 'Permiso para utilizar la cámara no otorgado',
+            duration: 2000,
+            color: 'danger'
+          });
+        }
+      }
+    } else {
+      this.utilsSvc.presentToast({
+        message: 'Camera API not available in this environment',
+        duration: 2000,
+        color: 'danger'
+      });
+    }
+  }
+
+  async scanBarcode() {
+    try {
+      const result: Result = await this.codeReader.decodeOnceFromVideoDevice(undefined, this.videoElement.nativeElement);
+      if (result) {
+        console.log('Código de barras escaneado:', result.getText());
+        this.newFoodForm.patchValue({ codigoBarras: result.getText() });
+      } else {
+        console.log('No se pudo escanear ningún código de barras.');
+      }
+    } catch (error) {
+      console.error('Error al escanear código de barras:', error);
+    }
+  }
+
+  async startScanner() {
+    this.showScanner = true; // Mostrar el scanner
+    await this.checkCameraPermission();
+    await new Promise(resolve => setTimeout(resolve, 100)); // Asegura que el DOM esté completamente cargado
+    await this.scanBarcode();
+    this.showScanner = false; // Cierra el div de la cámara después de escanear
+  }
+}

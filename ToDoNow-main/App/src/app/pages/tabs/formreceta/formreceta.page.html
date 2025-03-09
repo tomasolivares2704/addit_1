@@ -1,0 +1,78 @@
+<app-header title="Formulario Recetas"></app-header>
+
+<ion-content>
+  <ion-spinner *ngIf="loading"></ion-spinner>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Crear Nueva Receta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="newRecetaForm" (ngSubmit)="addNewReceta()">
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input formControlName="name" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Categoría</ion-label>
+          <ion-select formControlName="categoria" interface="action-sheet">
+            <ion-select-option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Imagen URL</ion-label>
+          <ion-input formControlName="imagen" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Video URL</ion-label>
+          <ion-input formControlName="video" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Calorías</ion-label>
+          <ion-input formControlName="calories" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Proteínas</ion-label>
+          <ion-input formControlName="protein" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Grasas</ion-label>
+          <ion-input formControlName="fats" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Carbohidratos</ion-label>
+          <ion-input formControlName="carbohydrates" type="number"></ion-input>
+        </ion-item>
+
+        <!-- FormArray para los ingredientes -->
+        <div formArrayName="ingredients">
+          <div *ngFor="let ingredient of ingredients.controls; let i=index" [formGroupName]="i">
+            <!-- ion-select para seleccionar el alimento -->
+            <ion-item>
+              <ion-label position="stacked">Ingrediente {{ i + 1 }} - Nombre</ion-label>
+              <ion-select formControlName="name">
+                <ion-select-option *ngFor="let food of foods" [value]="food.name">{{ food.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Stock</ion-label>
+              <ion-input formControlName="stock" type="number"></ion-input>
+            </ion-item>
+            <!-- Botón para eliminar un ingrediente -->
+            <ion-button expand="block" color="warning" (click)="removeIngredient(i)">
+              Eliminar Ingrediente
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Botón para añadir un nuevo ingrediente -->
+        <ion-button expand="block" color="success" (click)="addIngredient()">
+          Añadir Ingrediente
+        </ion-button>
+
+        <!-- Botón para enviar el formulario y agregar la receta -->
+        <ion-button expand="block" type="submit">Agregar Receta</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

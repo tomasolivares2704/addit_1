@@ -1,0 +1,138 @@
+/**/
+
+.table-header {
+  background-color: #004AAD;
+}
+
+.col-header {
+  margin: auto; 
+  margin: auto;
+  text-align: center;
+  text-justify: auto;
+}
+/* Estilos para la información del producto */
+
+.food-card {
+  position: relative;
+  width: 85%;
+  height: 100%;
+}
+
+.food-image {
+  width: 80%;
+  height: 80%; 
+  margin: auto;
+}
+
+.food-card .image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.food-card-content {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+.food-card-content p {
+  font-size: 8px; 
+  color: #44B0F1; 
+  font-weight: bold; 
+  margin: 0 0 0 0;
+}
+
+/* Estilos para los controles de cantidad */
+.quantity-controls {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+}
+
+.quantity-controls .quantity-wrapper {
+  display: flex;
+  
+}
+
+.quantity-controls ion-button {
+  --background: #ffffff;
+  --border: 1px solid #ccc;
+  --border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.quantity-controls ion-icon {
+  color: #007bff;
+  font-size: 20px;
+  font-weight: 1000;
+}
+
+.quantity-controls span {
+  align-self: center;
+  font-weight: bold;
+  font-size: 14px; 
+  margin: 0 10px; 
+}
+
+.quantity-controls .quantity-display {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+}
+
+/* Estilos para el selector de precio */
+.price-info {
+  height: 50px;
+  font-size: 16px;
+}
+
+.price-info ion-select {
+  --background: #ffffff;
+  width: 100%;
+  height: 50px;
+}
+
+
+/* Estilos generales de la grilla */
+.product-grid {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 0;
+}
+
+.product-row {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Botón de regreso */
+ion-back-button {
+  color: white;
+  width: 20%;
+  margin: 10px 0;
+}
+
+.table-header {
+  font-size: 14px;
+  font-weight: 800;
+  align-items: center;
+  margin-left: auto;
+}
+
+table-row {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-justify: auto;
+}
+

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear Perfil Nutricional</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="profileForm" (ngSubmit)="createNewProfile()">
+
+    <ion-item>
+      <ion-label position="floating" for="nombre">Nombre:</ion-label>
+      <ion-input type="text" formControlName="nombre" id="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" for="calories">Calorías Máximas:</ion-label>
+      <ion-input type="text" formControlName="calories" id="calories"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" for="protein">Proteinas Mínimas:</ion-label>
+      <ion-input type="text" formControlName="protein" id="protein"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating" for="carbs">Carbohidratos Máximos:</ion-label>
+      <ion-input type="text" formControlName="carbs" id="carbs"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" shape="round" type="submit" [disabled]="profileForm.invalid">Crear Perfil</ion-button>
+
+  </form>
+</ion-content>

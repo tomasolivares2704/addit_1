@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cambiar Correo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <ion-item>
+      <ion-label position="floating">Nuevo Correo</ion-label>
+      <ion-input formControlName="newemail" type="email"></ion-input>
+    </ion-item>
+    <ion-note *ngIf="form.get('newemail')?.touched && form.get('newemail')?.invalid" color="danger">
+      Introduzca un correo electrónico válido.
+    </ion-note>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item>
+    <ion-note *ngIf="form.get('password')?.touched && form.get('password')?.invalid" color="danger">
+      La contraseña es requerida.
+    </ion-note>
+
+    <ion-button expand="full" type="submit" [disabled]="form.invalid">Actualizar Correo</ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,53 @@
+<app-header title="Recetas"></app-header>
+
+<ion-content>
+  <ion-spinner *ngIf="loading"></ion-spinner>
+
+
+  <ion-list>
+    <ion-card class="receta-card" *ngFor="let receta of recetas">
+      <div class="receta-image" [style.backgroundImage]="'url(' + receta.imagen + ')'">
+        <div class="receta-nutrition">
+          <p>Calorías: {{ receta.calories }}</p>
+          <p>Proteínas: {{ receta.protein }}</p>
+          <p>Grasas: {{ receta.fats }}</p>
+          <p>Carbohidratos: {{ receta.carbohydrates }}</p>
+          <ion-button 
+            class="discount-button"
+            [color]="canDiscountIngredients(receta) ? 'success' : 'danger'" 
+            [disabled]="!canDiscountIngredients(receta)"
+            (click)="discountIngredients(receta)">
+            Descontar Ingredientes
+          </ion-button>
+          <ion-button (click)="openVideoModal(receta)">Ver Video</ion-button>
+        </div>
+      </div>
+      <div class="receta-ingredients">
+        <p>Ingredientes:</p>
+          <ion-list>
+            <ion-item *ngFor="let ing of receta.ingredients" class="receta-ingredient">
+              <ion-label>{{ ing.name }}</ion-label>
+              <ion-note slot="end">
+                <span class="stock-info">
+                  <span *ngIf="ing.stock >= 0" class="stock-label">Stock Requerido: {{ ing.stock }}</span>
+                  <span *ngIf="myfoods && myfoods.length > 0 && ingredientInMyFoods(ing.name)" class="my-stock" [ngStyle]="{'color': getMyFoodStock(ing.name) >= ing.stock ? 'green' : 'red'}">
+                    Mi Stock: {{ getMyFoodStock(ing.name) }}
+                  </span>
+                  <span *ngIf="getFaltante(ing) > 0" class="faltante" [ngStyle]="{'color': 'red'}">
+                    Faltante: {{ getFaltante(ing) }}
+                  </span>
+                  <span *ngIf="ing.stock >= 0 && getFaltante(ing) === 0" class="suficiente" [ngStyle]="{'color': 'green'}">
+                    Suficiente
+                  </span>
+                </span>
+              </ion-note>
+            </ion-item>
+          </ion-list>
+      </div>
+    </ion-card>
+  </ion-list>
+  
+  
+
+</ion-content>
+

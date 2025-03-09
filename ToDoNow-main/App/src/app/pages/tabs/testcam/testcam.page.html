@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Escáner de Código de Barras
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-button expand="block" (click)="toggleCamera()">
+        {{ isCameraOn ? 'Desactivar Cámara' : 'Activar Cámara' }}
+      </ion-button>
+      <ion-button expand="block" [disabled]="!isCameraOn || isScanning" (click)="startScanner()">
+        {{ isScanning ? 'Escaneando...' : 'Iniciar Escáner' }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Elemento de video para mostrar la cámara -->
+  <video #video playsinline autoplay></video>
+</ion-content>
